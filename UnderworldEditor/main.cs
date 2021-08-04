@@ -738,7 +738,7 @@ namespace UnderworldEditor
                 PicPalette.Image = ArtLoader.Palette(CurrentImage.ImagePalette, CurrentImage.PaletteRef).image;
                 ImgOut.Width = CurrentImage.image.Width * (int)NumZoom.Value;
                 ImgOut.Height = CurrentImage.image.Height * (int)NumZoom.Value;
-                LblImageDetails.Text = CurrentImage.image.Height + "x" + CurrentImage.image.Width + "\n" + CurrentImage.ImageType.ToString();
+                LblImageDetails.Text = CurrentImage.image.Width + "x" + CurrentImage.image.Height + "\n" + CurrentImage.ImageType.ToString();
             }
         }
 
