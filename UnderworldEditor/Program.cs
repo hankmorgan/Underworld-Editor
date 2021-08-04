@@ -14,6 +14,21 @@ namespace UnderworldEditor
         [STAThread]
         static void Main()
         {
+           // string offsets="";
+           //if( Util.ReadStreamFile("C:\\Games\\UWPSX\\avatar_", out char[] Buffer))
+           //     {
+           //     for (int i =0; i< 231; i++)
+           //         {
+           //         var data = Util.getValAtAddress(Buffer, i*4, 32);
+           //         offsets += i + "," + data +"\n";
+           //         //Console.WriteLine(i + "=" + data.ToString("X")  + "len");
+
+           //          }
+           //     System.IO.File.WriteAllText("C:\\Games\\UWPSX\\avatar.txt", offsets);
+           //     }
+
+
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new main());

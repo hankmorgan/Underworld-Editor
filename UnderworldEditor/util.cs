@@ -51,7 +51,6 @@ namespace UnderworldEditor
         /// <param name="buffer">Buffer.</param>
         public static bool ReadStreamFile(String Path, out char[] buffer)
         {
-            //Path = Path.Replace("--", sep.ToString());
             if (!File.Exists(Path))
             {            
                 
@@ -59,14 +58,14 @@ namespace UnderworldEditor
                 buffer = null;
                 return false;
             }
-
+            
             Stream fs = File.Open(Path,FileMode.Open,FileAccess.ReadWrite);
             if (fs.CanRead)
             {
                 buffer = new char[fs.Length];
                 for (int i = 0; i < fs.Length; i++)
                 {
-                    buffer[i] = (char)fs.ReadByte();
+                      buffer[i] = (char)fs.ReadByte();
                 }
                 fs.Close();
                 return true;

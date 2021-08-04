@@ -14,6 +14,7 @@ namespace UnderworldEditor
 {
     public partial class main : Form
     {
+        char[] PSX1Buffer;
         public static main instance;
         public const int GAME_UW1 = 1;
         public const int GAME_UW2 = 2;
@@ -66,8 +67,11 @@ namespace UnderworldEditor
             FrmSelect frm = new FrmSelect();
             frm.ShowDialog();
             PaletteLoader.LoadPalettes(main.basepath + "\\data\\pals.dat");
-            PicPalette.Image = ArtLoader.Palette(PaletteLoader.Palettes[0]).image;
-            PopulateTextureTree();
+            if(PaletteLoader.Palettes[0]!=null)
+            {
+                PicPalette.Image = ArtLoader.Palette(PaletteLoader.Palettes[0]).image;
+                PopulateTextureTree();
+            }
             isLoading = true;
         }
 
@@ -1442,6 +1446,25 @@ namespace UnderworldEditor
             {
                 UpdateMobileObjectUIChange(this,levarkbuffer, worldObjects, CurWorldObject);
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            // string offsets="";
+            if (PSX1Buffer==null)
+            {
+                Util.ReadStreamFile("C:\\Games\\UWPSX\\avatar_", out PSX1Buffer);
+            }
+
+                var art = new ArtLoader();
+                var res = ArtLoader.Image(art, PSX1Buffer,(long)numOffset.Value, 0,(int)fileWidth.Value, (int)fileHeight.Value, "test", PaletteLoader.Palettes[0], false, BitmapUW.ImageTypes.Texture);
+                ImgOut.Image = res?.image;
+
+        }
+
+        private void numOffset_ValueChanged(object sender, EventArgs e)
+        {
+            button2_Click(sender, e);
         }
 
         //private void btnJumpToRawData_Click(object sender, EventArgs e)
