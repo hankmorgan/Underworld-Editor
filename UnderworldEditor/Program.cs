@@ -14,6 +14,8 @@ namespace UnderworldEditor
         [STAThread]
         static void Main()
         {
+           // PathFinding.pathfind();
+            //return;
            // string offsets="";
            //if( Util.ReadStreamFile("C:\\Games\\UWPSX\\avatar_", out byte[] Buffer))
            //     {

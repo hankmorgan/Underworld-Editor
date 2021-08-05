@@ -65,6 +65,7 @@
     <Compile Include="GRLoader.cs" />
     <Compile Include="Palette.cs" />
     <Compile Include="PaletteLoader.cs" />
+    <Compile Include="PathFinding.cs" />
     <Compile Include="PictureBoxWithInterpolationMode.cs">
       <SubType>Component</SubType>
     </Compile>
