@@ -17,9 +17,9 @@ namespace UnderworldEditor
         private string pathTex_UW2 = "DATA\\T64.TR";
         private string pathTex_SS1 = "RES\\DATA\\Texture.res";
 
-        public char[] texturebufferW;//uw1 wall file data
-        public char[] texturebufferF;//uw1 floor file data
-        public char[] texturebufferT;//uw2 file data
+        public byte[] texturebufferW;//uw1 wall file data
+        public byte[] texturebufferF;//uw1 floor file data
+        public byte[] texturebufferT;//uw2 file data
 
         public long[] OffsetT = new long[261]; //file address offsets for texutres
 

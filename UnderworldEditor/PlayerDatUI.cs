@@ -14,7 +14,7 @@ namespace UnderworldEditor
             main.curslot = slot;
             main.isLoading = true;
             main.curgame = main.GAME_UW1;
-            char[] buffer = playerdat.LoadPlayerDatUW1(main.basepath + "\\save" + slot + "\\player.dat");//"c:\\games\\uw1\\save1\\player.dat");
+            byte[] buffer = playerdat.LoadPlayerDatUW1(main.basepath + "\\save" + slot + "\\player.dat");//"c:\\games\\uw1\\save1\\player.dat");
             PopulatePDatValuesToGrid(buffer,MAIN);
             MAIN.pdatObjects = new objects();
             MAIN.pdatObjects.InitInventoryObjectList(buffer, main.InventoryOffsetUW1);
@@ -28,7 +28,7 @@ namespace UnderworldEditor
             main.curslot = slot;
             main.isLoading = true;
             main.curgame = main.GAME_UW2;
-            char[] buffer = playerdat.LoadPlayerDatUW2(main.basepath + "\\save" + slot + "\\player.dat");
+            byte[] buffer = playerdat.LoadPlayerDatUW2(main.basepath + "\\save" + slot + "\\player.dat");
             PopulatePDatValuesToGrid(buffer, MAIN);
             MAIN.pdatObjects = new objects();
             MAIN.pdatObjects.InitInventoryObjectList(buffer, main.InventoryOffsetUW2);
@@ -37,14 +37,14 @@ namespace UnderworldEditor
             main.isLoading = false;
         }
 
-        public static void PopulateUI(char[] buffer, objects.ObjectInfo[] objList, main MAIN)
+        public static void PopulateUI(byte[] buffer, objects.ObjectInfo[] objList, main MAIN)
         {
             PlayerDatUI.PopulateCharName(buffer, MAIN);
             PlayerDatUI.PopulateStats(buffer, MAIN);
             PlayerDatUI.PopulateInventory(buffer, objList, MAIN);
         }
 
-        public static void PopulatePDatValuesToGrid(char[] buffer, main MAIN)
+        public static void PopulatePDatValuesToGrid(byte[] buffer, main MAIN)
         {
             MAIN.GrdPlayerDat.Rows.Clear();
             for (int i = 0; i <= buffer.GetUpperBound(0); i++)
@@ -57,7 +57,7 @@ namespace UnderworldEditor
         }
 
 
-        public static void PopulateCharName(char[] buffer, main MAIN)
+        public static void PopulateCharName(byte[] buffer, main MAIN)
         {
             MAIN.TxtCharName.Text = "";
             for (int i = 1; i < 14; i++)
@@ -67,7 +67,7 @@ namespace UnderworldEditor
         }
 
 
-        public static void PopulateStats(char[] buffer, main MAIN)
+        public static void PopulateStats(byte[] buffer, main MAIN)
         {
             int charclassdetails = 0;
             switch (main.curgame)
@@ -170,7 +170,7 @@ namespace UnderworldEditor
 
         }
 
-        public static void PopulateInventory(char[] buffer, objects.ObjectInfo[] objList, main MAIN)
+        public static void PopulateInventory(byte[] buffer, objects.ObjectInfo[] objList, main MAIN)
         {
             int offset = main.InventorySlotOffsetUW1;
             MAIN.TreeInventory.Nodes.Clear();
@@ -401,20 +401,20 @@ namespace UnderworldEditor
         /// Get the list of values in the grid and store in a char array.
         /// </summary>
         /// <returns></returns>
-        public static char[] GetValuesFromPDatGrid(main MAIN)
+        public static byte[] GetValuesFromPDatGrid(main MAIN)
         {
-            char[] buffer = new char[MAIN.GrdPlayerDat.Rows.Count];
+            byte[] buffer = new byte[MAIN.GrdPlayerDat.Rows.Count];
             for (int i = 0; i <= buffer.GetUpperBound(0); i++)
             {
                 int val;
                 if (int.TryParse(MAIN.GrdPlayerDat.Rows[i].Cells[0].Value.ToString(), out val))
                 {
                     val = val & 0xff;
-                    buffer[i] = (char)val;
+                    buffer[i] = (byte)val;
                 }
                 else
                 {
-                    buffer[i] = (char)0;
+                    buffer[i] = (byte)0;
                 }
             }
             return buffer;

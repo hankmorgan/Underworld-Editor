@@ -15,7 +15,7 @@ namespace UnderworldEditor
         static void Main()
         {
            // string offsets="";
-           //if( Util.ReadStreamFile("C:\\Games\\UWPSX\\avatar_", out char[] Buffer))
+           //if( Util.ReadStreamFile("C:\\Games\\UWPSX\\avatar_", out byte[] Buffer))
            //     {
            //     for (int i =0; i< 231; i++)
            //         {

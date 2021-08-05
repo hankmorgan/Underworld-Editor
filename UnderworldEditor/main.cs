@@ -14,7 +14,8 @@ namespace UnderworldEditor
 {
     public partial class main : Form
     {
-        char[] PSX1Buffer;
+        byte[] PSX1Buffer;
+        Palette testpal;
         public static main instance;
         public const int GAME_UW1 = 1;
         public const int GAME_UW2 = 2;
@@ -27,7 +28,7 @@ namespace UnderworldEditor
         public const int SkillsOffsetUW2 = 31;
 
         public Util.UWBlock[] uwblocks;
-        public char[] levarkbuffer;
+        public byte[] levarkbuffer;
         public static int curgame;
         public static string basepath;
         public static int curslot=-1;
@@ -160,7 +161,7 @@ namespace UnderworldEditor
         /// <param name="numOwner"></param>
         /// <param name="numNext"></param>
         /// <param name="numLink"></param>
-        public void UpdateObjectUIChange(char[] TileMapData, objects objlist, int index,
+        public void UpdateObjectUIChange(byte[] TileMapData, objects objlist, int index,
             ComboBox cmbItem_ID,
             CheckBox chkEnchanted,
             CheckBox chkIsQuant,
@@ -205,25 +206,25 @@ namespace UnderworldEditor
                 ((objlist.objList[index].flags & 0x07) << 9) |
                 (objlist.objList[index].item_id & 0x1FF);
 
-            TileMapData[addptr] = (char)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 1] = (char)((ByteToWrite >> 8) & 0xFF);
+            TileMapData[addptr] = (byte)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
 
             ByteToWrite = ((objlist.objList[index].xpos & 0x7) << 13) |
                     ((objlist.objList[index].ypos & 0x7) << 10) |
                     ((objlist.objList[index].heading & 0x7) << 7) |
                     ((objlist.objList[index].zpos & 0x7F));
-            TileMapData[addptr + 2] = (char)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 3] = (char)((ByteToWrite >> 8) & 0xFF);
+            TileMapData[addptr + 2] = (byte)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 3] = (byte)((ByteToWrite >> 8) & 0xFF);
 
             ByteToWrite = (((int)objlist.objList[index].next & 0x3FF) << 6) |
                     (objlist.objList[index].quality & 0x3F);
-            TileMapData[addptr + 4] = (char)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 5] = (char)((ByteToWrite >> 8) & 0xFF);
+            TileMapData[addptr + 4] = (byte)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 5] = (byte)((ByteToWrite >> 8) & 0xFF);
 
             ByteToWrite = ((objlist.objList[index].link & 0x3FF) << 6) |
                     (objlist.objList[index].owner & 0x3F);
-            TileMapData[addptr + 6] = (char)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 7] = (char)((ByteToWrite >> 8) & 0xFF);
+            TileMapData[addptr + 6] = (byte)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 7] = (byte)((ByteToWrite >> 8) & 0xFF);
         }
 
         /// <summary>
@@ -233,7 +234,7 @@ namespace UnderworldEditor
         /// <param name="objlist"></param>
         /// <param name="index"></param>
         /// <param name="npc_hp"></param>
-        public void UpdateMobileObjectUIChange(main MAIN, char[] TileMapData, objects objlist, int index )
+        public void UpdateMobileObjectUIChange(main MAIN, byte[] TileMapData, objects objlist, int index )
         {
             objects.ObjectInfo obj = objlist.objList[index];
             //populate mobile data
@@ -271,15 +272,15 @@ namespace UnderworldEditor
             long addptr = obj.FileAddress;
             //0x8
             int ByteToWrite = obj.npc_hp;
-            TileMapData[addptr + 0x8] = (char)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0x8] = (byte)(ByteToWrite & 0xFF);
 
             //0x9
             ByteToWrite = obj.projectile0x9;
-            TileMapData[addptr + 0x9] = (char)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0x9] = (byte)(ByteToWrite & 0xFF);
            
             //0xA
             ByteToWrite = obj.Unknown0xA;
-            TileMapData[addptr + 0xA] = (char)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0xA] = (byte)(ByteToWrite & 0xFF);
 
 
             //0xB
@@ -289,8 +290,8 @@ namespace UnderworldEditor
                 ((obj.Unknown0xB << 12))
                     );
            
-            TileMapData[addptr + 0xb] = (char)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 0xb + 1] = (char)((ByteToWrite >> 8) & 0xFF);
+            TileMapData[addptr + 0xb] = (byte)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0xb + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
             
             //0xD
             ByteToWrite = ((obj.npc_level & 0xFF)) |
@@ -299,8 +300,8 @@ namespace UnderworldEditor
                 ((obj.npc_talked_to & 0x1)) << 13|
                 ((obj.npc_attitude & 0x3)) << 14;
 
-            TileMapData[addptr + 0xd] = (char)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 0xd + 1] = (char)((ByteToWrite >> 8) & 0xFF);
+            TileMapData[addptr + 0xd] = (byte)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0xd + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
 
             //0xF
             ByteToWrite = ((obj.unknown_0_5_0xF & 0x3F)) |
@@ -308,52 +309,52 @@ namespace UnderworldEditor
                 ((obj.unknown_13_15_0xF & 0x7) << 13);
 
 
-            TileMapData[addptr + 0xf] = (char)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 0xf + 1] = (char)((ByteToWrite >> 8) & 0xFF);
+            TileMapData[addptr + 0xf] = (byte)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0xf + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
             
             //0x11
             ByteToWrite = obj.unknown_0x11;
-            TileMapData[addptr + 0x11] = (char)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0x11] = (byte)(ByteToWrite & 0xFF);
 
             //0x12
             ByteToWrite = obj.unknown_0x12;
-            TileMapData[addptr + 0x12] = (char)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0x12] = (byte)(ByteToWrite & 0xFF);
 
             //0x13
             ByteToWrite = (obj.unknown_0_6_0x13 & 0x7F) |
                    ((obj.unknown_7_7_0x13 & 0x1) << 7);
-            TileMapData[addptr + 0x13] = (char)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0x13] = (byte)(ByteToWrite & 0xFF);
 
             //0x14
             ByteToWrite = obj.unknown_0x14;
-            TileMapData[addptr + 0x14] = (char)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0x14] = (byte)(ByteToWrite & 0xFF);
 
             //0x15
             ByteToWrite = obj.unknown_0x15;
-            TileMapData[addptr + 0x15] = (char)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0x15] = (byte)(ByteToWrite & 0xFF);
 
             //0x16
             ByteToWrite = (obj.unknown_0_3_0x16 & 0xF) |
                     ((obj.npc_yhome & 0x3f)<<4) |
                     ((obj.npc_xhome & 0x3f)<<10);
-            TileMapData[addptr + 0x16] = (char)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 0x16 + 1] = (char)((ByteToWrite >> 8) & 0xFF);
+            TileMapData[addptr + 0x16] = (byte)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0x16 + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
 
             //0x18
             ByteToWrite = (obj.npc_heading & 0x1F) |
                    ((obj.unknown_5_7_0x18 & 0x7) << 5);
-            TileMapData[addptr + 0x19] = (char)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0x19] = (byte)(ByteToWrite & 0xFF);
 
 
             //0x19
             ByteToWrite = (obj.npc_hunger & 0x7F) |
                    ((obj.unknown_7_7_0x19 & 0x1) << 7);
-            TileMapData[addptr + 0x19] = (char)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0x19] = (byte)(ByteToWrite & 0xFF);
 
 
             //0x1a
             ByteToWrite = obj.npc_whoami;
-            TileMapData[addptr + 0x1a] = (char)(ByteToWrite & 0xFF);
+            TileMapData[addptr + 0x1a] = (byte)(ByteToWrite & 0xFF);
         }
 
 
@@ -514,7 +515,7 @@ namespace UnderworldEditor
         {
             if (MessageBox.Show(this, "Confirm File Save?","Save Player.dat", MessageBoxButtons.YesNo)==DialogResult.Yes)
             {
-                char[] buffer = PlayerDatUI.GetValuesFromPDatGrid(this);
+                byte[] buffer = PlayerDatUI.GetValuesFromPDatGrid(this);
                 if (curgame == GAME_UW2)
                 {
                     buffer = playerdat.EncryptDecryptUW2(buffer, (byte)buffer[0]);
@@ -536,7 +537,7 @@ namespace UnderworldEditor
         /////// <param name="e"></param>
         ////private void writePlayerDatToolStripMenuItem1_Click(object sender, EventArgs e)
         ////{
-        ////    char[] buffer = PlayerDatUI.GetValuesFromPDatGrid(this);
+        ////    byte[] buffer = PlayerDatUI.GetValuesFromPDatGrid(this);
         ////    buffer = playerdat.EncryptDecryptUW2(buffer, (byte)buffer[0]);
         ////    Util.WriteStreamFile(main.basepath + "\\save" + curslot + "\\PLAYER.DAT", buffer);
         ////}
@@ -1008,7 +1009,7 @@ namespace UnderworldEditor
         {
             if (isLoading) { return; }
             //Update object at address
-            char[] buffer= PlayerDatUI.GetValuesFromPDatGrid(this);
+            byte[] buffer= PlayerDatUI.GetValuesFromPDatGrid(this);
             UpdateObjectUIChange(buffer, pdatObjects, CurPDatObject, CmbPdatItem_ID, ChkPdatEnchanted, ChkPdatIsQuant, ChkPdatDoorDir, ChkPdatInvis, NumPInvXpos, NumPInvYPos, NumPInvZpos, NumPInvHeading, NumPdatFlags, NumPdatQuality, NumPdatOwner, NumPdatNext, NumPdatLink);
             isLoading = true;
             PlayerDatUI.PopulatePDatValuesToGrid(buffer, this);
@@ -1153,7 +1154,7 @@ namespace UnderworldEditor
         {            
             if (main.curgame==GAME_UW2)
             {
-               char[] lev_ark;
+               byte[] lev_ark;
                if(! Util.ReadStreamFile(basepath + "\\data\\lev.ark", out lev_ark))
                {
                 return;
@@ -1448,7 +1449,7 @@ namespace UnderworldEditor
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void LoadPSXNodeData()
         {
             // string offsets="";
             if (PSX1Buffer==null)
@@ -1456,15 +1457,107 @@ namespace UnderworldEditor
                 Util.ReadStreamFile("C:\\Games\\UWPSX\\avatar_", out PSX1Buffer);
             }
 
+            long start = (long)numPal.Value ;  //3125248;// 3788800+(7*256);
+
+                testpal = new Palette();
+                for (int i=0; i<256; i++)
+                {
+                switch (numPalMode.Value)
+                {
+                    case 0:
+                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
+                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
+                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
+                       
+                        break;
+                    case 1:
+                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
+                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
+                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
+                        break;
+                    case 2:
+                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
+                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
+                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
+                        break;
+                    case 3:
+                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
+                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
+                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
+                        break;
+                    case 4:
+                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
+                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
+                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
+                        break;
+                       
+                    case 5:
+                    default:
+                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
+                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
+                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
+                        break;                      
+
+
+                }
+                //testpal.red[i] = (byte)i; //(byte)Util.getValAtAddress(PSX1Buffer, start, 8);
+                //testpal.blue[i] = (byte)i; //(byte)Util.getValAtAddress(PSX1Buffer, start+1, 8);
+                //testpal.green[i] = (byte)i;// (byte)Util.getValAtAddress(PSX1Buffer, start+2, 8);
+
+                //testpal.red[i] = (byte)i;
+                //testpal.blue[i] = (byte)i;
+                //testpal.green[i] = (byte)i;
+
+
+                start = start + 3;
+                }
+                if (numOffset.Value + (fileHeight.Value*fileWidth.Value) <PSX1Buffer.GetUpperBound(0))
+            {
                 var art = new ArtLoader();
-                var res = ArtLoader.Image(art, PSX1Buffer,(long)numOffset.Value, 0,(int)fileWidth.Value, (int)fileHeight.Value, "test", PaletteLoader.Palettes[0], false, BitmapUW.ImageTypes.Texture);
-                ImgOut.Image = res?.image;
+                var res = ArtLoader.Image(art, PSX1Buffer, (long)numOffset.Value, 0, (int)fileWidth.Value, (int)fileHeight.Value, "test", testpal, true, BitmapUW.ImageTypes.Texture);
+                picPSX.Image = res?.image;
+            }
+                else
+            {
+                MessageBox.Show("Index out of bounds");
+            }
 
         }
 
-        private void numOffset_ValueChanged(object sender, EventArgs e)
+
+        private void LoadPSXNodes(object sender, EventArgs e)
         {
-            button2_Click(sender, e);
+            if (PSX1Buffer == null)
+            {
+                Util.ReadStreamFile("C:\\Games\\UWPSX\\avatar_", out PSX1Buffer);
+            }
+            for (int i = 0; i < 231; i++)
+            {
+                var data = Util.getValAtAddress(PSX1Buffer, i * 4, 32);
+                var newNode = new TreeNode(i.ToString() + "@" + data);
+                newNode.Tag = data;
+                treeView1.Nodes.Add(newNode);
+            }
+        }
+
+        private void numOffset_ValueChanged_1(object sender, EventArgs e)
+        {
+            LoadPSXNodeData();
+        }
+
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            numOffset.Value = (long)treeView1.SelectedNode.Tag;
+        }
+
+        private void fileWidth_ValueChanged(object sender, EventArgs e)
+        {
+            LoadPSXNodeData();
+        }
+
+        private void numPalMode_ValueChanged(object sender, EventArgs e)
+        {
+            LoadPSXNodeData();
         }
 
         //private void btnJumpToRawData_Click(object sender, EventArgs e)

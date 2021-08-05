@@ -31,7 +31,7 @@ namespace UnderworldEditor
         }
 
         public ImageTypes ImageType;
-        public char[] UncompressedData;
+        public byte[] UncompressedData;
         public int[] PaletteRef; //Either the auxpal used or the greyscale palette.
         public bool Modified = false;
         

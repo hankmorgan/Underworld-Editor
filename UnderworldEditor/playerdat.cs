@@ -14,9 +14,9 @@ namespace UnderworldEditor
         /// </summary>
         private const int NoOfEncryptedBytes = 0xD2;
 
-        public static char[] LoadPlayerDatUW1(string FilePath)
+        public static byte[] LoadPlayerDatUW1(string FilePath)
         {
-            char[] buffer;
+            byte[] buffer;
             if (Util.ReadStreamFile(FilePath, out buffer))
             {
                 int xOrValue = (int)buffer[0];
@@ -27,9 +27,9 @@ namespace UnderworldEditor
         }//end loadplayerdatuw1
 
 
-        public static char[] LoadPlayerDatUW2(string FilePath)
+        public static byte[] LoadPlayerDatUW2(string FilePath)
         {
-            char[] buffer;
+            byte[] buffer;
             if (Util.ReadStreamFile(FilePath, out buffer))
             {
                 int xOrValue = (int)buffer[0];
@@ -43,7 +43,7 @@ namespace UnderworldEditor
         /// </summary>
         /// <param name="buffer"></param>
         /// <param name="xOrValue"></param>
-        public static void EncryptDecryptUW1(char[] buffer, int xOrValue)
+        public static void EncryptDecryptUW1(byte[] buffer, int xOrValue)
         {
             int incrnum = 3;
             for (int i = 1; i <= NoOfEncryptedBytes; i++)
@@ -52,7 +52,7 @@ namespace UnderworldEditor
                 {
                     incrnum = 3;
                 }
-                buffer[i] ^= (char)((xOrValue + incrnum) & 0xFF);
+                buffer[i] ^= (byte)((xOrValue + incrnum) & 0xFF);
                 incrnum += 3;
             }
         }
@@ -63,7 +63,7 @@ namespace UnderworldEditor
         /// </summary>
         /// <param name="buffer"></param>
         /// <param name="xOrValue"></param>
-        public static char[] EncryptDecryptUW2(char[] pDat, byte MS)
+        public static byte[] EncryptDecryptUW2(byte[] pDat, byte MS)
         {
             int[] MA = new int[80];
             MS += 7;
@@ -87,18 +87,18 @@ namespace UnderworldEditor
                 MS += 0x49;
                 MA[i * 7] = MS;
             }
-            char[] buffer = new char[pDat.GetUpperBound(0) + 1];
+            byte[] buffer = new byte[pDat.GetUpperBound(0) + 1];
             int offset = 1;
             int byteCounter = 0;
             for (int l = 0; l <= 11; l++)
             {
-                buffer[0 + offset] = (char)(pDat[0 + offset] ^ MA[0]);
+                buffer[0 + offset] = (byte)(pDat[0 + offset] ^ MA[0]);
                 byteCounter++;
                 for (int i = 1; i < 0x50; ++i)
                 {
                     if (byteCounter < 0x37D)
                     {
-                        buffer[i + offset] = (char)(((pDat[i + offset] & 0xff) ^ ((buffer[i - 1 + offset] & 0xff) + (pDat[i - 1 + offset] & 0xff) + (MA[i] & 0xff))) & 0xff);
+                        buffer[i + offset] = (byte)(((pDat[i + offset] & 0xff) ^ ((buffer[i - 1 + offset] & 0xff) + (pDat[i - 1 + offset] & 0xff) + (MA[i] & 0xff))) & 0xff);
                         byteCounter++;
                     }
                 }

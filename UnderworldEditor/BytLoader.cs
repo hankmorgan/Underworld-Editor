@@ -114,7 +114,7 @@ namespace UnderworldEditor
 
         public BitmapUW extractUW2Bitmap(string path, int index, bool Alpha)
         {
-            char[] textureFile;          // Pointer to our buffered data (little endian format)
+            byte[] textureFile;          // Pointer to our buffered data (little endian format)
                                          //int i;
             long NoOfTextures;
 

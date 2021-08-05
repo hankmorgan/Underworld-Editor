@@ -88,7 +88,7 @@ namespace UnderworldEditor
                     }
                 case 0x8://4 bit run-length
                     {
-                        char[] imgNibbles;
+                        byte[] imgNibbles;
                         int auxPalIndex;
                        
                         int BitMapWidth = (int)Util.getValAtAddress(ImageFileData, imageOffset + 1, 8);
@@ -102,12 +102,12 @@ namespace UnderworldEditor
                             auxPalIndex = OverrideAuxPalIndex;
                         }
                         int datalen = (int)Util.getValAtAddress(ImageFileData, imageOffset + 4, 16);
-                        imgNibbles = new char[Math.Max(BitMapWidth * BitMapHeight * 2, (datalen + 5) * 2)];
+                        imgNibbles = new byte[Math.Max(BitMapWidth * BitMapHeight * 2, (datalen + 5) * 2)];
                         imageOffset = imageOffset + 6;  //Start of raw data.
                         copyNibbles(ImageFileData, ref imgNibbles, datalen, imageOffset);
                          int[] aux = PaletteLoader.LoadAuxilaryPalIndices(main.basepath + AuxPalPath, auxPalIndex);
-                        char[] RawImg = DecodeRLEBitmap(imgNibbles, datalen, BitMapWidth, BitMapHeight, 4);
-                        char[] OutputImg = ApplyAuxPal(RawImg, aux);
+                        byte[] RawImg = DecodeRLEBitmap(imgNibbles, datalen, BitMapWidth, BitMapHeight, 4);
+                        byte[] OutputImg = ApplyAuxPal(RawImg, aux);
                         ImageCache[index] = Image(this, OutputImg, 0, index, BitMapWidth, BitMapHeight, "name_goes_here", PaletteLoader.Palettes[PaletteNo], Alpha, BitmapUW.ImageTypes.FourBitRunLength);
                         ImageCache[index].UncompressedData = RawImg;
                         ImageCache[index].SetAuxPalRef(aux);
@@ -116,7 +116,7 @@ namespace UnderworldEditor
                     }
                 case 0xA://4 bit uncompressed
                     {
-                        char[] imgNibbles;
+                        byte[] imgNibbles;
                         int auxPalIndex;
                         int datalen;
                         int BitMapWidth = (int)Util.getValAtAddress(ImageFileData, imageOffset + 1, 8);
@@ -130,12 +130,12 @@ namespace UnderworldEditor
                             auxPalIndex = OverrideAuxPalIndex;
                         }
                         datalen = (int)Util.getValAtAddress(ImageFileData, imageOffset + 4, 16);
-                        imgNibbles = new char[Math.Max(BitMapWidth * BitMapHeight * 2, (5 + datalen) * 2)];
+                        imgNibbles = new byte[Math.Max(BitMapWidth * BitMapHeight * 2, (5 + datalen) * 2)];
                         imageOffset = imageOffset + 6;  //Start of raw data.
                         copyNibbles(ImageFileData, ref imgNibbles, datalen, imageOffset);
                         //Palette auxpal = PaletteLoader.LoadAuxilaryPal(main.basepath + AuxPalPath, PaletteLoader.Palettes[PaletteNo], auxPalIndex);
                         int[] aux = PaletteLoader.LoadAuxilaryPalIndices(main.basepath + AuxPalPath, auxPalIndex);
-                        char[] OutputImg = ApplyAuxPal(imgNibbles, aux);
+                        byte[] OutputImg = ApplyAuxPal(imgNibbles, aux);
                         ImageCache[index] = Image(this, OutputImg, 0, index, BitMapWidth, BitMapHeight, "name_goes_here", PaletteLoader.Palettes[PaletteNo], Alpha, BitmapUW.ImageTypes.FourBitUncompress);
                         ImageCache[index].UncompressedData = OutputImg;
                         ImageCache[index].SetAuxPalRef(aux);
@@ -175,12 +175,12 @@ namespace UnderworldEditor
         /// <param name="Img"></param>
         /// <param name="auxpal"></param>
         /// <returns></returns>
-        char[] ApplyAuxPal(char[] Img, int[] auxpal)
+        byte[] ApplyAuxPal(byte[] Img, int[] auxpal)
         {
-            char[] output = new char[Img.GetUpperBound(0) + 1];
+            byte[] output = new byte[Img.GetUpperBound(0) + 1];
             for (int i = 0; i <= Img.GetUpperBound(0); i++)
             {
-                output[i] = (char)auxpal[Img[i]];
+                output[i] = (byte)auxpal[Img[i]];
             }
             return output;
         }
@@ -193,7 +193,7 @@ namespace UnderworldEditor
         /// <param name="NoOfNibbles">No of nibbles.</param>
         /// <param name="add_ptr">Add ptr.</param>
         /// This code from underworld adventures
-        protected void copyNibbles(char[] InputData, ref char[] OutputData, int NoOfNibbles, long add_ptr)
+        protected void copyNibbles(byte[] InputData, ref byte[] OutputData, int NoOfNibbles, long add_ptr)
         {
             //Split the data up into it's nibbles.
             int i = 0;
@@ -202,8 +202,8 @@ namespace UnderworldEditor
             {
                 if (add_ptr <= InputData.GetUpperBound(0))
                 {
-                    OutputData[i] = (char)((Util.getValAtAddress(InputData, add_ptr, 8) >> 4) & 0x0F);        //High nibble
-                    OutputData[i + 1] = (char)((Util.getValAtAddress(InputData, add_ptr, 8)) & 0xf);  //Low nibble							
+                    OutputData[i] = (byte)((Util.getValAtAddress(InputData, add_ptr, 8) >> 4) & 0x0F);        //High nibble
+                    OutputData[i + 1] = (byte)((Util.getValAtAddress(InputData, add_ptr, 8)) & 0xf);  //Low nibble							
                 }
                 i = i + 2;
                 add_ptr++;
@@ -211,7 +211,7 @@ namespace UnderworldEditor
             }
             if (NoOfNibbles == 1)
             {   //Odd nibble out.
-                OutputData[i] = (char)((Util.getValAtAddress(InputData, add_ptr, 8) >> 4) & 0x0F);
+                OutputData[i] = (byte)((Util.getValAtAddress(InputData, add_ptr, 8) >> 4) & 0x0F);
             }
         }
 
@@ -226,15 +226,15 @@ namespace UnderworldEditor
         /// <param name="imageHeight">Image height.</param>
         /// <param name="BitSize">Bit size.</param>
         /// This code from underworld adventures
-        char[] DecodeRLEBitmap(char[] imageData, int datalen, int imageWidth, int imageHeight, int BitSize)
+        byte[] DecodeRLEBitmap(byte[] imageData, int datalen, int imageWidth, int imageHeight, int BitSize)
         //, palette *auxpal, int index, int BitSize, char OutFileName[255])
         {
-            char[] outputImg = new char[imageWidth * imageHeight];
+            byte[] outputImg = new byte[imageWidth * imageHeight];
             int state = 0;
             int curr_pxl = 0;
             int count = 0;
             int repeatcount = 0;
-            char nibble;
+            byte nibble;
 
             int add_ptr = 0;
 
@@ -312,9 +312,9 @@ namespace UnderworldEditor
             return outputImg;
         }
 
-        public char[] EncodeRLEBitMap(char[] img)
+        public byte[] EncodeRLEBitMap(byte[] img)
         {
-            List<char> data = new List<char>();
+            List<byte> data = new List<byte>();
             //main.instance.TxtDebug.Text += "\n\n\nEncoding";
            int i = 0;
             int state = repeat_record;
@@ -337,7 +337,7 @@ namespace UnderworldEditor
                         if (state==run_record)
                         {//previous was already a run record. Insert count to signify this.
                            // main.instance.TxtDebug.Text += "\nRun Count 1";
-                            data.Add((char)1);//flag the data begins with a run record.
+                            data.Add((byte)1);//flag the data begins with a run record.
                         }
                         state = run_record;
                         int nextrepeat = FindNextRepeat(img, i);
@@ -368,7 +368,7 @@ namespace UnderworldEditor
                         {
                             // if (state==repeat_record && i>0 )
                             //{//this is a repeating repeat record and not at the start of the data.
-                            //data.Add((char)2);//flag the data begins with a repeat record.
+                            //data.Add((byte)2);//flag the data begins with a repeat record.
                             //main.instance.TxtDebug.Text += "\nRepeat Count (2)";
                             //}
                             // Find if the data following this repeat is also a repeating record. Do so until eof or not a repeat.
@@ -377,8 +377,8 @@ namespace UnderworldEditor
                                 FoundNoOfRepeats = FindNoOfRepeats(img, i);
                                 if (FoundNoOfRepeats > 1)
                                 {
-                                    data.Add((char)2);//flag the data begins with a repeat record.
-                                    //data.Add((char)(FoundNoOfRepeats));
+                                    data.Add((byte)2);//flag the data begins with a repeat record.
+                                    //data.Add((byte)(FoundNoOfRepeats));
                                     CreateCount(data, FoundNoOfRepeats);
                                    // main.instance.TxtDebug.Text += "\nRepeat Count (2)";
                                 }
@@ -388,7 +388,7 @@ namespace UnderworldEditor
 
                             //main.instance.TxtDebug.Text += "\nRepeat " + curchar + " " + copycount + " times";
                             CreateCount(data, copycount);
-                            data.Add((char)curchar);
+                            data.Add((byte)curchar);
                            // for (int x = 0; x < copycount && x <= img.GetUpperBound(0); x++)
                            // {
                                // main.instance.TxtDebug.Text += "\n\t Repeating " + curchar;
@@ -407,7 +407,7 @@ namespace UnderworldEditor
         /// </summary>
         /// <param name="data"></param>
         /// <param name="count"></param>
-        void CreateCount(List<char> data, int count)
+        void CreateCount(List<byte> data, int count)
         {
             //TODO.
            // 1 word count : [w0]     0-15                     , with(w0) != 0
@@ -415,22 +415,22 @@ namespace UnderworldEditor
      // 3 word count :   0    0    0  [w3] [w4] [w5]    0-4095
             if (count < 16)
             {
-                data.Add((char)count);
+                data.Add((byte)count);
             }
             else if(count<255)
             {
-                data.Add((char)0);
-                data.Add((char)((count & 0xf0) >>4));
-                data.Add((char)(count & 0x0f));
+                data.Add((byte)0);
+                data.Add((byte)((count & 0xf0) >>4));
+                data.Add((byte)(count & 0x0f));
             }
             else //count <4095
             {
-                data.Add((char)0);
-                data.Add((char)0);
-                data.Add((char)0);
-                data.Add((char)((count & 0xf00) >> 8));
-                data.Add((char)((count & 0xf0) >> 4));
-                data.Add((char)(count & 0x0f));
+                data.Add((byte)0);
+                data.Add((byte)0);
+                data.Add((byte)0);
+                data.Add((byte)((count & 0xf00) >> 8));
+                data.Add((byte)((count & 0xf0) >> 4));
+                data.Add((byte)(count & 0x0f));
             }
         }
 
@@ -441,7 +441,7 @@ namespace UnderworldEditor
         /// <param name="img"></param>
         /// <param name="start"></param>
         /// <returns></returns>
-        int getCopyCount(char[] img, int start)
+        int getCopyCount(byte[] img, int start)
         {
             if (start > img.GetUpperBound(0)) { return 0; }
             int val = img[start];
@@ -460,7 +460,7 @@ namespace UnderworldEditor
             return copycount;
         }
 
-        int FindNextRepeat(char[] img, int start)
+        int FindNextRepeat(byte[] img, int start)
         {
             for (int i=start; i<=img.GetUpperBound(0);i++)
             {
@@ -472,7 +472,7 @@ namespace UnderworldEditor
             return -1;//no more repeats. Img is run record til eof.
         }
 
-        int FindNoOfRepeats(char[] img, int start)
+        int FindNoOfRepeats(byte[] img, int start)
         {
             int nextcopylength = getCopyCount(img, start);
             int count = 0;
@@ -492,7 +492,7 @@ namespace UnderworldEditor
         /// <param name="addr_ptr">Address ptr.</param>
         /// <param name="size">Size.</param>
         /// This code from underworld adventures
-        int getcount(char[] nibbles, ref int addr_ptr, int size)
+        int getcount(byte[] nibbles, ref int addr_ptr, int size)
         {
             int n1;
             int n2;
@@ -525,9 +525,9 @@ namespace UnderworldEditor
         /// <param name="nibbles">Nibbles.</param>
         /// <param name="addr_ptr">Address ptr.</param>
         /// This code from underworld adventures
-        char getNibble(char[] nibbles, ref int addr_ptr)
+        byte getNibble(byte[] nibbles, ref int addr_ptr)
         {
-            char n1 = nibbles[addr_ptr];
+            var n1 = nibbles[addr_ptr];
             addr_ptr = addr_ptr + 1;
             return n1;
         }
@@ -538,23 +538,23 @@ namespace UnderworldEditor
         /// </summary>
         /// <param name="img"></param>
         /// <returns></returns>
-        public static char[] DataToNibbles(char[] data)
+        public static byte[] DataToNibbles(byte[] data)
         {
             int datasize = data.GetUpperBound(0) + 1;
             int imgsize = datasize / 2 + datasize % 2;
-            char[] nibbles = new char[imgsize];
+            byte[] nibbles = new byte[imgsize];
             int counter = 0;
             for (int i=0; i<= data.GetUpperBound(0); i++ )
             {
                 int curbyte = data[i];
                 if (i % 2 ==1)
                 {//odd nibble
-                    nibbles[counter] = (char)((nibbles[counter]) | (char)(curbyte & 0xf));
+                    nibbles[counter] = (byte)((nibbles[counter]) | (byte)(curbyte & 0xf));
                     counter++;
                 }
                 else
                 {//even nibble
-                    nibbles[counter] = (char)((curbyte << 4) & 0xf0);
+                    nibbles[counter] = (byte)((curbyte << 4) & 0xf0);
                 }
             }           
             return nibbles;
@@ -564,7 +564,7 @@ namespace UnderworldEditor
         {
             return; // and this does not work either!!!
             //Copy unmodified files.
-            char[] output = new char[128000];
+            byte[] output = new byte[128000];
             //Allocate space for file header
             int curFileOffset = 1 + 2 + (NoOfImages * 4);
             int FileOffsetPtr = 0;
@@ -583,11 +583,11 @@ namespace UnderworldEditor
                 Util.StoreInt32(output, 3 + FileOffsetPtr, curFileOffset);
                 FileOffsetPtr += 4;
                 {//This is my new image. encode and store
-                    char[] newdata = EncodeRLEBitMap(ImageCache[i].UncompressedData);
-                    output[curFileOffset++] = (char)8;
-                    output[curFileOffset++] = (char)ImageCache[i].image.Width;
-                    output[curFileOffset++] = (char)ImageCache[i].image.Height;
-                    output[curFileOffset++] = (char)ImageCache[i].AuxPalNo;
+                    byte[] newdata = EncodeRLEBitMap(ImageCache[i].UncompressedData);
+                    output[curFileOffset++] = (byte)8;
+                    output[curFileOffset++] = (byte)ImageCache[i].image.Width;
+                    output[curFileOffset++] = (byte)ImageCache[i].image.Height;
+                    output[curFileOffset++] = (byte)ImageCache[i].AuxPalNo;
                     Util.StoreInt16(output, curFileOffset, newdata.GetUpperBound(0) + 1);
                     curFileOffset += 2;
                     for (int j=0;j<=newdata.GetUpperBound(0);j++)
@@ -597,7 +597,7 @@ namespace UnderworldEditor
                 }
             }
 
-            char[] final = new char[curFileOffset + 1];
+            byte[] final = new byte[curFileOffset + 1];
             for (int i=0; i<=final.GetUpperBound(0);i++)
             {
                 final[i] = output[i];
@@ -633,7 +633,7 @@ namespace UnderworldEditor
                 FileSizeNeeded += FileSizes[i];
             }
 
-            char[] Output = new char[FileSizeNeeded];
+            byte[] Output = new byte[FileSizeNeeded];
             //Write file header
             Output[0] = ImageFileData[0];//type
             Output[1] = ImageFileData[1];//no of images
@@ -650,9 +650,9 @@ namespace UnderworldEditor
             //Now write files  
             for (int i = 0; i < NoOfImages; i++)
             {
-                Output[addptr++] = (char)0x4;//Imagetype
-                Output[addptr++] = (char)ImageCache[i].image.Width;
-                Output[addptr++] = (char)ImageCache[i].image.Height;                
+                Output[addptr++] = (byte)0x4;//Imagetype
+                Output[addptr++] = (byte)ImageCache[i].image.Width;
+                Output[addptr++] = (byte)ImageCache[i].image.Height;                
                 Util.StoreInt16(Output, addptr, ImageCache[i].UncompressedData.GetUpperBound(0)+1);
                 addptr += 2;
                 //      Image Data

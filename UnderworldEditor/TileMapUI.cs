@@ -213,17 +213,17 @@ namespace UnderworldEditor
             int floorHeight = (t.floorHeight / 2) << 4;
 
             int ByteToWrite = tileType | floorHeight;//| floorTexture | noMagic;//This will be set in the original data
-            MAIN.levarkbuffer[t.FileAddress] = (char)(ByteToWrite);
+            MAIN.levarkbuffer[t.FileAddress] = (byte)(ByteToWrite);
             int flags = t.flags & 0x3;
             int floorTexture = t.floorTexture << 2;
             int noMagic = t.noMagic << 6;
             int DoorBit = t.doorBit << 7;
             ByteToWrite = floorTexture | noMagic | DoorBit | flags;
-            MAIN.levarkbuffer[t.FileAddress + 1] = (char)(ByteToWrite);
+            MAIN.levarkbuffer[t.FileAddress + 1] = (byte)(ByteToWrite);
 
             ByteToWrite = ((t.indexObjectList & 0x3FF) << 6) | (t.wallTexture & 0x3F);
-            MAIN.levarkbuffer[t.FileAddress + 2] = (char)(ByteToWrite & 0xFF);
-            MAIN.levarkbuffer[t.FileAddress + 3] = (char)((ByteToWrite >> 8) & 0xFF);
+            MAIN.levarkbuffer[t.FileAddress + 2] = (byte)(ByteToWrite & 0xFF);
+            MAIN.levarkbuffer[t.FileAddress + 3] = (byte)((ByteToWrite >> 8) & 0xFF);
 
             MAIN.tilemap.Cleanup();
             MAIN.PicMap.Image = ArtUI.UWMap(MAIN.tilemap, MAIN.tex);

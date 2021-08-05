@@ -20,7 +20,7 @@ namespace UnderworldEditor
         /// <summary>
         /// The complete image file 
         /// </summary>
-        public char[] ImageFileData;
+        public byte[] ImageFileData;
 
         /// <summary>
         /// The palette no to use with this file.
@@ -39,7 +39,7 @@ namespace UnderworldEditor
             newimg.image = new Bitmap(2, 2);
             newimg.ImagePalette = PaletteLoader.Palettes[0];
             ImageCache[index] = newimg;
-            ImageCache[index].UncompressedData = new char[4];
+            ImageCache[index].UncompressedData = new byte[4];
             return ImageCache[index];
         }
 
@@ -66,7 +66,7 @@ namespace UnderworldEditor
         /// <param name="imageName">Image name.</param>
         /// <param name="pal">Pal.</param>
         /// <param name="Alpha">If set to <c>true</c> alpha.</param>
-        public static BitmapUW Image(ArtLoader instance, char[] databuffer, long dataOffSet, int index, int width, int height, string imageName, Palette pal, bool Alpha, BitmapUW.ImageTypes imgType)
+        public static BitmapUW Image(ArtLoader instance, byte[] databuffer, long dataOffSet, int index, int width, int height, string imageName, Palette pal, bool Alpha, BitmapUW.ImageTypes imgType)
         {
             return Image(instance, databuffer, dataOffSet, index, width, height, imageName, pal, Alpha, false, imgType);
         }
@@ -82,7 +82,7 @@ namespace UnderworldEditor
         /// <param name="imageName">Image name.</param>
         /// <param name="pal">Pal.</param>
         /// <param name="Alpha">If set to <c>true</c> alpha.</param>
-        public static BitmapUW Image(ArtLoader instance, char[] databuffer, long dataOffSet, int index, int width, int height, string imageName, Palette pal, bool Alpha, bool useXFER, BitmapUW.ImageTypes imgType)
+        public static BitmapUW Image(ArtLoader instance, byte[] databuffer, long dataOffSet, int index, int width, int height, string imageName, Palette pal, bool Alpha, bool useXFER, BitmapUW.ImageTypes imgType)
         {
             BitmapUW imgUW = new BitmapUW();
             imgUW.artdata = instance;
@@ -108,8 +108,7 @@ namespace UnderworldEditor
                     imageColors[counter++] = col.B;
                     imageColors[counter++] = col.G;
                     imageColors[counter++] = col.R;
-                    imageColors[counter++] = col.A;
-                    //image.SetPixel(j- (iRow * width), iRow, pal.ColorAtPixel(pixel, Alpha));
+                    imageColors[counter++] = col.A;                    
                 }
             }
             //image.filterMode = FilterMode.Point;
@@ -158,7 +157,7 @@ namespace UnderworldEditor
         /// <param name="maxpix">Maxpix.</param>
         /// <param name="addr_ptr">Address ptr.</param>
         /// <param name="auxpal">Auxpal.</param>
-        public static void ua_image_decode_rle(char[] FileIn, char[] pixels, int bits, int datalen, int maxpix, int addr_ptr, char[] auxpal)
+        public static void ua_image_decode_rle(byte[] FileIn, byte[] pixels, int bits, int datalen, int maxpix, int addr_ptr, byte[] auxpal)
         {
             //Code lifted from Underworld adventures.
             // bit extraction variables
@@ -343,18 +342,18 @@ namespace UnderworldEditor
             0x0200      fade to white
             0x0280      fade to black
             */
-        static char getActualAuxPalVal(char[] auxpal, int nibble)
+        static byte getActualAuxPalVal(byte[] auxpal, int nibble)
         {
             switch ((int)auxpal[nibble])
             {
                 case 0xf0: // fade to red
-                    return (char)(256 + 0x80 + nibble);
+                    return (byte)(256 + 0x80 + nibble);
                 case 0xf4: // fade to blue
-                    return (char)(256 + 0x180 + nibble);
+                    return (byte)(256 + 0x180 + nibble);
                 case 0xf8:// fade to green 
-                    return (char)(256 + 0x200 + nibble);
+                    return (byte)(256 + 0x200 + nibble);
                 case 252:  // fade to white 
-                    return (char)(256 + 0x280 + nibble);
+                    return (byte)(256 + 0x280 + nibble);
 
                 //????   fade to black
                 default:
@@ -365,12 +364,12 @@ namespace UnderworldEditor
 
         public static BitmapUW Palette(Palette pal)
         {
-            char[] paldata = new char[256*64];
+            byte[] paldata = new byte[256*64];
             for (int j=0; j<64;j++)
             {
                 for (int i = 0; i < 256; i++)
                 {
-                    paldata[j*256 + i] = (char)i;
+                    paldata[j*256 + i] = (byte)i;
                 }
             }
             return Image(null, paldata, 0, 0, 256, 64, "name", pal, true, BitmapUW.ImageTypes.Palette);
@@ -380,13 +379,13 @@ namespace UnderworldEditor
         {
 
             int width = (auxPal.GetUpperBound(0) + 1) ;
-            char[] paldata = new char[width * 64];
+            byte[] paldata = new byte[width * 64];
             {
                 for (int j = 0; j < 64; j++)
                 {
                     for (int i = 0; i < width; i++)
                     {
-                       paldata[j * width + i] = (char)auxPal[i];                      
+                       paldata[j * width + i] = (byte)auxPal[i];                      
                     }
                 }
                 return Image(null, paldata, 0, 0, width, 64, "name", pal, true, BitmapUW.ImageTypes.Palette);
