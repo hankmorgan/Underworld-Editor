@@ -51,8 +51,8 @@ namespace UnderworldEditor
             {
                 int rowId = MAIN.GrdPlayerDat.Rows.Add();
                 DataGridViewRow row = MAIN.GrdPlayerDat.Rows[rowId];
-                row.Cells[0].Value = (int)buffer[i];
-                row.HeaderCell.Value = playerdat.FieldName(i, main.curgame);
+                row.Cells[0].Value = (int)buffer[i];               
+                row.HeaderCell.Value = i.ToString("x") + " " + playerdat.FieldName(i, main.curgame);
             }
         }
 
@@ -62,7 +62,7 @@ namespace UnderworldEditor
             MAIN.TxtCharName.Text = "";
             for (int i = 1; i < 14; i++)
             {
-                MAIN.TxtCharName.Text = MAIN.TxtCharName.Text + buffer[i].ToString();
+                MAIN.TxtCharName.Text = MAIN.TxtCharName.Text + (char)buffer[i];
             }
         }
 

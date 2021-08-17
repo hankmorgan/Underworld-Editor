@@ -575,26 +575,34 @@ namespace UnderworldEditor
                 TreeNode AutoMapNotesNodes = TreeUWBlocks.Nodes.Add("AutoMapNotes");//These are variable sizes
                 for (int i = 0; i <= uwblocks.GetUpperBound(0); i++)
                 {
-                    if (Util.LoadUWBlock(levarkbuffer, i, Util.UWBlockSizes(i), out uwblocks[i]))
+                    try
                     {
-                        uwblocks[i].ContentType = Util.GetUWLevArkContentType(i);
-                        TreeNode node;
-                        switch (uwblocks[i].ContentType)
+                        if (Util.LoadUWBlock(levarkbuffer, i, Util.UWBlockSizes(i), out uwblocks[i]))
                         {
-                            case Util.ContentTypes.AnimationOverlay:
-                                node = OverlayMapNodes.Nodes.Add("Block #" + i); break;
-                            case Util.ContentTypes.AutoMap:
-                                node = AutoMapNodes.Nodes.Add("Block #" + i); break;
-                            case Util.ContentTypes.AutoMapNotes:
-                                node = AutoMapNotesNodes.Nodes.Add("Block #" + i); break;
-                            case Util.ContentTypes.TextureMap:
-                                node = TextureMapNodes.Nodes.Add("Block #" + i); break;
-                            case Util.ContentTypes.TileMap:
-                            default:
-                                node = TileMapNodes.Nodes.Add("Block #" + i); break;
+                            uwblocks[i].ContentType = Util.GetUWLevArkContentType(i);
+                            TreeNode node;
+                            switch (uwblocks[i].ContentType)
+                            {
+                                case Util.ContentTypes.AnimationOverlay:
+                                    node = OverlayMapNodes.Nodes.Add("Block #" + i); break;
+                                case Util.ContentTypes.AutoMap:
+                                    node = AutoMapNodes.Nodes.Add("Block #" + i); break;
+                                case Util.ContentTypes.AutoMapNotes:
+                                    node = AutoMapNotesNodes.Nodes.Add("Block #" + i); break;
+                                case Util.ContentTypes.TextureMap:
+                                    node = TextureMapNodes.Nodes.Add("Block #" + i); break;
+                                case Util.ContentTypes.TileMap:
+                                default:
+                                    node = TileMapNodes.Nodes.Add("Block #" + i); break;
+                            }
+                            node.Tag = i;
                         }
-                        node.Tag = i;
                     }
+                    catch(Exception e)
+                    {
+                        MessageBox.Show(e.Message + " most likely bug with loading of automap notes");
+                    }
+
                 }
             }//end readstreamfile
         }
