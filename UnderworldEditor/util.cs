@@ -31,7 +31,7 @@ namespace UnderworldEditor
         /// </summary>
         public struct UWBlock
         {
-            public char[] Data;
+            public byte[] Data;
             public long Address; //The file address of the block
 
             public long DataLen;
@@ -49,37 +49,39 @@ namespace UnderworldEditor
         /// <returns><c>true</c>, if stream file was  read, <c>false</c> otherwise.</returns>
         /// <param name="Path">Path.</param>
         /// <param name="buffer">Buffer.</param>
-        public static bool ReadStreamFile(String Path, out char[] buffer)
+        public static bool ReadStreamFile(String Path, out byte[] buffer)
         {
-            //Path = Path.Replace("--", sep.ToString());
             if (!File.Exists(Path))
-            {            
+            {           
                 
                 Debug.WriteLine("Util.ReadStreamFile : File not found : " + Path);
                 buffer = null;
                 return false;
             }
 
-            Stream fs = File.Open(Path,FileMode.Open,FileAccess.ReadWrite);
-            if (fs.CanRead)
-            {
-                buffer = new char[fs.Length];
-                for (int i = 0; i < fs.Length; i++)
-                {
-                    buffer[i] = (char)fs.ReadByte();
-                }
-                fs.Close();
-                return true;
-            }
-            else
-            {
-                fs.Close();
-                buffer = new char[0];
-                return false;
-            }
+            buffer=System.IO.File.ReadAllBytes(Path);
+            return true;
+            //Stream fs = File.Open(Path,FileMode.Open,FileAccess.ReadWrite);
+            //if (fs.CanRead)
+            //{
+                
+            //    buffer = new byte[fs.Length];
+            //    for (int i = 0; i < fs.Length; i++)
+            //    {
+            //          buffer[i] = (byte)fs.ReadByte();
+            //    }
+            //    fs.Close();
+            //    return true;
+            //}
+            //else
+            //{
+            //    fs.Close();
+            //    buffer = new byte[0];
+            //    return false;
+            //}
         }
         
-        public static void WriteStreamFile(String Path, char[] buffer)
+        public static void WriteStreamFile(String Path, byte[] buffer)
         {
             byte[] bytes = new byte[buffer.GetUpperBound(0)+1];
             for (int i=0; i<=buffer.GetUpperBound(0);i++)
@@ -97,7 +99,7 @@ namespace UnderworldEditor
         /// <param name="buffer">Buffer.</param>
         /// <param name="Address">Address.</param>
         /// <param name="size">Size of the data in bits</param>
-        public static long getValAtAddress(char[] buffer, long Address, int size)
+        public static long getValAtAddress(byte[] buffer, long Address, int size)
         {//Gets contents of bytes the the specific integer address. int(8), int(16), int(32) per uw-formats.txt
             switch (size)
             {
@@ -117,19 +119,19 @@ namespace UnderworldEditor
         }
 
 
-        public static long ConvertInt16(char Byte1, char Byte2)
+        public static long ConvertInt16(byte Byte1, byte Byte2)
         {
             int b1 = (int)Byte1;
             int b2 = (int)Byte2;
             return Byte2 << 8 | Byte1;
         }
 
-        public static long ConvertInt24(char Byte1, char Byte2, char Byte3)
+        public static long ConvertInt24(byte Byte1, byte Byte2, byte Byte3)
         {
             return Byte3 << 16 | Byte2 << 8 | Byte1;
         }
 
-        public static long ConvertInt32(char Byte1, char Byte2, char Byte3, char Byte4)
+        public static long ConvertInt32(byte Byte1, byte Byte2, byte Byte3, byte Byte4)
         {
             return Byte4 << 24 | Byte3 << 16 | Byte2 << 8 | Byte1;      //24 was 32
         }
@@ -173,7 +175,7 @@ namespace UnderworldEditor
         /// <param name="blockNo">Block no.</param>
         /// <param name="targetDataLen">Target data length.</param>
         /// <param name="uwb">Uwb.</param>
-        public static bool LoadUWBlock(char[] arkData, int blockNo, long targetDataLen, out UWBlock uwb)
+        public static bool LoadUWBlock(byte[] arkData, int blockNo, long targetDataLen, out UWBlock uwb)
         {
             uwb = new UWBlock();
             int NoOfBlocks = (int)getValAtAddress(arkData, 0, 32);
@@ -194,7 +196,7 @@ namespace UnderworldEditor
                             }
                             else
                             {
-                                uwb.Data = new char[uwb.DataLen];
+                                uwb.Data = new byte[uwb.DataLen];
                                 int b = 0;
                                 for (long i = uwb.Address; i < uwb.Address + uwb.DataLen; i++)
                                 {//Copy the data to the block.
@@ -214,7 +216,7 @@ namespace UnderworldEditor
                         uwb.Address = getValAtAddress(arkData, (blockNo * 4) + 2, 32);
                         if (uwb.Address != 0)
                         {
-                            uwb.Data = new char[targetDataLen];
+                            uwb.Data = new byte[targetDataLen];
                             uwb.DataLen = targetDataLen;
                             uwb.CompressionFlag = 0;
                             int b = 0;
@@ -243,7 +245,7 @@ namespace UnderworldEditor
         /// <param name="blockNo">Block no.</param>
         /// <param name="targetDataLen">Target data length.</param>
         /// <param name="uwb">Uwb.</param>
-        public static bool CopyUWBlock(char[] arkData, int blockNo, long targetDataLen, out UWBlock uwb)
+        public static bool CopyUWBlock(byte[] arkData, int blockNo, long targetDataLen, out UWBlock uwb)
         {
             uwb = new UWBlock();
             int NoOfBlocks = (int)getValAtAddress(arkData, 0, 32);
@@ -257,7 +259,7 @@ namespace UnderworldEditor
                         uwb.ReservedSpace = getValAtAddress(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 12), 32);
                         if (uwb.Address != 0)
                         {
-                            uwb.Data = new char[uwb.DataLen];
+                            uwb.Data = new byte[uwb.DataLen];
                             int b = 0;
                             for (long i = uwb.Address; i < uwb.Address + uwb.DataLen; i++)
                             {//Copy the data to the block.
@@ -267,7 +269,7 @@ namespace UnderworldEditor
                         }
                         else
                         {
-                            uwb.Data = new char[0];
+                            uwb.Data = new byte[0];
                             uwb.DataLen = 0;
                             return false;
                         }
@@ -286,12 +288,12 @@ namespace UnderworldEditor
         /// <param name="datalen">Datalen.</param>
         /// Robbed and changed slightly from the Labyrinth of Worlds implementation project.
         ///This decompresses UW2 blocks.
-        public static char[] unpackUW2(char[] tmp, long address_pointer, ref long datalen)
+        public static byte[] unpackUW2(byte[] tmp, long address_pointer, ref long datalen)
         {
             long BlockLen = (int)getValAtAddress(tmp, address_pointer, 32);  //lword(base);
             long NoOfSegs = ((BlockLen / 0x1000) + 1) * 0x1000;
-            //char[] buf = new char[BlockLen+100];
-            char[] buf = new char[Math.Max(NoOfSegs, BlockLen + 100)];
+            //byte[] buf = new byte[BlockLen+100];
+            byte[] buf = new byte[Math.Max(NoOfSegs, BlockLen + 100)];
 
             long upPtr = 0;
             datalen = 0;
@@ -345,7 +347,7 @@ namespace UnderworldEditor
                                 //int currentsegment = ((datalen/0x1000) + 1) * 0x1000;
                                 //buf[upPtr++]= buf[buf.GetUpperBound(0) + o++];//This is probably very very wrong.
                                 //buf[upPtr++]= buf[currentsegment + o++];//This is probably very very wrong.
-                                buf[upPtr++] = (char)0;
+                                buf[upPtr++] = (byte)0;
                                 o++;
                             }
                             else
@@ -478,12 +480,12 @@ namespace UnderworldEditor
             return 2;
         }
 
-        public static void StoreInt16(char[] buffer, int address, long val)
+        public static void StoreInt16(byte[] buffer, int address, long val)
         {
-            char valOut = (char)(val & 0xff);
+            byte valOut = (byte)(val & 0xff);
             buffer[address] = valOut;
 
-            valOut = (char)(val >> 8 & 0xff);
+            valOut = (byte)(val >> 8 & 0xff);
             buffer[address + 1] = valOut;
         }
 
@@ -510,20 +512,42 @@ namespace UnderworldEditor
             return 4;
         }
 
-        public static void StoreInt32(char[] buffer, int address, long val)
+        public static void StoreInt32(byte[] buffer, int address, long val)
         {
-            char valOut = (char)(val & 0xff);
+            byte valOut = (byte)(val & 0xff);
             buffer[address] = valOut;
 
-            valOut = (char)(val >> 8 & 0xff);
+            valOut = (byte)(val >> 8 & 0xff);
             buffer[address+1] = valOut;
 
-            valOut = (char)(val >> 16 & 0xff);
+            valOut = (byte)(val >> 16 & 0xff);
             buffer[address+2] = valOut;
 
-            valOut = (char)(val >> 24 & 0xff);
+            valOut = (byte)(val >> 24 & 0xff);
             buffer[address+3] = valOut;
         }
+
+
+
+        public static string DecimalToOct(string data)
+        {
+            if (data == "0")
+            { return "00"; }
+            string result = string.Empty;
+            int num = int.Parse(data);
+            while (num > 0)
+            {
+                int rem = num % 8;
+                num /= 8;
+                result = rem.ToString() + result;
+            }
+            if (result.Length == 1)
+            {
+                result = "0" + result;
+            }
+            return result;
+        }
+
 
     }//end class
 }

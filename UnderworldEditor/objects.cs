@@ -83,7 +83,7 @@ namespace UnderworldEditor
 
         public ObjectInfo[] objList;
 
-        public void InitInventoryObjectList(char[]buffer, int offset)
+        public void InitInventoryObjectList(byte[]buffer, int offset)
         {
             int NoOfItems = ((buffer.GetUpperBound(0) - offset) / 8) + 1;
             if(offset== buffer.GetUpperBound(0)+1)
@@ -101,7 +101,7 @@ namespace UnderworldEditor
             }
         }
 
-        public void InitWorldObjectList(char[] buffer, int offset, long blockaddress)
+        public void InitWorldObjectList(byte[] buffer, int offset, long blockaddress)
         {
             int NoOfItems = 1024;
             objList = new ObjectInfo[1025];
@@ -124,7 +124,7 @@ namespace UnderworldEditor
         }
 
 
-        static ObjectInfo initObject(char[]buffer, int objectsAddress, bool IsMobile)
+        static ObjectInfo initObject(byte[]buffer, int objectsAddress, bool IsMobile)
         {
             ObjectInfo newObj = new ObjectInfo();
 

@@ -12,7 +12,6 @@ namespace UnderworldEditor
         public byte[] red = new byte[256];
         public byte[] blue = new byte[256];
         public byte[] green = new byte[256];
-
         public Palette()
         {
             

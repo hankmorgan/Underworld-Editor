@@ -73,7 +73,7 @@ namespace UnderworldEditor
             {
                 default:
                     {
-                        char[] pals_dat;
+                        byte[] pals_dat;
                         Palettes = new Palette[NoOfPals];
                         if (Util.ReadStreamFile(Path, out pals_dat))
                         {
@@ -96,7 +96,7 @@ namespace UnderworldEditor
 
         public static int[] LoadAuxilaryPalIndices(string auxPalPath, int auxPalIndex)
         {
-            char[] palf;
+            byte[] palf;
             int[] auxpal = new int[16];
 
             if (Util.ReadStreamFile(auxPalPath, out palf))
@@ -111,7 +111,7 @@ namespace UnderworldEditor
 
         public static Palette LoadAuxilaryPal(string auxPalPath, Palette gamepal, int auxPalIndex)
         {
-            char[] palf;
+            byte[] palf;
             Palette auxpal = new Palette();
             auxpal.red = new byte[16];
             auxpal.green = new byte[16];
@@ -139,10 +139,10 @@ namespace UnderworldEditor
         {
             int height = 1;
             int width = 256;
-            char[] imgData = new char[height * width];
+            byte[] imgData = new byte[height * width];
             for (int i = 0; i < imgData.GetUpperBound(0); i++)
             {
-                imgData[i] = (char)i;
+                imgData[i] = (byte)i;
             }
             BitmapUW output= ArtLoader.Image(null, imgData, 0,0, width, height, "name here", Palettes[PalIndex], true, BitmapUW.ImageTypes.Palette);
             return output.image;

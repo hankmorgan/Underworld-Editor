@@ -541,7 +541,7 @@ namespace UnderworldEditor
             long address_pointer = 0;
             huffman_node[] hman;
             block_dir[] blocks;
-            char[] Buffer;
+            byte[] Buffer;
             string Key = "";
             GameStrings = new Hashtable();
             EntryCounts = new Hashtable();

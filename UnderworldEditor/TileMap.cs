@@ -71,7 +71,7 @@ namespace UnderworldEditor
 
         public short ceilingtexture;
 
-        public void InitTileMap(char[] lev_ark, int address_pointer, int thisblock, long BlockAddress)
+        public void InitTileMap(byte[] lev_ark, int address_pointer, int thisblock, long BlockAddress)
         {
            // if (game == 1)//uw1
            // {
@@ -101,7 +101,7 @@ namespace UnderworldEditor
         /// </summary>
         /// <param name="tex_ark"></param>
         /// <param name="CeilingTexture"></param>
-       public void BuildTextureMap(char[] tex_ark, ref short CeilingTexture)
+       public void BuildTextureMap(byte[] tex_ark, ref short CeilingTexture)
         {
             short textureMapSize;//=UW1_TEXTUREMAPSIZE;
             switch (main.curgame)

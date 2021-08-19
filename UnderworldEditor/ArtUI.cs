@@ -29,18 +29,18 @@ namespace UnderworldEditor
                                 {
                                     if (currentimg.ImageNo < 210)
                                     {
-                                        texdata.texturebufferW[currentimg.FileOffset + y * 64 + x] = (char)newpixel;
+                                        texdata.texturebufferW[currentimg.FileOffset + y * 64 + x] = (byte)newpixel;
                                     }
                                     else
                                     {
-                                        texdata.texturebufferF[currentimg.FileOffset + y * 32 + x] = (char)newpixel;
+                                        texdata.texturebufferF[currentimg.FileOffset + y * 32 + x] = (byte)newpixel;
                                     }
                                     currentimg.artdata.Modified = true;
                                     break;
                                 }
                             case main.GAME_UW2:
                                 {
-                                    texdata.texturebufferT[currentimg.FileOffset + y * 64 + x] = (char)newpixel;
+                                    texdata.texturebufferT[currentimg.FileOffset + y * 64 + x] = (byte)newpixel;
                                     currentimg.artdata.Modified = true;
                                     break;
                                 }
@@ -54,7 +54,7 @@ namespace UnderworldEditor
                             case main.GAME_UW1:
                                 {
                                     BytLoader byt = (BytLoader)currentimg.artdata;
-                                    byt.ImageFileData[currentimg.FileOffset + y * (currentimg.image.Width) + x] = (char)newpixel;
+                                    byt.ImageFileData[currentimg.FileOffset + y * (currentimg.image.Width) + x] = (byte)newpixel;
                                     currentimg.artdata.Modified = true;
                                     break;
                                 }
@@ -64,7 +64,7 @@ namespace UnderworldEditor
                 case BitmapUW.ImageTypes.EightBitUncompressed:
                     {
                         GRLoader gr = (GRLoader)currentimg.artdata;
-                        gr.ImageFileData[currentimg.FileOffset + y * (currentimg.image.Width) + x] = (char)newpixel;
+                        gr.ImageFileData[currentimg.FileOffset + y * (currentimg.image.Width) + x] = (byte)newpixel;
                         currentimg.artdata.Modified = true;
                         break;
                     }
@@ -76,13 +76,13 @@ namespace UnderworldEditor
                         int HiOrLow = Offset % 2;
                         if (HiOrLow==1)
                         {//low nibble
-                            gr.ImageFileData[NibbleAddress] = (char)(gr.ImageFileData[NibbleAddress] & 0xF0);
-                            gr.ImageFileData[NibbleAddress] =(char)( gr.ImageFileData[NibbleAddress] | ((char)auxpixel & 0xf));
+                            gr.ImageFileData[NibbleAddress] = (byte)(gr.ImageFileData[NibbleAddress] & 0xF0);
+                            gr.ImageFileData[NibbleAddress] =(byte)( gr.ImageFileData[NibbleAddress] | ((byte)auxpixel & 0xf));
                         }
                         else
                         {
-                            gr.ImageFileData[NibbleAddress] = (char)(gr.ImageFileData[NibbleAddress] & 0x0F);
-                            gr.ImageFileData[NibbleAddress] = (char)(gr.ImageFileData[NibbleAddress] | ((char)(auxpixel<<4) & 0xf0));
+                            gr.ImageFileData[NibbleAddress] = (byte)(gr.ImageFileData[NibbleAddress] & 0x0F);
+                            gr.ImageFileData[NibbleAddress] = (byte)(gr.ImageFileData[NibbleAddress] | ((byte)(auxpixel<<4) & 0xf0));
                         }
                        
                         currentimg.artdata.Modified = true;
@@ -91,7 +91,7 @@ namespace UnderworldEditor
                 //case BitmapUW.ImageTypes.FourBitRunLength:
                 //    {
                         //GRLoader gr = (GRLoader)currentimg.artdata;
-                        //currentimg.UncompressedData[y * (currentimg.image.Width) + x] = (char)auxpixel;
+                        //currentimg.UncompressedData[y * (currentimg.image.Width) + x] = (byte)auxpixel;
                         //currentimg.artdata.Modified = true;                        
                 //        break;
                 //    }
@@ -105,15 +105,14 @@ namespace UnderworldEditor
             currentimg.Modified = true;
             main.CurrentImage = currentimg.artdata.ImageCache[currentimg.ImageNo];
             img.Image = main.CurrentImage.image;
-
         }
 
-        public static void SaveBytDataUW1(char[] artfile, string filename)
+        public static void SaveBytDataUW1(byte[] artfile, string filename)
         {
             Util.WriteStreamFile(main.basepath + filename, artfile);
         }
 
-        public static void SaveTextureData(char[] artfile, bool IsUW1Wall)
+        public static void SaveTextureData(byte[] artfile, bool IsUW1Wall)
         {
             switch (main.curgame)
             {

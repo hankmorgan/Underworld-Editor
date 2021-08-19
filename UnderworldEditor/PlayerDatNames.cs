@@ -110,7 +110,7 @@ namespace UnderworldEditor
                 case 0x5F: return "High nibble is level of silver tree. Low nibble is the level of the moon stone";
                 case 0x60: return "Incense dream bits (0-1)   , play_poison (bits 2-5) , No of Active spells bits (6-7)";
                 case 0x61: return "Various plot flags";
-                case 0x62: return "unknown";
+                case 0x62: return "Shrooms, intoxication, is garamon buried";
                 case 0x63: return "MiscQuestVars";
                 case 0x64: return "Light level. (bits 5 to 8)";
                 case 0x65: return "Handedness/Gender/Body/charclass";
