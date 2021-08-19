@@ -50,6 +50,7 @@
     <Compile Include="ArtUI.cs" />
     <Compile Include="BitmapUW.cs" />
     <Compile Include="BytLoader.cs" />
+    <Compile Include="CritterArtLoader.cs" />
     <Compile Include="frmRES.cs">
       <SubType>Form</SubType>
     </Compile>

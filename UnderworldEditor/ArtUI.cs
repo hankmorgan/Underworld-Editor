@@ -105,7 +105,6 @@ namespace UnderworldEditor
             currentimg.Modified = true;
             main.CurrentImage = currentimg.artdata.ImageCache[currentimg.ImageNo];
             img.Image = main.CurrentImage.image;
-
         }
 
         public static void SaveBytDataUW1(byte[] artfile, string filename)

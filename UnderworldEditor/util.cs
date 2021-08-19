@@ -527,5 +527,27 @@ namespace UnderworldEditor
             buffer[address+3] = valOut;
         }
 
+
+
+        public static string DecimalToOct(string data)
+        {
+            if (data == "0")
+            { return "00"; }
+            string result = string.Empty;
+            int num = int.Parse(data);
+            while (num > 0)
+            {
+                int rem = num % 8;
+                num /= 8;
+                result = rem.ToString() + result;
+            }
+            if (result.Length == 1)
+            {
+                result = "0" + result;
+            }
+            return result;
+        }
+
+
     }//end class
 }

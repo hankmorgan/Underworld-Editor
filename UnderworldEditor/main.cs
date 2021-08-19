@@ -50,7 +50,7 @@ namespace UnderworldEditor
         private int CurrentPalettePixel=0;
         private int CurrentRefPixel = 0;
 
-
+        CritterArtLoader critloader;
 
         public main()
         {
@@ -719,6 +719,11 @@ namespace UnderworldEditor
                             }
                             break;
                         }
+                    case "CRITTER":
+                        {
+                            MessageBox.Show(node.Tag.ToString());
+                            break;
+                        }
                     default:
                         if (partext.ToUpper().Contains(".GR"))
                         {
@@ -742,6 +747,29 @@ namespace UnderworldEditor
                                 }
                             }
                         }
+                        else
+                        {
+                            if(node.Tag!=null)
+                            {
+                                if (node.Tag.ToString().StartsWith("CRITTER:"))
+                                {
+                                    var critparams = node.Tag.ToString().Split(',');
+                                    var critno = int.Parse(critparams[1]);
+                                    var animindex = int.Parse(critparams[2]);
+                                    try
+                                    {
+                                        CurrentImage = critloader.critter[critno].AnimInfo.animSprites[animindex];
+                                    }
+                                    catch
+                                    {
+                                        MessageBox.Show("No image data!");
+                                    }
+                                   
+                                    //CurrentImage = critloader?.critter[critno]?.AnimInfo?.animSprites[animindex];
+                                }
+                            }
+                        }
+
                         break;
                 }
             }
@@ -829,6 +857,12 @@ namespace UnderworldEditor
                 }
                 bytfile = new BytLoader[1];
             }
+
+            TreeNode critters = TreeArt.Nodes.Add("Critters");
+            critloader = new CritterArtLoader(curgame, critters, PaletteLoader.Palettes[0]);
+            //ImgOut.Image = critloader.critter[0].AnimInfo.animSprites[0];
+            
+
         }
 
         /// <summary>
@@ -1566,6 +1600,11 @@ namespace UnderworldEditor
         private void numPalMode_ValueChanged(object sender, EventArgs e)
         {
             LoadPSXNodeData();
+        }
+
+        private void lblOffset_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(lblOffset.Text);
         }
 
         //private void btnJumpToRawData_Click(object sender, EventArgs e)
