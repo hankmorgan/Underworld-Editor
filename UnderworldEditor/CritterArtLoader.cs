@@ -147,7 +147,7 @@ namespace UnderworldEditor
             int animationCounter = 0;
             for (int Animation = 0; Animation < 8; Animation++)//The the animation slot
             {
-                bool NoAngle = isAnimUnAngled(Animation);
+                bool NoAngle = false;// isAnimUnAngled(Animation);
                 //int NoOfValid=0;
 
                 for (int Angle = 0; Angle < 8; Angle++)//Each animation has every possible angle.
