@@ -108,6 +108,7 @@ namespace UnderworldEditor
 
         public static void LoadInfoForTileXY(main MAIN, int x, int y)
         {         
+            if (MAIN.tilemap == null) { return; }
             main.isLoading = true;
             MAIN.curTileX = x;
             MAIN.curTileY = y;

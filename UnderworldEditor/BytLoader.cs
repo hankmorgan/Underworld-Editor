@@ -50,8 +50,8 @@ namespace UnderworldEditor
             6,
             15,
             15,
-            0,
-            0,//this is probably wrong
+            21,
+            21,
             0
         };
 
@@ -64,8 +64,8 @@ namespace UnderworldEditor
             0,
             0,
             0,
-            0,//15,
-            0,//15,
+            15,
+            15,
             0,
             0,
             0
@@ -93,7 +93,8 @@ namespace UnderworldEditor
             {
                 case main.GAME_UW2:
                     {
-                        ImageCache[index] = extractUW2Bitmap(main.basepath + "\\DATA\\BYT.ARK", index, Alpha);
+                        var bmp= extractUW2Bitmap(main.basepath + "\\DATA\\BYT.ARK", index, Alpha);
+                        ImageCache[index] = bmp;
                         return ImageCache[index];
                     }
                 default:
@@ -134,7 +135,8 @@ namespace UnderworldEditor
                 if (isCompressed == 1)
                 {
                     long datalen = 0;
-                    return Image(this, Util.unpackUW2(textureFile, textureOffset, ref datalen), 0, index, 320, 200, "namehere", PaletteLoader.Palettes[PaletteIndicesUW2[index]], Alpha, BitmapUW.ImageTypes.Byt);
+                    var unpacked = Util.unpackUW2(textureFile, textureOffset, ref datalen);
+                    return Image(this, unpacked, 0, index, 320, 200, "namehere", PaletteLoader.Palettes[PaletteIndicesUW2[index]], Alpha, BitmapUW.ImageTypes.Byt);
                 }
                 else
                 {

@@ -42,7 +42,7 @@ namespace UnderworldEditor
         string curlevarkfile;
         public objects worldObjects;
         public UWStrings UWGameStrings;
-        public GRLoader[] grfile =new GRLoader[33];
+        public GRLoader[] grfile =new GRLoader[35];
         public BytLoader[] bytfile;
         public TextureLoader tex = new TextureLoader();
         public static BitmapUW CurrentImage;
@@ -719,11 +719,6 @@ namespace UnderworldEditor
                             }
                             break;
                         }
-                    case "CRITTER":
-                        {
-                            MessageBox.Show(node.Tag.ToString());
-                            break;
-                        }
                     default:
                         if (partext.ToUpper().Contains(".GR"))
                         {
@@ -749,10 +744,18 @@ namespace UnderworldEditor
                         }
                         else
                         {
+                            if (node.Text=="CRITTERS")
+                            {
+                            if (critloader == null)
+                                {
+                                    critloader = new CritterArtLoader(curgame, node, PaletteLoader.Palettes[0]);
+                                }
+                            }
                             if(node.Tag!=null)
                             {
                                 if (node.Tag.ToString().StartsWith("CRITTER:"))
                                 {
+                                    BtnRepack4Bit.Enabled = false;
                                     var critparams = node.Tag.ToString().Split(',');
                                     var critno = int.Parse(critparams[1]);
                                     var animindex = int.Parse(critparams[2]);
@@ -859,9 +862,8 @@ namespace UnderworldEditor
             }
 
             TreeNode critters = TreeArt.Nodes.Add("Critters");
-            critloader = new CritterArtLoader(curgame, critters, PaletteLoader.Palettes[0]);
-            //ImgOut.Image = critloader.critter[0].AnimInfo.animSprites[0];
-            
+            critters = critters.Nodes.Add("CRITTERS");
+            critters.Tag = "CRITTERS";
 
         }
 
