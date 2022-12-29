@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace UnderworldEditor
 {
@@ -28,14 +29,33 @@ namespace UnderworldEditor
             //          }
             //     System.IO.File.WriteAllText("C:\\Games\\UWPSX\\avatar.txt", offsets);
             //     }
-           // thatOneFunction();
+            // thatOneFunction();
 
-
+            // ExtractSpellTable("C:\\Games\\UW2IDA\\uw2\\uw2.exe", 0x66490, "C:\\Games\\UW2IDA\\uw2\\spells.txt");
+           // ExtractSpellTable("C:\\Games\\UW1\\game\\UW\\uw.exe", 0x59EF0, "C:\\Games\\UW1\\game\\UW\\spells.txt");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new main());
         }
 
+        static void ExtractSpellTable(string exePath, long tableOffset, string outFile)
+        {
+            if (Util.ReadStreamFile(exePath, out byte[] Buffer))
+            {
+                File.Delete(outFile);
+                long addr = tableOffset;
+                string output="Index,SpellClass,Runes,SpellSubClass,CalculatedEffect\n";
+                for (int spell =0; spell<=0x45;spell++)
+                {
+                    var spellclass = (Util.getValAtAddress(Buffer, addr, 8) & 0xF8)>>3;
+                    var runes = Util.getValAtAddress(Buffer, addr + 1, 16);
+                    var spellsubclass = Util.getValAtAddress(Buffer, addr + 3, 8);
+                    output = output + spell +"," +spellclass + "," + runes + "," + spellsubclass +"," + (spell+256)+ "\n";
+                    addr += 4;
+                }
+                File.WriteAllText(outFile, output);
+            }
+        }
         static void thatOneFunction()
         {
             int ax = 0x1f80;

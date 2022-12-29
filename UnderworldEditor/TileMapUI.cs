@@ -44,20 +44,6 @@ namespace UnderworldEditor
             {
                 MAIN.tilemap.BuildTextureMap(MAIN.uwblocks[blockno + 80].Data, ref MAIN.tilemap.ceilingtexture);
             }
-            //Temporarily output to treeview for testing.
-           // MAIN.txtMap.Text = "";
-            //for (int x = 0; x <= 63; x++)
-            //{
-               
-            //   TreeNode xnode = MAIN.TreeTiles.Nodes.Add("X=" + x);
-            //    for (int y = 0; y <= 63; y++)
-            //    {
-            //        TreeNode ynode = xnode.Nodes.Add("Y=" + y);
-            //        ynode.Tag = x + "," + y;
-            //        //MAIN.txtMap.Text += MAIN.tilemap.Tiles[x, y].tileType;
-            //    }
-            //    //MAIN.txtMap.Text += "\n";
-            //}
 
             MAIN.worldObjects = new objects();
             MAIN.worldObjects.InitWorldObjectList(MAIN.uwblocks[blockno].Data, 64 * 64 * 4 , MAIN.uwblocks[blockno].Address);
@@ -75,12 +61,14 @@ namespace UnderworldEditor
                 {
                     if (MAIN.tilemap.Tiles[x, y].indexObjectList != 0)
                     {
-                        TreeNode xynode = MAIN.TreeWorldByTile.Nodes.Add(x + "," + y);
+                        int head = MAIN.tilemap.Tiles[x, y].indexObjectList;
+                        var objname = objects.ObjectName(MAIN.worldObjects.objList[head].item_id, main.curgame);
+                        TreeNode xynode = MAIN.TreeWorldByTile.Nodes.Add(x + "," + y + " " + objname + " " + " (" + head + ")");
                         TileMapUI.PopulateWorldNode(xynode, MAIN.tilemap.Tiles[x, y].indexObjectList, MAIN.worldObjects.objList);
                     }
                 }
             }
-            
+
             MAIN.PicMap.Image = ArtUI.UWMap(MAIN.tilemap, MAIN.tex);
             MAIN.PicMap.Height = 64 * (int)MAIN.numMapZoom.Value;
             MAIN.PicMap.Width = 64 * (int)MAIN.numMapZoom.Value;

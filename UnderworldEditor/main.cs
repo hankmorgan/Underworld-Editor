@@ -1203,7 +1203,7 @@ namespace UnderworldEditor
                {
                 return;
                }
-                int BlocksToRepack = 80;//A value of higher than this will crash the dos game.
+                int BlocksToRepack = 120;//A value of higher than this will crash the dos game.
                 //Create a new uwblocks array of size 320
                 Util.UWBlock[] blockData = new Util.UWBlock[320];
                 //Uncompress the first 80 and store appropiate flags
@@ -1607,6 +1607,12 @@ namespace UnderworldEditor
         private void lblOffset_Click(object sender, EventArgs e)
         {
             Clipboard.SetText(lblOffset.Text);
+        }
+
+        private void btnExportMapImage_Click(object sender, EventArgs e)
+        {
+
+            PicMap.Image.Save("map.png");
         }
 
         //private void btnJumpToRawData_Click(object sender, EventArgs e)

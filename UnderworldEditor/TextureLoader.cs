@@ -187,6 +187,16 @@ namespace UnderworldEditor
          
          public Bitmap LowResAt(int index)
         {
+            if (index==-1)
+            {
+                Bitmap bmp = new Bitmap(LOWRESSIZE, LOWRESSIZE);
+                using (Graphics graph = Graphics.FromImage(bmp))
+                {
+                    Rectangle ImageSize = new Rectangle(0, 0, LOWRESSIZE, LOWRESSIZE);
+                    graph.FillRectangle(Brushes.Blue, ImageSize);
+                }
+                return bmp;
+            }
             if (imageCacheLowRes[index] == null)
             {
                 BitmapUW tmp = LoadImageAt(index);
