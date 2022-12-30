@@ -306,7 +306,6 @@
             this.stringsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.btnExportMapImage = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.PlayerDat.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -1046,7 +1045,7 @@
             this.Inv.Margin = new System.Windows.Forms.Padding(4);
             this.Inv.Name = "Inv";
             this.Inv.Padding = new System.Windows.Forms.Padding(4);
-            this.Inv.Size = new System.Drawing.Size(2080, 1244);
+            this.Inv.Size = new System.Drawing.Size(2080, 1240);
             this.Inv.TabIndex = 0;
             this.Inv.Text = "Inventory";
             // 
@@ -1444,7 +1443,7 @@
             this.Runes.Location = new System.Drawing.Point(8, 39);
             this.Runes.Margin = new System.Windows.Forms.Padding(4);
             this.Runes.Name = "Runes";
-            this.Runes.Size = new System.Drawing.Size(2080, 1244);
+            this.Runes.Size = new System.Drawing.Size(2080, 1240);
             this.Runes.TabIndex = 3;
             this.Runes.Text = "Runes";
             this.Runes.UseVisualStyleBackColor = true;
@@ -1454,7 +1453,7 @@
             this.GameVars.Location = new System.Drawing.Point(8, 39);
             this.GameVars.Margin = new System.Windows.Forms.Padding(4);
             this.GameVars.Name = "GameVars";
-            this.GameVars.Size = new System.Drawing.Size(2080, 1244);
+            this.GameVars.Size = new System.Drawing.Size(2080, 1240);
             this.GameVars.TabIndex = 4;
             this.GameVars.Text = "Game Variables";
             this.GameVars.UseVisualStyleBackColor = true;
@@ -1466,7 +1465,7 @@
             this.RawData.Margin = new System.Windows.Forms.Padding(4);
             this.RawData.Name = "RawData";
             this.RawData.Padding = new System.Windows.Forms.Padding(4);
-            this.RawData.Size = new System.Drawing.Size(2080, 1244);
+            this.RawData.Size = new System.Drawing.Size(2080, 1240);
             this.RawData.TabIndex = 1;
             this.RawData.Text = "Raw Data";
             this.RawData.UseVisualStyleBackColor = true;
@@ -1486,7 +1485,7 @@
             this.GrdPlayerDat.Name = "GrdPlayerDat";
             this.GrdPlayerDat.RowHeadersWidth = 300;
             this.GrdPlayerDat.RowTemplate.Height = 24;
-            this.GrdPlayerDat.Size = new System.Drawing.Size(2072, 1236);
+            this.GrdPlayerDat.Size = new System.Drawing.Size(2072, 1232);
             this.GrdPlayerDat.TabIndex = 3;
             // 
             // PDatValue
@@ -1512,7 +1511,7 @@
             this.LevArk.Location = new System.Drawing.Point(8, 39);
             this.LevArk.Margin = new System.Windows.Forms.Padding(4);
             this.LevArk.Name = "LevArk";
-            this.LevArk.Size = new System.Drawing.Size(2104, 1299);
+            this.LevArk.Size = new System.Drawing.Size(2104, 1295);
             this.LevArk.TabIndex = 1;
             this.LevArk.Text = "LevArk";
             this.LevArk.UseVisualStyleBackColor = true;
@@ -1530,7 +1529,7 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(2104, 1299);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(2104, 1295);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
             // TreeUWBlocks
@@ -1539,7 +1538,7 @@
             this.TreeUWBlocks.Location = new System.Drawing.Point(4, 4);
             this.TreeUWBlocks.Margin = new System.Windows.Forms.Padding(4);
             this.TreeUWBlocks.Name = "TreeUWBlocks";
-            this.TreeUWBlocks.Size = new System.Drawing.Size(292, 1291);
+            this.TreeUWBlocks.Size = new System.Drawing.Size(292, 1287);
             this.TreeUWBlocks.TabIndex = 1;
             this.TreeUWBlocks.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeUWBlocks_AfterSelect);
             // 
@@ -1554,7 +1553,7 @@
             this.tabLevArk.Margin = new System.Windows.Forms.Padding(4);
             this.tabLevArk.Name = "tabLevArk";
             this.tabLevArk.SelectedIndex = 0;
-            this.tabLevArk.Size = new System.Drawing.Size(1796, 1291);
+            this.tabLevArk.Size = new System.Drawing.Size(1796, 1287);
             this.tabLevArk.TabIndex = 3;
             // 
             // tabPage1
@@ -1564,7 +1563,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(1780, 1244);
+            this.tabPage1.Size = new System.Drawing.Size(1780, 1240);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Tiles";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -1582,7 +1581,7 @@
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1772, 1236);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1772, 1232);
             this.tableLayoutPanel2.TabIndex = 5;
             // 
             // panel1
@@ -1594,7 +1593,7 @@
             this.panel1.Location = new System.Drawing.Point(489, 4);
             this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1279, 1228);
+            this.panel1.Size = new System.Drawing.Size(1279, 1224);
             this.panel1.TabIndex = 24;
             // 
             // PicMap
@@ -1622,14 +1621,13 @@
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1228F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(477, 1228);
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1224F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(477, 1224);
             this.tableLayoutPanel3.TabIndex = 11;
             // 
             // panel2
             // 
             this.panel2.AutoScroll = true;
-            this.panel2.Controls.Add(this.btnExportMapImage);
             this.panel2.Controls.Add(this.label49);
             this.panel2.Controls.Add(this.numMapZoom);
             this.panel2.Controls.Add(this.BtnApplyTileChanges);
@@ -1915,7 +1913,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage2.Size = new System.Drawing.Size(1780, 1244);
+            this.tabPage2.Size = new System.Drawing.Size(1780, 1240);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Objects";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -3068,7 +3066,7 @@
             this.tabPage7.Location = new System.Drawing.Point(8, 39);
             this.tabPage7.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(1780, 1244);
+            this.tabPage7.Size = new System.Drawing.Size(1780, 1240);
             this.tabPage7.TabIndex = 3;
             this.tabPage7.Text = "TextureMaps";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -3078,7 +3076,7 @@
             this.tabPage8.Location = new System.Drawing.Point(8, 39);
             this.tabPage8.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(1780, 1244);
+            this.tabPage8.Size = new System.Drawing.Size(1780, 1240);
             this.tabPage8.TabIndex = 4;
             this.tabPage8.Text = "AutoMaps";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -3089,7 +3087,7 @@
             this.tabPage9.Location = new System.Drawing.Point(8, 39);
             this.tabPage9.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage9.Name = "tabPage9";
-            this.tabPage9.Size = new System.Drawing.Size(2104, 1299);
+            this.tabPage9.Size = new System.Drawing.Size(2104, 1295);
             this.tabPage9.TabIndex = 2;
             this.tabPage9.Text = "Strings";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -3106,7 +3104,7 @@
             this.GrdStrings.Name = "GrdStrings";
             this.GrdStrings.RowHeadersWidth = 82;
             this.GrdStrings.RowTemplate.Height = 24;
-            this.GrdStrings.Size = new System.Drawing.Size(2104, 1299);
+            this.GrdStrings.Size = new System.Drawing.Size(2104, 1295);
             this.GrdStrings.TabIndex = 0;
             // 
             // Column2
@@ -3319,7 +3317,7 @@
             this.tabPage3.Controls.Add(this.panel3);
             this.tabPage3.Location = new System.Drawing.Point(8, 39);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(2104, 1299);
+            this.tabPage3.Size = new System.Drawing.Size(2104, 1295);
             this.tabPage3.TabIndex = 4;
             this.tabPage3.Text = "PSX";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -3338,7 +3336,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(2104, 1299);
+            this.panel3.Size = new System.Drawing.Size(2104, 1295);
             this.panel3.TabIndex = 0;
             // 
             // button2
@@ -3620,16 +3618,6 @@
             // 
             this.saveFileDialog1.DefaultExt = "png";
             this.saveFileDialog1.Filter = "(*.png)|*.png";
-            // 
-            // btnExportMapImage
-            // 
-            this.btnExportMapImage.Location = new System.Drawing.Point(48, 697);
-            this.btnExportMapImage.Name = "btnExportMapImage";
-            this.btnExportMapImage.Size = new System.Drawing.Size(300, 49);
-            this.btnExportMapImage.TabIndex = 43;
-            this.btnExportMapImage.Text = "Export Map Image";
-            this.btnExportMapImage.UseVisualStyleBackColor = true;
-            this.btnExportMapImage.Click += new System.EventHandler(this.btnExportMapImage_Click);
             // 
             // main
             // 
@@ -4032,7 +4020,6 @@
         private PictureBoxWithInterpolationMode picPSX;
         private System.Windows.Forms.NumericUpDown numPalMode;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button btnExportMapImage;
     }
 }
 

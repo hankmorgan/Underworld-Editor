@@ -291,7 +291,7 @@ namespace UnderworldEditor
                 if (linked <= objList.GetUpperBound(0))
                 {
                     TreeNode newnode = node.Nodes.Add(objects.ObjectName(objList[linked].item_id, main.curgame));
-                    newnode.Tag = linked;
+                    newnode.Tag = index;
                 }
             }
         }

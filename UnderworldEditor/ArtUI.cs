@@ -146,7 +146,6 @@ namespace UnderworldEditor
                     if ((tm.Tiles[x, y].Render) && (tm.Tiles[x, y].tileType !=0))
                     {
                         int floortex = TileMap.FloorTextureMapped(tm, TileMap.fTOP, tm.Tiles[x, y], main.curgame);
-                        floortex = -1;
                         switch (tm.Tiles[x, y].tileType)
                         {
                             case TileMap.TILE_SOLID:
