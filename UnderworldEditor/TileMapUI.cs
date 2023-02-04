@@ -83,8 +83,8 @@ namespace UnderworldEditor
             }
             
             MAIN.PicMap.Image = ArtUI.UWMap(MAIN.tilemap, MAIN.tex);
-            MAIN.PicMap.Height = 640 * (int)MAIN.numMapZoom.Value;
-            MAIN.PicMap.Width = 640 * (int)MAIN.numMapZoom.Value;
+            MAIN.PicMap.Height = 64 * (int)MAIN.numMapZoom.Value;
+            MAIN.PicMap.Width = 64 * (int)MAIN.numMapZoom.Value;
 
         }
 
