@@ -10,21 +10,88 @@ namespace UnderworldEditor
     {
         public struct ObjectInfo
         {
+            public short[] StaticValues;
+            public short[] MobileValues;
             public int index;
-            public int item_id; //0-8
-            public short flags; //9-12
-            public short enchantment;   //12
-            public short doordir;   //13
-            public short invis;     //14
-            public short is_quant;  //15
-            public short zpos;
-            public short heading;
-            public short xpos;
-            public short ypos;
-            public short quality;
-            public int next;
-            public short owner;
-            public int link;
+           // public int item_id; 
+
+            //Static properties. Common to all objects so these will use preplaced controls.
+           public short item_id
+            {
+                get { return StaticValues[0]; }
+                set { StaticValues[0] = value; }
+            }
+
+            public short flags 
+            {
+                get { return StaticValues[1]; }
+                set { StaticValues[1] = value; }
+            }
+
+            public short enchantment
+            {
+                get { return StaticValues[2]; }
+                set { StaticValues[2] = value; }
+            }
+
+            public short doordir
+            {
+                get { return StaticValues[3]; }
+                set { StaticValues[3] = value; }
+            }
+
+            public short invis
+            {
+                get { return StaticValues[4]; }
+                set { StaticValues[4] = value; }
+            }
+
+            public short is_quant
+            {
+                get { return StaticValues[5]; }
+                set { StaticValues[5] = value; }
+            }
+            public short zpos
+            {
+                get { return StaticValues[6]; }
+                set { StaticValues[6] = value; }
+            }
+            public short heading
+            {
+                get { return StaticValues[7]; }
+                set { StaticValues[7] = value; }
+            }
+            public short xpos
+            {
+                get { return StaticValues[8]; }
+                set { StaticValues[8] = value; }
+            }
+            public short ypos
+            {
+                get { return StaticValues[9]; }
+                set { StaticValues[9] = value; }
+            }
+            public short quality
+            {
+                get { return StaticValues[10]; }
+                set { StaticValues[10] = value; }
+            }
+            public short next
+            {
+                get { return StaticValues[11]; }
+                set { StaticValues[11] = value; }
+            }
+            public short owner
+            {
+                get { return StaticValues[12]; }
+                set { StaticValues[12] = value; }
+            }
+            public short link
+            {
+                get { return StaticValues[13]; }
+                set { StaticValues[13] = value; }
+            }
+
             public long FileAddress;//Absolute address in the file data
             public long LocalBlockAddress;//Relative address in the data block
 
@@ -38,7 +105,7 @@ namespace UnderworldEditor
 
             public short npc_level;//0xD
             public short unknown_4_11_0xD;
-            public short unknown_12_0xD;
+            public short loot_spawned;
             public short npc_talked_to;
             public short npc_attitude;
 
@@ -127,7 +194,16 @@ namespace UnderworldEditor
         static ObjectInfo initObject(byte[]buffer, int objectsAddress, bool IsMobile)
         {
             ObjectInfo newObj = new ObjectInfo();
-
+            int vCounter = 0;
+            newObj.StaticValues = new short[ObjectDefinition.NoOfStaticObjectValues];
+            foreach (var sdef in main.objdefinition.StaticObjectDefinition)
+            {
+                var byt = (int)Util.getValAtAddress(buffer, objectsAddress + sdef.ByteOffset, sdef.ByteSize*8);
+                foreach (var vdef in sdef.ByteFormat)
+                {
+                    newObj.StaticValues[vCounter++] = (short)Util.ExtractBits(byt, vdef.DataOffset, vdef.DataSize);
+                }
+            }
             int[] Vals = new int[4];
             //Read in the 4 x int 16s that comprise the static object
             for (int i = 0; i <= Vals.GetUpperBound(0); i++)
@@ -135,29 +211,59 @@ namespace UnderworldEditor
                 Vals[i] = (int)Util.getValAtAddress(buffer, objectsAddress + (i * 2), 16);
             }
             newObj.FileAddress = objectsAddress;
+
+            //Static objects
             //postion at +1
-            newObj.item_id = (int)Util.ExtractBits(Vals[0], 0, 9);
-            newObj.flags = (short)(Util.ExtractBits(Vals[0], 9, 3));
-            newObj.enchantment = (short)(Util.ExtractBits(Vals[0], 12, 1));
-            newObj.doordir = (short)(Util.ExtractBits(Vals[0], 13, 1));
-            newObj.invis = (short)(Util.ExtractBits(Vals[0], 14, 1));
-            newObj.is_quant = (short)(Util.ExtractBits(Vals[0], 15, 1));
+            //newObj.item_id = (int)Util.ExtractBits(Vals[0], 0, 9);
+            //newObj.flags = (short)(Util.ExtractBits(Vals[0], 9, 3));
+            //newObj.enchantment = (short)(Util.ExtractBits(Vals[0], 12, 1));
+            //newObj.doordir = (short)(Util.ExtractBits(Vals[0], 13, 1));
+            //newObj.invis = (short)(Util.ExtractBits(Vals[0], 14, 1));
+            //newObj.is_quant = (short)(Util.ExtractBits(Vals[0], 15, 1));
 
-            //position at +2
-            newObj.zpos = (short)(Util.ExtractBits(Vals[1], 0, 7));  //bits 0-6 
-            newObj.heading = (short)(Util.ExtractBits(Vals[1], 7, 3)); //bits 7-9
-            newObj.ypos = (short)(Util.ExtractBits(Vals[1], 10, 3)); //bits 7-9	//bits 10-12
-            newObj.xpos = (short)(Util.ExtractBits(Vals[1], 13, 3));    //bits 13-15
-            //+4
-            newObj.quality = (short)(Util.ExtractBits(Vals[2], 0, 6));
-            newObj.next = (short)(Util.ExtractBits(Vals[2], 6, 10));
+            ////position at +2
+            //newObj.zpos = (short)(Util.ExtractBits(Vals[1], 0, 7));  //bits 0-6 
+            //newObj.heading = (short)(Util.ExtractBits(Vals[1], 7, 3)); //bits 7-9
+            //newObj.ypos = (short)(Util.ExtractBits(Vals[1], 10, 3)); //bits 7-9	//bits 10-12
+            //newObj.xpos = (short)(Util.ExtractBits(Vals[1], 13, 3));    //bits 13-15
+            ////+4
+            //newObj.quality = (short)(Util.ExtractBits(Vals[2], 0, 6));
+            //newObj.next = (short)(Util.ExtractBits(Vals[2], 6, 10));
 
-            //+6
-            newObj.owner = (short)(Util.ExtractBits(Vals[3], 0, 6));//bits 0-5
-            newObj.link = (short)(Util.ExtractBits(Vals[3], 6, 10)); //bits 6-15
+            ////+6
+            //newObj.owner = (short)(Util.ExtractBits(Vals[3], 0, 6));//bits 0-5
+            //newObj.link = (short)(Util.ExtractBits(Vals[3], 6, 10)); //bits 6-15
+
+
 
             if (IsMobile)
             {
+                vCounter = 0;
+                List<ObjectDefinitionProperties> mobileProps;
+                if((newObj.item_id & 0x1C0)>>6 ==1)
+                {
+                    //object is an npc. use the NPC object definition 
+                    mobileProps = main.objdefinition.NPCObjectDefinition;
+                    newObj.MobileValues = new short[ObjectDefinition.NoOfNPCObjectValues];
+                }
+                else
+                {
+                    //object is a projectile. Use the projectile object definition
+                   mobileProps = main.objdefinition.MobileObjectDefinition;
+                    newObj.MobileValues = new short[ObjectDefinition.NoOfMobileObjectValues];
+                }
+                if (mobileProps!=null)
+                {
+                    foreach (var sdef in mobileProps)
+                    {
+                        var byt = (int)Util.getValAtAddress(buffer, objectsAddress + sdef.ByteOffset, sdef.ByteSize * 8);
+                        foreach (var vdef in sdef.ByteFormat)
+                        {
+                            newObj.MobileValues[vCounter++] = (short)Util.ExtractBits(byt, vdef.DataOffset, vdef.DataSize);
+                        }
+                    }
+                }
+
                 //0x8
                 newObj.npc_hp = (short)(Util.getValAtAddress(buffer, objectsAddress + 0x8, 8));
 
@@ -178,7 +284,7 @@ namespace UnderworldEditor
                 val = (int)Util.getValAtAddress(buffer, objectsAddress + 0xd, 16);
                 newObj.npc_level = (short)(Util.ExtractBits(val, 0, 4));
                 newObj.unknown_4_11_0xD = (short)(Util.ExtractBits(val, 4, 8));
-                newObj.unknown_12_0xD = (short)(Util.ExtractBits(val, 12, 1));
+                newObj.loot_spawned = (short)(Util.ExtractBits(val, 12, 1));
                 newObj.npc_talked_to = (short)(Util.ExtractBits(val, 13, 1));
                 newObj.npc_attitude = (short)(Util.ExtractBits(val, 14, 2));
 

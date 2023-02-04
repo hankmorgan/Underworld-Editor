@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace UnderworldEditor
 {
@@ -50,6 +51,7 @@ namespace UnderworldEditor
         private int CurrentPalettePixel=0;
         private int CurrentRefPixel = 0;
 
+        public static ObjectDefinition objdefinition;        
         CritterArtLoader critloader;
 
         public main()
@@ -73,6 +75,44 @@ namespace UnderworldEditor
                 PicPalette.Image = ArtLoader.Palette(PaletteLoader.Palettes[0]).image;
                 PopulateTextureTree();
             }
+            //Load the definition for how an object is structures.
+            //File must cover all bytes.
+            var objectJson = System.IO.File.ReadAllText("object_definition.json");
+            objdefinition = JsonConvert.DeserializeObject<ObjectDefinition>(objectJson);
+
+            if (objdefinition.SanityCheck())
+            {
+                Console.WriteLine("Object Definition Sanity Check passed");
+            }
+            else
+            {
+                Console.WriteLine("Object Definition Sanity Check failed");
+            }
+
+            if (main.objdefinition.StaticObjectDefinition != null)
+            {
+                foreach (var sdef in main.objdefinition.StaticObjectDefinition)
+                {
+                    ObjectDefinition.NoOfStaticObjectValues += sdef.ByteFormat.Count;
+                }
+            }
+ 
+            if (main.objdefinition.NPCObjectDefinition != null)
+            {
+                foreach (var sdef in main.objdefinition.NPCObjectDefinition)
+                {
+                    ObjectDefinition.NoOfNPCObjectValues += sdef.ByteFormat.Count;
+                }
+            }
+            if (main.objdefinition.MobileObjectDefinition!=null)
+            {
+                foreach (var sdef in main.objdefinition.MobileObjectDefinition)
+                {
+                    ObjectDefinition.NoOfMobileObjectValues += sdef.ByteFormat.Count;
+                }
+            }
+
+
             isLoading = true;
         }
 
@@ -179,7 +219,7 @@ namespace UnderworldEditor
             )
         {
             //Update the object with the selected info
-            objlist.objList[index].item_id = cmbItem_ID.SelectedIndex;
+            objlist.objList[index].item_id = (short)cmbItem_ID.SelectedIndex;
             cmbItem_ID.Text = objlist.objList[index].item_id + "-" + objects.ObjectName(objlist.objList[index].item_id, curgame);
 
             if (chkEnchanted.Checked) { objlist.objList[index].enchantment = 1; } else { objlist.objList[index].enchantment = 0; }
@@ -199,32 +239,60 @@ namespace UnderworldEditor
             objlist.objList[index].link= (short)numLink.Value  ;
 
             long addptr = objlist.objList[index].FileAddress;
-            int ByteToWrite = (objlist.objList[index].is_quant << 15) |
-                (objlist.objList[index].invis << 14) |
-                (objlist.objList[index].doordir << 13) |
-                (objlist.objList[index].enchantment << 12) |
-                ((objlist.objList[index].flags & 0x07) << 9) |
-                (objlist.objList[index].item_id & 0x1FF);
+            int valuePtr = 0;
+            foreach (var byt in main.objdefinition.StaticObjectDefinition)
+            {
+                
+                switch (byt.ByteSize)
+                {
+                    case 1:
+                        {
+                            //should not happen in static objects as it is 4x2Bytes
+                            break;
+                        }
+                    case 2:
+                        {//write 2 bytes.
+                            int NewByteToWrite = 0;                            
+                            foreach (var vdef in byt.ByteFormat)                            
+                            {
+                                //Store the values per the byte definition.
+                                NewByteToWrite = NewByteToWrite |
+                                ((objlist.objList[index].StaticValues[valuePtr++] & vdef.BitMask) << vdef.DataOffset);
+                            }
+                            TileMapData[addptr + byt.ByteOffset] = (byte)(NewByteToWrite & 0xFF);
+                            TileMapData[addptr + byt.ByteOffset + 1] = (byte)((NewByteToWrite >> 8) & 0xFF);
+                            break;
+                        }
+                }                
+            }
 
-            TileMapData[addptr] = (byte)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
 
-            ByteToWrite = ((objlist.objList[index].xpos & 0x7) << 13) |
-                    ((objlist.objList[index].ypos & 0x7) << 10) |
-                    ((objlist.objList[index].heading & 0x7) << 7) |
-                    ((objlist.objList[index].zpos & 0x7F));
-            TileMapData[addptr + 2] = (byte)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 3] = (byte)((ByteToWrite >> 8) & 0xFF);
+            //int ByteToWrite = (objlist.objList[index].is_quant << 15) |
+            //    (objlist.objList[index].invis << 14) |
+            //    (objlist.objList[index].doordir << 13) |
+            //    (objlist.objList[index].enchantment << 12) |
+            //    ((objlist.objList[index].flags & 0x07) << 9) |
+            //    (objlist.objList[index].item_id & 0x1FF);
 
-            ByteToWrite = (((int)objlist.objList[index].next & 0x3FF) << 6) |
-                    (objlist.objList[index].quality & 0x3F);
-            TileMapData[addptr + 4] = (byte)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 5] = (byte)((ByteToWrite >> 8) & 0xFF);
+            //TileMapData[addptr] = (byte)(ByteToWrite & 0xFF);
+            //TileMapData[addptr + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
 
-            ByteToWrite = ((objlist.objList[index].link & 0x3FF) << 6) |
-                    (objlist.objList[index].owner & 0x3F);
-            TileMapData[addptr + 6] = (byte)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 7] = (byte)((ByteToWrite >> 8) & 0xFF);
+            //ByteToWrite = ((objlist.objList[index].xpos & 0x7) << 13) |
+            //        ((objlist.objList[index].ypos & 0x7) << 10) |
+            //        ((objlist.objList[index].heading & 0x7) << 7) |
+            //        ((objlist.objList[index].zpos & 0x7F));
+            //TileMapData[addptr + 2] = (byte)(ByteToWrite & 0xFF);
+            //TileMapData[addptr + 3] = (byte)((ByteToWrite >> 8) & 0xFF);
+
+            //ByteToWrite = (((int)objlist.objList[index].next & 0x3FF) << 6) |
+            //        (objlist.objList[index].quality & 0x3F);
+            //TileMapData[addptr + 4] = (byte)(ByteToWrite & 0xFF);
+            //TileMapData[addptr + 5] = (byte)((ByteToWrite >> 8) & 0xFF);
+
+            //ByteToWrite = ((objlist.objList[index].link & 0x3FF) << 6) |
+            //        (objlist.objList[index].owner & 0x3F);
+            //TileMapData[addptr + 6] = (byte)(ByteToWrite & 0xFF);
+            //TileMapData[addptr + 7] = (byte)((ByteToWrite >> 8) & 0xFF);
         }
 
         /// <summary>
@@ -234,127 +302,190 @@ namespace UnderworldEditor
         /// <param name="objlist"></param>
         /// <param name="index"></param>
         /// <param name="npc_hp"></param>
-        public void UpdateMobileObjectUIChange(main MAIN, byte[] TileMapData, objects objlist, int index )
+        public void UpdateMobileObjectUIChange(main MAIN, byte[] TileMapData, objects objlist, int index)
         {
             objects.ObjectInfo obj = objlist.objList[index];
-            //populate mobile data
-            obj.npc_hp= (short)MAIN.numNPC_HP.Value;
-            obj.projectile0x9 = (short)MAIN.numProjectile0x9.Value  ;
-            obj.Unknown0xA = (short)MAIN.numUnknown0xA.Value ;
-            obj.npc_goal = (short)MAIN.numnpc_goal.Value  ;
-            obj.npc_gtarg = (short)MAIN.numnpc_gtarg.Value  ;
-            obj.Unknown0xB = (short)MAIN.numUnknown0xB.Value  ;
-            obj.npc_level = (short)MAIN.numnpc_level.Value ;
-            obj.unknown_4_11_0xD = (short)MAIN.numunknown_4_11_0xD.Value  ;
-            obj.unknown_12_0xD = (short)MAIN.numunknown_12_0xD.Value  ;
-            obj.npc_talked_to = (short)MAIN.numnpc_talked_to.Value  ;
-            obj.npc_attitude = (short)MAIN.numnpc_attitude.Value  ;
-            obj.unknown_0_5_0xF = (short)MAIN.numunknown_0_5_0xF.Value  ;
-            obj.npc_height = (short)MAIN.numnpc_height.Value ;
-            obj.unknown_13_15_0xF = (short)MAIN.numunknown_13_15_0xF.Value  ;
-            obj.unknown_0x11 = (short)MAIN.numunknown_0x11.Value ;
-            obj.unknown_0x12 = (short)MAIN.numunknown_0x12.Value ;
-            obj.unknown_0_6_0x13 = (short)MAIN.numunknown_0_6_0x13.Value ;
-            obj.unknown_7_7_0x13 = (short)MAIN.numunknown_7_7_0x13.Value ;
-            obj.unknown_0x14 = (short)MAIN.numunknown_0x14.Value ;
-            obj.unknown_0x15 = (short)MAIN.numunknown_0x15.Value ;
-            obj.unknown_0_3_0x16 = (short)MAIN.numunknown_0_3_0x16.Value ;
-            obj.npc_yhome = (short)MAIN.numnpc_yhome.Value ;
-            obj.npc_xhome = (short)MAIN.numnpc_xhome.Value ;
-            obj.npc_heading = (short)MAIN.numnpc_heading.Value;
-            obj.unknown_5_7_0x18 = (short)MAIN.numunknown_5_7_0x18.Value;
-            obj.npc_hunger = (short)MAIN.numnpc_hunger.Value ;
-            obj.unknown_7_7_0x19 = (short)MAIN.numunknown_7_7_0x19.Value ;
-            obj.npc_whoami = (short)MAIN.numnpc_whoami.Value ;
-
-
-
             long addptr = obj.FileAddress;
-            //0x8
-            int ByteToWrite = obj.npc_hp;
-            TileMapData[addptr + 0x8] = (byte)(ByteToWrite & 0xFF);
+            int valuePtr = 0;
+            //Copy values to the array.
+            foreach(DataGridViewRow row in grdMobileObjectData.Rows)
+            {
+                short toStore = 0;
+                if(int.TryParse (row.Cells[1].Value.ToString(), out int val))
+                {
+                    toStore = (short)val;
+                }
+                else
+                {
+                    Console.WriteLine("Non parsable value in grid!");
+                }
+                obj.MobileValues[valuePtr] = toStore;
+                valuePtr++;
+            }
+            List<ObjectDefinitionProperties> objDef;
+            if ((obj.item_id & 0x1C0) >> 6 == 1)
+            {
+                objDef = main.objdefinition.NPCObjectDefinition;
+            }
+            else
+            {
+                objDef = main.objdefinition.MobileObjectDefinition;
+            }
+            valuePtr = 0;
+            foreach (var byt in objDef)
+            {
+                switch (byt.ByteSize)
+                {
+                    case 1:
+                        {
+                            int NewByteToWrite = 0;
+                            foreach (var vdef in byt.ByteFormat)
+                            {
+                                //Store the values per the byte definition.
+                                NewByteToWrite = NewByteToWrite |
+                                ((objlist.objList[index].MobileValues[valuePtr++] & vdef.BitMask) << vdef.DataOffset);
+                            }
+                            TileMapData[addptr + byt.ByteOffset] = (byte)(NewByteToWrite & 0xFF);
+                            break;
+                        }
+                    case 2:
+                        {//write 2 bytes.
+                            int NewByteToWrite = 0;
+                            foreach (var vdef in byt.ByteFormat)
+                            {
+                                //Store the values per the byte definition.
+                                NewByteToWrite = NewByteToWrite |
+                                ((objlist.objList[index].MobileValues[valuePtr++] & vdef.BitMask) << vdef.DataOffset);
+                            }
+                            TileMapData[addptr + byt.ByteOffset] = (byte)(NewByteToWrite & 0xFF);
+                            TileMapData[addptr + byt.ByteOffset + 1] = (byte)((NewByteToWrite >> 8) & 0xFF);
+                            break;
+                        }
+                }
+            }
 
-            //0x9
-            ByteToWrite = obj.projectile0x9;
-            TileMapData[addptr + 0x9] = (byte)(ByteToWrite & 0xFF);
+
+
+
+            return;
+            ////populate mobile data
+            //obj.npc_hp= (short)MAIN.numNPC_HP.Value;
+            //obj.projectile0x9 = (short)MAIN.numProjectile0x9.Value  ;
+            //obj.Unknown0xA = (short)MAIN.numUnknown0xA.Value ;
+            //obj.npc_goal = (short)MAIN.numnpc_goal.Value  ;
+            //obj.npc_gtarg = (short)MAIN.numnpc_gtarg.Value  ;
+            //obj.Unknown0xB = (short)MAIN.numUnknown0xB.Value  ;
+            //obj.npc_level = (short)MAIN.numnpc_level.Value ;
+            //obj.unknown_4_11_0xD = (short)MAIN.numunknown_4_11_0xD.Value  ;
+            //obj.loot_spawned = (short)MAIN.LootSpawned.Value  ;
+            //obj.npc_talked_to = (short)MAIN.numnpc_talked_to.Value  ;
+            //obj.npc_attitude = (short)MAIN.numnpc_attitude.Value  ;
+            //obj.unknown_0_5_0xF = (short)MAIN.numunknown_0_5_0xF.Value  ;
+            //obj.npc_height = (short)MAIN.numnpc_height.Value ;
+            //obj.unknown_13_15_0xF = (short)MAIN.numunknown_13_15_0xF.Value  ;
+            //obj.unknown_0x11 = (short)MAIN.numunknown_0x11.Value ;
+            //obj.unknown_0x12 = (short)MAIN.numunknown_0x12.Value ;
+            //obj.unknown_0_6_0x13 = (short)MAIN.numunknown_0_6_0x13.Value ;
+            //obj.unknown_7_7_0x13 = (short)MAIN.numunknown_7_7_0x13.Value ;
+            //obj.unknown_0x14 = (short)MAIN.numunknown_0x14.Value ;
+            //obj.unknown_0x15 = (short)MAIN.numunknown_0x15.Value ;
+            //obj.unknown_0_3_0x16 = (short)MAIN.numunknown_0_3_0x16.Value ;
+            //obj.npc_yhome = (short)MAIN.numnpc_yhome.Value ;
+            //obj.npc_xhome = (short)MAIN.numnpc_xhome.Value ;
+            //obj.npc_heading = (short)MAIN.numnpc_heading.Value;
+            //obj.unknown_5_7_0x18 = (short)MAIN.numunknown_5_7_0x18.Value;
+            //obj.npc_hunger = (short)MAIN.numnpc_hunger.Value ;
+            //obj.unknown_7_7_0x19 = (short)MAIN.numunknown_7_7_0x19.Value ;
+            //obj.npc_whoami = (short)MAIN.numnpc_whoami.Value ;
+
+
+
+            //long addptr = obj.FileAddress;
+            ////0x8
+            //int ByteToWrite = obj.npc_hp;
+            //TileMapData[addptr + 0x8] = (byte)(ByteToWrite & 0xFF);
+
+            ////0x9
+            //ByteToWrite = obj.projectile0x9;
+            //TileMapData[addptr + 0x9] = (byte)(ByteToWrite & 0xFF);
            
-            //0xA
-            ByteToWrite = obj.Unknown0xA;
-            TileMapData[addptr + 0xA] = (byte)(ByteToWrite & 0xFF);
+            ////0xA
+            //ByteToWrite = obj.Unknown0xA;
+            //TileMapData[addptr + 0xA] = (byte)(ByteToWrite & 0xFF);
 
 
-            //0xB
-            ByteToWrite = (
-                ((obj.npc_goal & 0xF)) |
-                ((obj.npc_gtarg & 0xFF) << 4) |
-                ((obj.Unknown0xB << 12))
-                    );
+            ////0xB
+            //ByteToWrite = (
+            //    ((obj.npc_goal & 0xF)) |
+            //    ((obj.npc_gtarg & 0xFF) << 4) |
+            //    ((obj.Unknown0xB << 12))
+            //        );
            
-            TileMapData[addptr + 0xb] = (byte)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 0xb + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
+            //TileMapData[addptr + 0xb] = (byte)(ByteToWrite & 0xFF);
+            //TileMapData[addptr + 0xb + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
             
-            //0xD
-            ByteToWrite = ((obj.npc_level & 0xFF)) |
-                ((obj.unknown_4_11_0xD & 0xFF) << 4) |
-                ((obj.unknown_12_0xD & 0x1)) << 12 |
-                ((obj.npc_talked_to & 0x1)) << 13|
-                ((obj.npc_attitude & 0x3)) << 14;
+            ////0xD
+            //ByteToWrite = ((obj.npc_level & 0xFF)) |
+            //    ((obj.unknown_4_11_0xD & 0xFF) << 4) |
+            //    ((obj.loot_spawned & 0x1)) << 12 |
+            //    ((obj.npc_talked_to & 0x1)) << 13|
+            //    ((obj.npc_attitude & 0x3)) << 14;
 
-            TileMapData[addptr + 0xd] = (byte)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 0xd + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
+            //TileMapData[addptr + 0xd] = (byte)(ByteToWrite & 0xFF);
+            //TileMapData[addptr + 0xd + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
 
-            //0xF
-            ByteToWrite = ((obj.unknown_0_5_0xF & 0x3F)) |
-                ((obj.npc_height & 0x7F) << 6) |
-                ((obj.unknown_13_15_0xF & 0x7) << 13);
+            ////0xF
+            //ByteToWrite = ((obj.unknown_0_5_0xF & 0x3F)) |
+            //    ((obj.npc_height & 0x7F) << 6) |
+            //    ((obj.unknown_13_15_0xF & 0x7) << 13);
 
 
-            TileMapData[addptr + 0xf] = (byte)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 0xf + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
+            //TileMapData[addptr + 0xf] = (byte)(ByteToWrite & 0xFF);
+            //TileMapData[addptr + 0xf + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
             
-            //0x11
-            ByteToWrite = obj.unknown_0x11;
-            TileMapData[addptr + 0x11] = (byte)(ByteToWrite & 0xFF);
+            ////0x11
+            //ByteToWrite = obj.unknown_0x11;
+            //TileMapData[addptr + 0x11] = (byte)(ByteToWrite & 0xFF);
 
-            //0x12
-            ByteToWrite = obj.unknown_0x12;
-            TileMapData[addptr + 0x12] = (byte)(ByteToWrite & 0xFF);
+            ////0x12
+            //ByteToWrite = obj.unknown_0x12;
+            //TileMapData[addptr + 0x12] = (byte)(ByteToWrite & 0xFF);
 
-            //0x13
-            ByteToWrite = (obj.unknown_0_6_0x13 & 0x7F) |
-                   ((obj.unknown_7_7_0x13 & 0x1) << 7);
-            TileMapData[addptr + 0x13] = (byte)(ByteToWrite & 0xFF);
+            ////0x13
+            //ByteToWrite = (obj.unknown_0_6_0x13 & 0x7F) |
+            //       ((obj.unknown_7_7_0x13 & 0x1) << 7);
+            //TileMapData[addptr + 0x13] = (byte)(ByteToWrite & 0xFF);
 
-            //0x14
-            ByteToWrite = obj.unknown_0x14;
-            TileMapData[addptr + 0x14] = (byte)(ByteToWrite & 0xFF);
+            ////0x14
+            //ByteToWrite = obj.unknown_0x14;
+            //TileMapData[addptr + 0x14] = (byte)(ByteToWrite & 0xFF);
 
-            //0x15
-            ByteToWrite = obj.unknown_0x15;
-            TileMapData[addptr + 0x15] = (byte)(ByteToWrite & 0xFF);
+            ////0x15
+            //ByteToWrite = obj.unknown_0x15;
+            //TileMapData[addptr + 0x15] = (byte)(ByteToWrite & 0xFF);
 
-            //0x16
-            ByteToWrite = (obj.unknown_0_3_0x16 & 0xF) |
-                    ((obj.npc_yhome & 0x3f)<<4) |
-                    ((obj.npc_xhome & 0x3f)<<10);
-            TileMapData[addptr + 0x16] = (byte)(ByteToWrite & 0xFF);
-            TileMapData[addptr + 0x16 + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
+            ////0x16
+            //ByteToWrite = (obj.unknown_0_3_0x16 & 0xF) |
+            //        ((obj.npc_yhome & 0x3f)<<4) |
+            //        ((obj.npc_xhome & 0x3f)<<10);
+            //TileMapData[addptr + 0x16] = (byte)(ByteToWrite & 0xFF);
+            //TileMapData[addptr + 0x16 + 1] = (byte)((ByteToWrite >> 8) & 0xFF);
 
-            //0x18
-            ByteToWrite = (obj.npc_heading & 0x1F) |
-                   ((obj.unknown_5_7_0x18 & 0x7) << 5);
-            TileMapData[addptr + 0x19] = (byte)(ByteToWrite & 0xFF);
-
-
-            //0x19
-            ByteToWrite = (obj.npc_hunger & 0x7F) |
-                   ((obj.unknown_7_7_0x19 & 0x1) << 7);
-            TileMapData[addptr + 0x19] = (byte)(ByteToWrite & 0xFF);
+            ////0x18
+            //ByteToWrite = (obj.npc_heading & 0x1F) |
+            //       ((obj.unknown_5_7_0x18 & 0x7) << 5);
+            //TileMapData[addptr + 0x19] = (byte)(ByteToWrite & 0xFF);
 
 
-            //0x1a
-            ByteToWrite = obj.npc_whoami;
-            TileMapData[addptr + 0x1a] = (byte)(ByteToWrite & 0xFF);
+            ////0x19
+            //ByteToWrite = (obj.npc_hunger & 0x7F) |
+            //       ((obj.unknown_7_7_0x19 & 0x1) << 7);
+            //TileMapData[addptr + 0x19] = (byte)(ByteToWrite & 0xFF);
+
+
+            ////0x1a
+            //ByteToWrite = obj.npc_whoami;
+            //TileMapData[addptr + 0x1a] = (byte)(ByteToWrite & 0xFF);
         }
 
 
@@ -1608,6 +1739,19 @@ namespace UnderworldEditor
         {
             Clipboard.SetText(lblOffset.Text);
         }
+
+        private void grdMobileObjectData_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (isLoading) return;
+            if (e.ColumnIndex==1)
+            {
+                //get row
+                //var row = grdMobileObjectData.Rows[e.RowIndex];
+                //var cell = row.Cells[e.ColumnIndex];
+                UpdateMobileObjectUIChange(this, levarkbuffer, worldObjects, CurWorldObject);
+            }
+        }
+
 
         //private void btnJumpToRawData_Click(object sender, EventArgs e)
         //{
