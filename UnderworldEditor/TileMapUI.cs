@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -141,50 +142,75 @@ namespace UnderworldEditor
                 MAIN.NumWorldHeading, MAIN.NumWorldFlags,
                 MAIN.NumWorldQuality, MAIN.NumWorldOwner,
                 MAIN.NumWorldNext, MAIN.NumWorldLink);
+
+            MAIN.grdMobileObjectData.Rows.Clear();
             if (index<256)
             {
-                //populate mobile data
-                MAIN.numNPC_HP.Value = obj.npc_hp;
+                List<ObjectDefinitionProperties> mobileProps;
+                if ((int)(obj.item_id & 0x1C0)>>6 == 1)
+                {//object is an NPC
+                    mobileProps = main.objdefinition.NPCObjectDefinition;
+                }
+                else
+                {//object is a projectile
+                    mobileProps = main.objdefinition.MobileObjectDefinition;
+                }
+                int valPointer = 0;
+                foreach(var byt in mobileProps)
+                {
+                    foreach(var mdef in byt.ByteFormat)
+                    {
+                        var rowId = MAIN.grdMobileObjectData.Rows.Add();
+                        DataGridViewRow row = MAIN.grdMobileObjectData.Rows[rowId];
+                        row.Cells[0].Value = mdef.DataName;
+                        row.Cells[1].Value = obj.MobileValues[valPointer++];
+                        row.Cells[2].Value = mdef.Description;
+                    }
+                }                    
 
-                MAIN.numProjectile0x9.Value = obj.projectile0x9;
 
-                MAIN.numUnknown0xA.Value = obj.Unknown0xA;
+                ////populate mobile data
+                //MAIN.numNPC_HP.Value = obj.npc_hp;
 
-                MAIN.numnpc_goal.Value = obj.npc_goal;
-                MAIN.numnpc_gtarg.Value = obj.npc_gtarg;
-                MAIN.numUnknown0xB.Value = obj.Unknown0xB;
+                //MAIN.numProjectile0x9.Value = obj.projectile0x9;
 
-                MAIN.numnpc_level.Value = obj.npc_level;
-                MAIN.numunknown_4_11_0xD.Value = obj.unknown_4_11_0xD;
-                MAIN.numunknown_12_0xD.Value = obj.unknown_12_0xD;
-                MAIN.numnpc_talked_to.Value = obj.npc_talked_to;
-                MAIN.numnpc_attitude.Value = obj.npc_attitude;
+                //MAIN.numUnknown0xA.Value = obj.Unknown0xA;
 
-                MAIN.numunknown_0_5_0xF.Value = obj.unknown_0_5_0xF;
-                MAIN.numnpc_height.Value = obj.npc_height;
-                MAIN.numunknown_13_15_0xF.Value = obj.unknown_13_15_0xF;
+                //MAIN.numnpc_goal.Value = obj.npc_goal;
+                //MAIN.numnpc_gtarg.Value = obj.npc_gtarg;
+                //MAIN.numUnknown0xB.Value = obj.Unknown0xB;
 
-                MAIN.numunknown_0x11.Value = obj.unknown_0x11;
-                MAIN.numunknown_0x12.Value = obj.unknown_0x12;
+                //MAIN.numnpc_level.Value = obj.npc_level;
+                //MAIN.numunknown_4_11_0xD.Value = obj.unknown_4_11_0xD;
+                //MAIN.LootSpawned.Value = obj.loot_spawned;
+                //MAIN.numnpc_talked_to.Value = obj.npc_talked_to;
+                //MAIN.numnpc_attitude.Value = obj.npc_attitude;
 
-                MAIN.numunknown_0_6_0x13.Value = obj.unknown_0_6_0x13;
-                MAIN.numunknown_7_7_0x13.Value = obj.unknown_7_7_0x13;
+                //MAIN.numunknown_0_5_0xF.Value = obj.unknown_0_5_0xF;
+                //MAIN.numnpc_height.Value = obj.npc_height;
+                //MAIN.numunknown_13_15_0xF.Value = obj.unknown_13_15_0xF;
 
-                MAIN.numunknown_0x14.Value = obj.unknown_0x14;
+                //MAIN.numunknown_0x11.Value = obj.unknown_0x11;
+                //MAIN.numunknown_0x12.Value = obj.unknown_0x12;
 
-                MAIN.numunknown_0x15.Value = obj.unknown_0x15;
+                //MAIN.numunknown_0_6_0x13.Value = obj.unknown_0_6_0x13;
+                //MAIN.numunknown_7_7_0x13.Value = obj.unknown_7_7_0x13;
 
-                MAIN.numunknown_0_3_0x16.Value = obj.unknown_0_3_0x16;
-                MAIN.numnpc_yhome.Value = obj.npc_yhome;
-                MAIN.numnpc_xhome.Value = obj.npc_xhome;
+                //MAIN.numunknown_0x14.Value = obj.unknown_0x14;
 
-                MAIN.numnpc_heading.Value = obj.npc_heading;
-                MAIN.numunknown_5_7_0x18.Value = obj.unknown_5_7_0x18;
+                //MAIN.numunknown_0x15.Value = obj.unknown_0x15;
 
-                MAIN.numnpc_hunger.Value = obj.npc_hunger;
-                MAIN.numunknown_7_7_0x19.Value = obj.unknown_7_7_0x19;
+                //MAIN.numunknown_0_3_0x16.Value = obj.unknown_0_3_0x16;
+                //MAIN.numnpc_yhome.Value = obj.npc_yhome;
+                //MAIN.numnpc_xhome.Value = obj.npc_xhome;
 
-                MAIN.numnpc_whoami.Value = obj.npc_whoami;
+                //MAIN.numnpc_heading.Value = obj.npc_heading;
+                //MAIN.numunknown_5_7_0x18.Value = obj.unknown_5_7_0x18;
+
+                //MAIN.numnpc_hunger.Value = obj.npc_hunger;
+                //MAIN.numunknown_7_7_0x19.Value = obj.unknown_7_7_0x19;
+
+                //MAIN.numnpc_whoami.Value = obj.npc_whoami;
             }
             main.isLoading = false;
         }

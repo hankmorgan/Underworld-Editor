@@ -1,0 +1,628 @@
+{
+  "StaticObjectDefinition": [
+    {
+      "ByteOffset": 0,
+      "ByteSize": 2,
+      "ByteFormat": [
+        {
+          "DataName": "item_id",
+          "DataOffset": 0,
+          "DataSize": 9,
+          "Description": "The objects item ID"
+        },
+        {
+          "DataName": "flags",
+          "DataOffset": 9,
+          "DataSize": 3,
+          "Description": "Unknown meaning flags"
+        },
+        {
+          "DataName": "enchant",
+          "DataOffset": 12,
+          "DataSize": 1,
+          "Description": "Is the object enchanted"
+        },
+        {
+          "DataName": "doordir",
+          "DataOffset": 13,
+          "DataSize": 1,
+          "Description": "Unknown meaning flag"
+        },
+        {
+          "DataName": "invis",
+          "DataOffset": 14,
+          "DataSize": 1,
+          "Description": "Is the object invisible"
+        },
+        {
+          "DataName": "is_quant",
+          "DataOffset": 15,
+          "DataSize": 1,
+          "Description": "Is the object a quantity"
+        }
+      ]
+    },
+    {
+      "ByteOffset": 2,
+      "ByteSize": 2,
+      "ByteFormat": [
+        {
+          "DataName": "zpos",
+          "DataOffset": 0,
+          "DataSize": 7,
+          "Description": "z position in tile"
+        },
+        {
+          "DataName": "heading",
+          "DataOffset": 7,
+          "DataSize": 3,
+          "Description": "Object Heading. Also stores identification state."
+        },
+        {
+          "DataName": "ypos",
+          "DataOffset": 10,
+          "DataSize": 3,
+          "Description": "y position in tile"
+        },
+        {
+          "DataName": "xpos",
+          "DataOffset": 13,
+          "DataSize": 3,
+          "Description": "x position in tile"
+        }
+      ]
+    },
+    {
+      "ByteOffset": 4,
+      "ByteSize": 2,
+      "ByteFormat": [
+        {
+          "DataName": "quality",
+          "DataOffset": 0,
+          "DataSize": 6,
+          "Description": "Object Quality"
+        },
+        {
+          "DataName": "next",
+          "DataOffset": 6,
+          "DataSize": 10,
+          "Description": "Next Object In Chain"
+        }
+      ]
+    },
+    {
+      "ByteOffset": 6,
+      "ByteSize": 2,
+      "ByteFormat": [
+        {
+          "DataName": "owner",
+          "DataOffset": 0,
+          "DataSize": 6,
+          "Description": "Object Owner"
+        },
+        {
+          "DataName": "link",
+          "DataOffset": 6,
+          "DataSize": 10,
+          "Description": "Object Link"
+        }
+      ]
+    }
+  ]
+  ,
+  "NPCObjectDefinition":[
+      {
+      "ByteOffset": 8,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "npc_hp",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "npc_hp"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 9,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "projectile_heading",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "projectile_heading"
+        }
+      ]
+    }
+	,
+	{
+      "ByteOffset": 10,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "unk0xA",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "bit 7 here is relevant"
+        }
+      ]
+    }
+	,
+	{
+      "ByteOffset": 11,
+      "ByteSize": 2,
+      "ByteFormat": [
+        {
+          "DataName": "goal",
+          "DataOffset": 0,
+          "DataSize": 4,
+          "Description": "NPC AI Goal"
+        },
+		{
+          "DataName": "goal target",
+          "DataOffset": 4,
+          "DataSize": 8,
+          "Description": "Goal Target"
+        },
+		{
+          "DataName": "Animation Frame",
+          "DataOffset": 12,
+          "DataSize": 4,
+          "Description": "Animation Frame"
+        }
+      ]
+    }
+	,
+	{
+      "ByteOffset": 13,
+      "ByteSize": 2,
+      "ByteFormat": [
+        {
+          "DataName": "Previous Goal",
+          "DataOffset": 0,
+          "DataSize": 4,
+          "Description": "Also documented as npc_level"
+        },
+		{
+          "DataName": "Target Floor Height",
+          "DataOffset": 4,
+          "DataSize": 4,
+          "Description": "The floor height the NPC is trying to get to"
+        },
+		{
+          "DataName": "UNK Bit 8 at 0xD",
+          "DataOffset": 8,
+          "DataSize": 1,
+          "Description": "Unknown Bit 8 set on pit fighters at 0xD"
+        },
+		{
+          "DataName": "UNK Bit 9 at 0xD",
+          "DataOffset": 9,
+          "DataSize": 1,
+          "Description": "Unknown Bit 9 at 0xD"
+		}
+        ,
+		{
+          "DataName": "NPC Is Powerful",
+          "DataOffset": 10,
+          "DataSize": 1,
+          "Description": "NPC is a powerfull creature. Gets bonuses to attack, hp and damage"
+        }
+		,
+		{
+          "DataName": "UNK Bit 0xB at 0xD",
+          "DataOffset": 11,
+          "DataSize": 1,
+          "Description": "UNK Bit 0xB at 0xD"
+        }
+		,
+		{
+          "DataName": "Loot Spawned Flag",
+          "DataOffset": 12,
+          "DataSize": 1,
+          "Description": "Has NPC spawned its loot list"
+        }
+		,
+		{
+          "DataName": "npc_talked to",
+          "DataOffset": 13,
+          "DataSize": 1,
+          "Description": "Has the NPC been talked to"
+        }
+		,
+		{
+          "DataName": "npc_attitude",
+          "DataOffset": 14,
+          "DataSize": 2,
+          "Description": "What is the npc attitude towards the player"
+        }
+      ]	  
+    },
+	{
+      "ByteOffset": 15,
+      "ByteSize": 2,
+      "ByteFormat": [
+        {
+          "DataName": "TargetTileX",
+          "DataOffset": 0,
+          "DataSize": 6,
+          "Description": "Maybe a tile X the NPC wants to get to or is targeting"
+        }
+		,
+		{
+          "DataName": "TargetTileY",
+          "DataOffset": 6,
+          "DataSize": 6,
+          "Description": "Likely the tile Y the NPC wants to get to or is targeting. Also documented as npc_height"
+        }
+		,
+		{
+          "DataName": "swing_charge",
+          "DataOffset": 12,
+          "DataSize": 4,
+          "Description": "An index into a datatable in the exe that sets the charge of the NPCs weapon attack"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 17,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "DamageTaken In Single TIck",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "Temporary storage of damage taken by an NPC used in AI calculations"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 18,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "Last Character to Hit",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "Index of the last creature or player to hit this NPC"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 19,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "Unk 0x13",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "Possibly spell or ranged attack being used by the NPC"
+        }
+      ]
+    }
+	,
+	{
+      "ByteOffset": 20,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "Projectile Speed",
+          "DataOffset": 0,
+          "DataSize": 4,
+          "Description": "Not fully understood for NPCs"
+        },
+		{
+          "DataName": "Projectile Pitch",
+          "DataOffset": 4,
+          "DataSize": 4,
+          "Description": "Either movement pitch or attack type being executed. To recheck"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 21,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "Animation",
+          "DataOffset": 0,
+          "DataSize": 6,
+          "Description": "Current Animation"
+        },
+		{
+          "DataName": "Unknown AI flags",
+          "DataOffset": 6,
+          "DataSize": 2,
+          "Description": "Unknown AI flags"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 22,
+      "ByteSize": 2,
+      "ByteFormat": [
+	   {
+          "DataName": "Unk0x16_0_F",
+          "DataOffset": 0,
+          "DataSize": 4,
+          "Description": "Lookup into a table referenced by NPCGoto() functions"
+        },
+        {
+          "DataName": "y_home",
+          "DataOffset": 4,
+          "DataSize": 6,
+          "Description": "Home Y tile for the NPC"
+        },
+		{
+          "DataName": "x_home",
+          "DataOffset": 10,
+          "DataSize": 6,
+          "Description": "Home X tile for the NPC"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 24,
+      "ByteSize": 1,
+      "ByteFormat": [
+	   {
+          "DataName": "npc_heading",
+          "DataOffset": 0,
+          "DataSize": 5,
+          "Description": "Additional precision to heading in static byte"
+        },
+        {
+          "DataName": "unk_0x18_5_7",
+          "DataOffset": 5,
+          "DataSize": 3,
+          "Description": "Various AI flags for movement"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 25,
+      "ByteSize": 1,
+      "ByteFormat": [
+	   {
+          "DataName": "npc_hunger",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "Series of bit flags for NPC combat and tracking of player"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 26,
+      "ByteSize": 1,
+      "ByteFormat": [
+	   {
+          "DataName": "whoami",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "Identifier for the NPC for conversation lookup and naming"
+        }
+      ]
+    }	
+  ]
+
+  ,
+  "MobileObjectDefinition":[
+      {
+      "ByteOffset": 8,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "npc_hp",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "npc_hp"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 9,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "projectile_heading",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "projectile_heading"
+        }
+      ]
+    }
+	,
+	{
+      "ByteOffset": 10,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "unk0xA",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "bit 7 here is relevant"
+        }
+      ]
+    }
+	,
+	{
+      "ByteOffset": 11,
+      "ByteSize": 2,
+      "ByteFormat": [
+        {
+          "DataName": "xCoordinate",
+          "DataOffset": 0,
+          "DataSize": 16,
+          "Description": "Full X Coordinate"
+        }
+      ]
+    }
+	,
+	{
+      "ByteOffset": 13,
+      "ByteSize": 2,
+      "ByteFormat": [
+        {
+          "DataName": "yCoordinate",
+          "DataOffset": 0,
+          "DataSize": 16,
+          "Description": "Full Y Coordinate"
+        }
+      ]	  
+    },
+	{
+      "ByteOffset": 15,
+      "ByteSize": 2,
+      "ByteFormat": [
+        {
+          "DataName": "zCoordinate",
+          "DataOffset": 0,
+          "DataSize": 16,
+          "Description": "Full Z Coordinate"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 17,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "DamageTaken In Single TIck",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "Temporary storage of damage taken by an NPC used in AI calculations"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 18,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "Projectile Source ID",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "Index of the creature that launched the projectile"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 19,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "Unk 0x13",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "Possibly spell or ranged attack being used by the NPC"
+        }
+      ]
+    }
+	,
+	{
+      "ByteOffset": 20,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "Projectile Speed",
+          "DataOffset": 0,
+          "DataSize": 4,
+          "Description": "Not fully understood for NPCs"
+        },
+		{
+          "DataName": "Projectile Pitch",
+          "DataOffset": 4,
+          "DataSize": 4,
+          "Description": "Either movement pitch or attack type being executed. To recheck"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 21,
+      "ByteSize": 1,
+      "ByteFormat": [
+        {
+          "DataName": "Animation",
+          "DataOffset": 0,
+          "DataSize": 6,
+          "Description": "Current Animation"
+        },
+		{
+          "DataName": "Unknown AI flags",
+          "DataOffset": 6,
+          "DataSize": 2,
+          "Description": "Unknown AI flags"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 22,
+      "ByteSize": 2,
+      "ByteFormat": [
+	   {
+          "DataName": "Unk0x16_0_F",
+          "DataOffset": 0,
+          "DataSize": 4,
+          "Description": "Lookup into a table referenced by NPCGoto() functions"
+        },
+        {
+          "DataName": "y_home",
+          "DataOffset": 4,
+          "DataSize": 6,
+          "Description": "Home Y tile for the NPC"
+        },
+		{
+          "DataName": "x_home",
+          "DataOffset": 10,
+          "DataSize": 6,
+          "Description": "Unknown AI flags"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 24,
+      "ByteSize": 1,
+      "ByteFormat": [
+	   {
+          "DataName": "npc_heading",
+          "DataOffset": 0,
+          "DataSize": 5,
+          "Description": "Additional precision to heading in static byte"
+        },
+        {
+          "DataName": "unk_0x18_5_7",
+          "DataOffset": 5,
+          "DataSize": 3,
+          "Description": "Various AI flags for movement"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 25,
+      "ByteSize": 1,
+      "ByteFormat": [
+	   {
+          "DataName": "npc_hunger",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "Series of bit flags for NPC combat and tracking of player"
+        }
+      ]
+    },
+	{
+      "ByteOffset": 26,
+      "ByteSize": 1,
+      "ByteFormat": [
+	   {
+          "DataName": "backup object heading",
+          "DataOffset": 0,
+          "DataSize": 8,
+          "Description": "backup of the object heading to restore identifed state after it comes to a stop"
+        }
+      ]
+    }	
+  ]
+
+
+}

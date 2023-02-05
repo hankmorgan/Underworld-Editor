@@ -98,9 +98,9 @@ namespace UnderworldEditor
             MAIN.NumHunger.Value = Util.getValAtAddress(buffer, 0x3B, 8);
             MAIN.NumCharLevel.Value = Util.getValAtAddress(buffer, 0x3E, 8);
             MAIN.NumSkillPoints.Value = Util.getValAtAddress(buffer, 0x53, 8);
-            MAIN.NumPDatXPos.Value = Util.getValAtAddress(buffer, 0x56, 16);
-            MAIN.NumPDatYPos.Value = Util.getValAtAddress(buffer, 0x58, 16);
-            MAIN.NumPDatZPos.Value = Util.getValAtAddress(buffer, 0x5A, 16);
+            MAIN.NumPDatXPos.Value = Util.getValAtAddress(buffer, 0x55, 16);
+            MAIN.NumPDatYPos.Value = Util.getValAtAddress(buffer, 0x57, 16);
+            MAIN.NumPDatZPos.Value = Util.getValAtAddress(buffer, 0x59, 16);
             MAIN.NumPDatHeading.Value = Util.getValAtAddress(buffer, 0x5C, 8);
             MAIN.NumDungeonLevel.Value = Util.getValAtAddress(buffer, 0x5D, 8);
             PopulateCharClass(charclassdetails, MAIN);
