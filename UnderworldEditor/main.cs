@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
+using System.Reflection;
+using System.Threading;
 
 namespace UnderworldEditor
 {
@@ -75,6 +77,9 @@ namespace UnderworldEditor
                 PicPalette.Image = ArtLoader.Palette(PaletteLoader.Palettes[0]).image;
                 PopulateTextureTree();
             }
+
+            PopulateCutsceneTree();
+
             //Load the definition for how an object is structures.
             //File must cover all bytes.
             var objectJson = System.IO.File.ReadAllText("object_definition.json");
@@ -345,6 +350,7 @@ namespace UnderworldEditor
                                 NewByteToWrite = NewByteToWrite |
                                 ((objlist.objList[index].MobileValues[valuePtr++] & vdef.BitMask) << vdef.DataOffset);
                             }
+                            Debug.Print("(" + addptr + byt.ByteOffset + ")" + " For " + byt.ByteOffset + " changing value " + TileMapData[addptr + byt.ByteOffset] + " to " + (byte)(NewByteToWrite & 0xFF));
                             TileMapData[addptr + byt.ByteOffset] = (byte)(NewByteToWrite & 0xFF);
                             break;
                         }
@@ -696,7 +702,7 @@ namespace UnderworldEditor
             if (Util.ReadStreamFile(main.basepath + filename, out levarkbuffer))
             {
                 curlevarkfile = main.basepath + filename;
-                int NoOfBlocks = (int)Util.getValAtAddress(levarkbuffer, 0, 16);
+                int NoOfBlocks = (int)Util.getAt(levarkbuffer, 0, 16);
                 uwblocks = new Util.UWBlock[NoOfBlocks];
                 TreeUWBlocks.Nodes.Clear();
                 TreeNode TileMapNodes = TreeUWBlocks.Nodes.Add("Tilemaps");
@@ -710,21 +716,22 @@ namespace UnderworldEditor
                     {
                         if (Util.LoadUWBlock(levarkbuffer, i, Util.UWBlockSizes(i), out uwblocks[i]))
                         {
+                            int worldNo = (i / 8);
                             uwblocks[i].ContentType = Util.GetUWLevArkContentType(i);
                             TreeNode node;
                             switch (uwblocks[i].ContentType)
                             {
                                 case Util.ContentTypes.AnimationOverlay:
-                                    node = OverlayMapNodes.Nodes.Add("Block #" + i); break;
+                                    node = OverlayMapNodes.Nodes.Add("World " + worldNo  + " Block #" + i); break;
                                 case Util.ContentTypes.AutoMap:
-                                    node = AutoMapNodes.Nodes.Add("Block #" + i); break;
+                                    node = AutoMapNodes.Nodes.Add("World " + worldNo + " Block #" + i); break;
                                 case Util.ContentTypes.AutoMapNotes:
-                                    node = AutoMapNotesNodes.Nodes.Add("Block #" + i); break;
+                                    node = AutoMapNotesNodes.Nodes.Add("World " + worldNo  + " Block #" + i); break;
                                 case Util.ContentTypes.TextureMap:
-                                    node = TextureMapNodes.Nodes.Add("Block #" + i); break;
+                                    node = TextureMapNodes.Nodes.Add("World " + worldNo + " Block #" + i); break;
                                 case Util.ContentTypes.TileMap:
                                 default:
-                                    node = TileMapNodes.Nodes.Add("Block #" + i); break;
+                                    node = TileMapNodes.Nodes.Add("World " + worldNo + " Block #" + i); break;
                             }
                             node.Tag = i;
                         }
@@ -914,6 +921,22 @@ namespace UnderworldEditor
                 ImgOut.Width = CurrentImage.image.Width * (int)NumZoom.Value;
                 ImgOut.Height = CurrentImage.image.Height * (int)NumZoom.Value;
                 LblImageDetails.Text = CurrentImage.image.Width + "x" + CurrentImage.image.Height + "\n" + CurrentImage.ImageType.ToString();
+            }
+        }
+
+
+        private void PopulateCutsceneTree()
+        {
+           treeCutsN00.Nodes.Clear();
+           DirectoryInfo dir = new DirectoryInfo(basepath + "\\cuts");
+            if (dir != null)
+            {
+                FileInfo[] cutsFiles = dir.GetFiles("*.n00");
+                for (int i = 0; i <= cutsFiles.GetUpperBound(0); i++)
+                {
+                    TreeNode gr = treeCutsN00.Nodes.Add(cutsFiles[i].Name);
+                    gr.Tag = i;
+                }
             }
         }
 
@@ -1341,12 +1364,12 @@ namespace UnderworldEditor
                 long NewAddress=0;
                 for (int x=0; x<= blockData.GetUpperBound(0);x++)
                 {
-                    long currAddress = Util.getValAtAddress(lev_ark, 6 + (x * 4), 32);
+                    long currAddress = Util.getAt(lev_ark, 6 + (x * 4), 32);
                     if (x==0)
                     { NewAddress = currAddress; }
-                    int compressionFlag = (int)Util.getValAtAddress(lev_ark, 6 + (1 * (320 * 4)) + (x * 4), 32);
-                    int DataSizeVal = (int)Util.getValAtAddress(lev_ark, 6 + (2 * (320 * 4)) + (x * 4), 32);
-                    int DataAvail = (int)Util.getValAtAddress(lev_ark, 6 + (3 * (320 * 4)) + (x * 4), 32);
+                    int compressionFlag = (int)Util.getAt(lev_ark, 6 + (1 * (320 * 4)) + (x * 4), 32);
+                    int DataSizeVal = (int)Util.getAt(lev_ark, 6 + (2 * (320 * 4)) + (x * 4), 32);
+                    int DataAvail = (int)Util.getAt(lev_ark, 6 + (3 * (320 * 4)) + (x * 4), 32);
                     int isCompressed = (compressionFlag >> 1) & 0x01;
                     if (x< BlocksToRepack)
                     {//a tile map block
@@ -1640,37 +1663,37 @@ namespace UnderworldEditor
                 switch (numPalMode.Value)
                 {
                     case 0:
-                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
-                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
-                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
+                        testpal.red[i] = (byte)Util.getAt(PSX1Buffer, start + 0, 8);
+                        testpal.green[i] = (byte)Util.getAt(PSX1Buffer, start + 1, 8);
+                        testpal.blue[i] = (byte)Util.getAt(PSX1Buffer, start + 2, 8);
                        
                         break;
                     case 1:
-                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
-                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
-                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
+                        testpal.red[i] = (byte)Util.getAt(PSX1Buffer, start + 0, 8);
+                        testpal.green[i] = (byte)Util.getAt(PSX1Buffer, start + 2, 8);
+                        testpal.blue[i] = (byte)Util.getAt(PSX1Buffer, start + 1, 8);
                         break;
                     case 2:
-                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
-                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
-                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
+                        testpal.red[i] = (byte)Util.getAt(PSX1Buffer, start + 1, 8);
+                        testpal.green[i] = (byte)Util.getAt(PSX1Buffer, start + 0, 8);
+                        testpal.blue[i] = (byte)Util.getAt(PSX1Buffer, start + 2, 8);
                         break;
                     case 3:
-                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
-                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
-                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
+                        testpal.red[i] = (byte)Util.getAt(PSX1Buffer, start + 1, 8);
+                        testpal.green[i] = (byte)Util.getAt(PSX1Buffer, start + 2, 8);
+                        testpal.blue[i] = (byte)Util.getAt(PSX1Buffer, start + 0, 8);
                         break;
                     case 4:
-                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
-                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
-                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
+                        testpal.red[i] = (byte)Util.getAt(PSX1Buffer, start + 2, 8);
+                        testpal.green[i] = (byte)Util.getAt(PSX1Buffer, start + 0, 8);
+                        testpal.blue[i] = (byte)Util.getAt(PSX1Buffer, start + 1, 8);
                         break;
                        
                     case 5:
                     default:
-                        testpal.red[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 2, 8);
-                        testpal.green[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 1, 8);
-                        testpal.blue[i] = (byte)Util.getValAtAddress(PSX1Buffer, start + 0, 8);
+                        testpal.red[i] = (byte)Util.getAt(PSX1Buffer, start + 2, 8);
+                        testpal.green[i] = (byte)Util.getAt(PSX1Buffer, start + 1, 8);
+                        testpal.blue[i] = (byte)Util.getAt(PSX1Buffer, start + 0, 8);
                         break;                      
 
 
@@ -1708,7 +1731,7 @@ namespace UnderworldEditor
             }
             for (int i = 0; i < 231; i++)
             {
-                var data = Util.getValAtAddress(PSX1Buffer, i * 4, 32);
+                var data = Util.getAt(PSX1Buffer, i * 4, 32);
                 var newNode = new TreeNode(i.ToString() + "@" + data);
                 newNode.Tag = data;
                 treeView1.Nodes.Add(newNode);
@@ -1753,12 +1776,72 @@ namespace UnderworldEditor
         }
 
 
-        //private void btnJumpToRawData_Click(object sender, EventArgs e)
-        //{
-        //    tabLevArk.SelectedIndex = 4;
-        //     GrdLevArkRaw.CurrentCell = GrdLevArkRaw[0,(int)worldObjects.objList[CurWorldObject].LocalBlockAddress];
-        //    //worldObjects, CurWorldObject,
+        private void btnSearchTiles_Click(object sender, EventArgs e)
+        {
+            string result = "";
+            if (txtFindIndex.Text.Length == 0) return;
+            if (int.TryParse(txtFindIndex.Text, out int searchIndex))
+            {
+                foreach(TreeNode ndParent in TreeWorldByTile.Nodes)
+                {
+                    foreach(TreeNode nd in ndParent.Nodes)
+                    {
+                        if (nd.Tag != null)
+                        {
+                            if (int.TryParse(nd.Tag.ToString(), out int nodetag))
+                            {
+                                if (nodetag == searchIndex)
+                                {
+                                    result += ndParent.Text;
+                                }
+                            }
+                        }
+                    }                   
+                }
+            }
+            lblSearchResult.Text = "Result " + result;
+        }
 
-        //}
+        private void grdTextureMap_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) { return; }
+            var row = grdTextureMap.Rows[e.RowIndex];
+            if (row.Cells[0].Value == null) { return; }
+            if (int.TryParse(row.Cells[0].Value.ToString(), out int textureNo))
+            {
+                var img = tex.LoadImageAt(textureNo);
+                if (img != null)
+                {
+                    picTextureMap.Image = img.image;
+                }
+            }
+        }
+
+        private void grdTextureMap_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            grdTextureMap_CellClick(sender, e);
+        }
+
+        private void treeCutsN00_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            grdCutscene.Rows.Clear();
+            var filename = Path.Combine(main.basepath, "cuts", e.Node.Text);
+            if (System.IO.File.Exists(filename))
+            {
+                if (Util.ReadStreamFile(filename, out byte[] Buffer))
+                {
+                    var commands = cuts.LoadCutsceneData(Buffer);
+
+                    foreach (var c in commands)
+                    {
+                        var r = grdCutscene.Rows.Add();
+                        grdCutscene.Rows[r].HeaderCell.Value = c.offset.ToString();
+                        grdCutscene.Rows[r].Cells[0].Value = c.functionNo;
+                        grdCutscene.Rows[r].Cells[1].Value = c.display;
+                        grdCutscene.Rows[r].Cells[2].Value = c.FunctionDesc;
+                    }
+                }
+            }
+        }
     }
 }

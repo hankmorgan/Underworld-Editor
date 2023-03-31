@@ -20,7 +20,7 @@ namespace UnderworldEditor
             MAIN.pdatObjects.InitInventoryObjectList(buffer, main.InventoryOffsetUW1);
             main.PopulateItemIDList(MAIN.CmbPdatItem_ID);
             PopulateUI(buffer, MAIN.pdatObjects.objList, MAIN);
-            main.isLoading = false;
+            main.isLoading = false;            
         }
 
         public static void LoadUW2PDat(main MAIN, int slot)
@@ -34,6 +34,7 @@ namespace UnderworldEditor
             MAIN.pdatObjects.InitInventoryObjectList(buffer, main.InventoryOffsetUW2);
             main.PopulateItemIDList(MAIN.CmbPdatItem_ID);
             PopulateUI(buffer, MAIN.pdatObjects.objList, MAIN);
+            long clok = Util.getAt(buffer, 874, 32);
             main.isLoading = false;
         }
 
@@ -75,34 +76,34 @@ namespace UnderworldEditor
                 //Unique values
                 case main.GAME_UW1://uw1
                     {
-                        charclassdetails = (int)Util.getValAtAddress(buffer, 0x65, 8);
+                        charclassdetails = (int)Util.getAt(buffer, 0x65, 8);
                         PopulateSkillsGrid(main.SkillsOffsetUW1, MAIN);
-                        MAIN.ChkDifficulty.Checked = ((int)Util.getValAtAddress(buffer, 0xB5, 8) & 0x1) == 1;
+                        MAIN.ChkDifficulty.Checked = ((int)Util.getAt(buffer, 0xB5, 8) & 0x1) == 1;
                         break;
                     }//end switch uw1
                 case main.GAME_UW2:
                     {
-                        charclassdetails = (int)Util.getValAtAddress(buffer, 0x66, 8);
+                        charclassdetails = (int)Util.getAt(buffer, 0x66, 8);
                         PopulateSkillsGrid(main.SkillsOffsetUW2, MAIN);
-                        MAIN.ChkDifficulty.Checked = ((int)Util.getValAtAddress(buffer, 0x302, 8) & 0x1) == 1;
+                        MAIN.ChkDifficulty.Checked = ((int)Util.getAt(buffer, 0x302, 8) & 0x1) == 1;
                         break;
                     }//end switch uw2
             }
             //Common values
-            MAIN.NumEXP.Value = Util.getValAtAddress(buffer, 0x4F, 32) / 10;
-            MAIN.NumCurHP.Value = Util.getValAtAddress(buffer, 0x36, 8);
-            MAIN.NumMaxHP.Value = Util.getValAtAddress(buffer, 0x37, 8);
-            MAIN.NumCurMana.Value = Util.getValAtAddress(buffer, 0x38, 8);
-            MAIN.NumMaxMana.Value = Util.getValAtAddress(buffer, 0x39, 8);
-            MAIN.NumFatigue.Value = Util.getValAtAddress(buffer, 0x3A, 8);
-            MAIN.NumHunger.Value = Util.getValAtAddress(buffer, 0x3B, 8);
-            MAIN.NumCharLevel.Value = Util.getValAtAddress(buffer, 0x3E, 8);
-            MAIN.NumSkillPoints.Value = Util.getValAtAddress(buffer, 0x53, 8);
-            MAIN.NumPDatXPos.Value = Util.getValAtAddress(buffer, 0x55, 16);
-            MAIN.NumPDatYPos.Value = Util.getValAtAddress(buffer, 0x57, 16);
-            MAIN.NumPDatZPos.Value = Util.getValAtAddress(buffer, 0x59, 16);
-            MAIN.NumPDatHeading.Value = Util.getValAtAddress(buffer, 0x5C, 8);
-            MAIN.NumDungeonLevel.Value = Util.getValAtAddress(buffer, 0x5D, 8);
+            MAIN.NumEXP.Value = Util.getAt(buffer, 0x4F, 32) / 10;
+            MAIN.NumCurHP.Value = Util.getAt(buffer, 0x36, 8);
+            MAIN.NumMaxHP.Value = Util.getAt(buffer, 0x37, 8);
+            MAIN.NumCurMana.Value = Util.getAt(buffer, 0x38, 8);
+            MAIN.NumMaxMana.Value = Util.getAt(buffer, 0x39, 8);
+            MAIN.NumFatigue.Value = Util.getAt(buffer, 0x3A, 8);
+            MAIN.NumHunger.Value = Util.getAt(buffer, 0x3B, 8);
+            MAIN.NumCharLevel.Value = Util.getAt(buffer, 0x3E, 8);
+            MAIN.NumSkillPoints.Value = Util.getAt(buffer, 0x53, 8);
+            MAIN.NumPDatXPos.Value = Util.getAt(buffer, 0x55, 16);
+            MAIN.NumPDatYPos.Value = Util.getAt(buffer, 0x57, 16);
+            MAIN.NumPDatZPos.Value = Util.getAt(buffer, 0x59, 16);
+            MAIN.NumPDatHeading.Value = Util.getAt(buffer, 0x5C, 8);
+            MAIN.NumDungeonLevel.Value = Util.getAt(buffer, 0x5D, 8);
             PopulateCharClass(charclassdetails, MAIN);
         }
 
@@ -178,72 +179,72 @@ namespace UnderworldEditor
             { offset = main.InventorySlotOffsetUW2; }
 
             TreeNode tvn = MAIN.TreeInventory.Nodes.Add("Helm");
-            int objIndex = (int)Util.getValAtAddress(buffer, offset + 0, 16) >> 6;
+            int objIndex = (int)Util.getAt(buffer, offset + 0, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
 
             tvn = MAIN.TreeInventory.Nodes.Add("Chest");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 2, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 2, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
 
             tvn = MAIN.TreeInventory.Nodes.Add("Gloves");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 4, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 4, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
 
             tvn = MAIN.TreeInventory.Nodes.Add("Leggings");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 6, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 6, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
 
             tvn = MAIN.TreeInventory.Nodes.Add("Boots");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 8, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 8, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
 
             tvn = MAIN.TreeInventory.Nodes.Add("Right Shoulder");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 10, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 10, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
 
             tvn = MAIN.TreeInventory.Nodes.Add("Left Shoulder");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 12, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 12, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
 
             tvn = MAIN.TreeInventory.Nodes.Add("Right Hand");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 14, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 14, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
 
             tvn = MAIN.TreeInventory.Nodes.Add("Left Hand");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 16, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 16, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
 
             tvn = MAIN.TreeInventory.Nodes.Add("Right Ring");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 18, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 18, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
 
             tvn = MAIN.TreeInventory.Nodes.Add("Left Ring");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 20, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 20, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
 
             tvn = MAIN.TreeInventory.Nodes.Add("BackPack0");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 22, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 22, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
             tvn = MAIN.TreeInventory.Nodes.Add("BackPack1");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 24, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 24, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
             tvn = MAIN.TreeInventory.Nodes.Add("BackPack2");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 26, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 26, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
             tvn = MAIN.TreeInventory.Nodes.Add("BackPack3");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 28, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 28, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
             tvn = MAIN.TreeInventory.Nodes.Add("BackPack4");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 30, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 30, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
             tvn = MAIN.TreeInventory.Nodes.Add("BackPack5");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 32, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 32, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
             tvn = MAIN.TreeInventory.Nodes.Add("BackPack6");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 34, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 34, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
             tvn = MAIN.TreeInventory.Nodes.Add("BackPack7");
-            objIndex = (int)Util.getValAtAddress(buffer, offset + 36, 16) >> 6;
+            objIndex = (int)Util.getAt(buffer, offset + 36, 16) >> 6;
             PopulateInventoryNode(tvn, objIndex, objList);
         }
 

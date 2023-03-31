@@ -67,7 +67,7 @@ namespace UnderworldEditor
         public TileInfo[,] Tiles;
 
 
-        public short[] texture_map = new short[272];
+        public short[] texture_map;// = new short[272];
 
         public short ceilingtexture;
 
@@ -84,8 +84,8 @@ namespace UnderworldEditor
             {
                 for (short x = 0; x <= 63; x++)
                 {
-                    int FirstTileInt = (int)Util.getValAtAddress(lev_ark, (address_pointer + 0), 16);
-                    int SecondTileInt = (int)Util.getValAtAddress(lev_ark, (address_pointer + 2), 16);
+                    int FirstTileInt = (int)Util.getAt(lev_ark, (address_pointer + 0), 16);
+                    int SecondTileInt = (int)Util.getAt(lev_ark, (address_pointer + 2), 16);
                     Tiles[x, y] = BuildTileInfo(x, y, FirstTileInt, SecondTileInt, ceilingtexture);//TODO:Texturemappings
                     Tiles[x, y].FileAddress = BlockAddress + address_pointer;
                     Tiles[x, y].Render = true;
@@ -116,6 +116,7 @@ namespace UnderworldEditor
                     textureMapSize = UW1_TEXTUREMAPSIZE;
                     break;
             }
+            texture_map=new short[textureMapSize];
             int offset = 0;
             for (int i = 0; i < textureMapSize; i++)//256
             {
@@ -125,22 +126,22 @@ namespace UnderworldEditor
                         {
                             if (i < 48)//Wall textures
                             {
-                                texture_map[i] = (short)Util.getValAtAddress(tex_ark, offset, 16);
+                                texture_map[i] = (short)Util.getAt(tex_ark, offset, 16);
                                 offset = offset + 2;
                             }
                             else
                                 if (i <= 57)//Floor textures are 48 to 56, ceiling is 57
                             {
-                                texture_map[i] = (short)(Util.getValAtAddress(tex_ark, offset, 16) + 210);
-                                offset = offset + 2;
+                                texture_map[i] = (short)(Util.getAt(tex_ark, offset, 16) + 210);
                                 if (i == 57)
                                 {
-                                    CeilingTexture = (short)i;
+                                    CeilingTexture = texture_map[i];
                                 }
+                                offset = offset + 2;
                             }
                             else
                             {
-                                texture_map[i] = (short)Util.getValAtAddress(tex_ark, offset, 8);
+                                texture_map[i] = (short)Util.getAt(tex_ark, offset, 8);
                                 offset++;
                             }
                             break;
@@ -149,28 +150,23 @@ namespace UnderworldEditor
                         {
                             if (i < 64)
                             {
-                                texture_map[i] = (short)Util.getValAtAddress(tex_ark, offset, 16);
+                                texture_map[i] = (short)Util.getAt(tex_ark, offset, 16);
+                                if (i == 0xf)
+                                {
+                                    CeilingTexture = texture_map[i];
+                                }
                                 offset = offset + 2;
                             }
                             else
                             {
                                 //door textures
-                                texture_map[i] = (short)Util.getValAtAddress(tex_ark, offset, 8);
+                                texture_map[i] = (short)Util.getAt(tex_ark, offset, 8);
                                 offset++;
                             }
                         }
-                        if (i == 0xf)
-                        {
-                            CeilingTexture = (short)i;
-                        }
-                        //if ((LevelNo == (int)(GameWorldController.UW2_LevelNos.Ethereal4)) && (i == 16))
-                        //{
-                        //    //Not sure why this is an exceptional case!
-                        //    CeilingTexture = (short)i;
-                        //}
                         break;
                 }
-            }
+            }  
         }
 
         public TileInfo BuildTileInfo(short X, short Y, int FirstTileInt, int SecondTileInt, short CeilingTexture)

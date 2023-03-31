@@ -99,7 +99,7 @@ namespace UnderworldEditor
         /// <param name="buffer">Buffer.</param>
         /// <param name="Address">Address.</param>
         /// <param name="size">Size of the data in bits</param>
-        public static long getValAtAddress(byte[] buffer, long Address, int size)
+        public static long getAt(byte[] buffer, long Address, int size)
         {//Gets contents of bytes the the specific integer address. int(8), int(16), int(32) per uw-formats.txt
             switch (size)
             {
@@ -178,15 +178,15 @@ namespace UnderworldEditor
         public static bool LoadUWBlock(byte[] arkData, int blockNo, long targetDataLen, out UWBlock uwb)
         {
             uwb = new UWBlock();
-            int NoOfBlocks = (int)getValAtAddress(arkData, 0, 32);
+            int NoOfBlocks = (int)getAt(arkData, 0, 32);
             switch (main.curgame)
             {
                 case main.GAME_UW2:
                     {//6 + block *4 + (noOfBlocks*type)
-                        uwb.Address = (int)getValAtAddress(arkData, 6 + (blockNo * 4), 32);
-                        uwb.CompressionFlag = (int)getValAtAddress(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 4), 32);
-                        uwb.DataLen = getValAtAddress(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 8), 32);
-                        uwb.ReservedSpace = getValAtAddress(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 12), 32);
+                        uwb.Address = (int)getAt(arkData, 6 + (blockNo * 4), 32);
+                        uwb.CompressionFlag = (int)getAt(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 4), 32);
+                        uwb.DataLen = getAt(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 8), 32);
+                        uwb.ReservedSpace = getAt(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 12), 32);
                         if (uwb.Address != 0)
                         {
                             if (((uwb.CompressionFlag >> 1) & 0x01) == 1)
@@ -213,7 +213,7 @@ namespace UnderworldEditor
                     }
                 default:
                     {
-                        uwb.Address = getValAtAddress(arkData, (blockNo * 4) + 2, 32);
+                        uwb.Address = getAt(arkData, (blockNo * 4) + 2, 32);
                         if (uwb.Address != 0)
                         {
                             uwb.Data = new byte[targetDataLen];
@@ -248,15 +248,15 @@ namespace UnderworldEditor
         public static bool CopyUWBlock(byte[] arkData, int blockNo, long targetDataLen, out UWBlock uwb)
         {
             uwb = new UWBlock();
-            int NoOfBlocks = (int)getValAtAddress(arkData, 0, 32);
+            int NoOfBlocks = (int)getAt(arkData, 0, 32);
             switch (main.curgame)
             {
                 case main.GAME_UW2:
                     {//6 + block *4 + (noOfBlocks*type)
-                        uwb.Address = (int)getValAtAddress(arkData, 6 + (blockNo * 4), 32);
-                        uwb.CompressionFlag = (int)getValAtAddress(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 4), 32);
-                        uwb.DataLen = getValAtAddress(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 8), 32);
-                        uwb.ReservedSpace = getValAtAddress(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 12), 32);
+                        uwb.Address = (int)getAt(arkData, 6 + (blockNo * 4), 32);
+                        uwb.CompressionFlag = (int)getAt(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 4), 32);
+                        uwb.DataLen = getAt(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 8), 32);
+                        uwb.ReservedSpace = getAt(arkData, 6 + (blockNo * 4) + (NoOfBlocks * 12), 32);
                         if (uwb.Address != 0)
                         {
                             uwb.Data = new byte[uwb.DataLen];
@@ -290,7 +290,7 @@ namespace UnderworldEditor
         ///This decompresses UW2 blocks.
         public static byte[] unpackUW2(byte[] tmp, long address_pointer, ref long datalen)
         {
-            long BlockLen = (int)getValAtAddress(tmp, address_pointer, 32);  //lword(base);
+            long BlockLen = (int)getAt(tmp, address_pointer, 32);  //lword(base);
             long NoOfSegs = ((BlockLen / 0x1000) + 1) * 0x1000;
             //byte[] buf = new byte[BlockLen+100];
             byte[] buf = new byte[Math.Max(NoOfSegs, BlockLen + 100)];

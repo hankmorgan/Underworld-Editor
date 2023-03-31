@@ -45,20 +45,6 @@ namespace UnderworldEditor
             {
                 MAIN.tilemap.BuildTextureMap(MAIN.uwblocks[blockno + 80].Data, ref MAIN.tilemap.ceilingtexture);
             }
-            //Temporarily output to treeview for testing.
-           // MAIN.txtMap.Text = "";
-            //for (int x = 0; x <= 63; x++)
-            //{
-               
-            //   TreeNode xnode = MAIN.TreeTiles.Nodes.Add("X=" + x);
-            //    for (int y = 0; y <= 63; y++)
-            //    {
-            //        TreeNode ynode = xnode.Nodes.Add("Y=" + y);
-            //        ynode.Tag = x + "," + y;
-            //        //MAIN.txtMap.Text += MAIN.tilemap.Tiles[x, y].tileType;
-            //    }
-            //    //MAIN.txtMap.Text += "\n";
-            //}
 
             MAIN.worldObjects = new objects();
             MAIN.worldObjects.InitWorldObjectList(MAIN.uwblocks[blockno].Data, 64 * 64 * 4 , MAIN.uwblocks[blockno].Address);
@@ -86,26 +72,19 @@ namespace UnderworldEditor
             MAIN.PicMap.Height = 64 * (int)MAIN.numMapZoom.Value;
             MAIN.PicMap.Width = 64 * (int)MAIN.numMapZoom.Value;
 
+            MAIN.grdTextureMap.Rows.Clear();
+            int texIndex = 0;
+            int hexOffset = 33288;
+            foreach (var tex in MAIN.tilemap.texture_map)
+            {
+                int newRow = MAIN.grdTextureMap.Rows.Add();
+                MAIN.grdTextureMap.Rows[newRow].Cells[0].Value = tex;
+                MAIN.grdTextureMap.Rows[newRow].Cells[1].Value = hexOffset.ToString("X");
+                MAIN.grdTextureMap.Rows[newRow].HeaderCell.Value = texIndex.ToString();
+                hexOffset = hexOffset + 2;
+                texIndex++;
+            }
         }
-
-
-        //public static void LoadTileInfoFromSelectedNode(main MAIN)
-        //{
-        //    if (MAIN.TreeTiles.SelectedNode.Tag != null)
-        //    {
-        //        //Load tile info for tagged value.
-        //        string X = MAIN.TreeTiles.SelectedNode.Tag.ToString().Split(',')[0];
-        //        string Y = MAIN.TreeTiles.SelectedNode.Tag.ToString().Split(',')[1];
-        //        int x; int y;
-        //        if (int.TryParse(X, out x))
-        //        {
-        //            if (int.TryParse(Y, out y))
-        //            {
-        //                LoadInfoForTileXY(MAIN, x, y);
-        //            }
-        //        }
-        //    }
-        //}
 
         public static void LoadInfoForTileXY(main MAIN, int x, int y)
         {         
@@ -120,8 +99,17 @@ namespace UnderworldEditor
             MAIN.NumWallTexture.Value = MAIN.tilemap.Tiles[x, y].wallTexture;
             MAIN.NumIndexObjectList.Value = MAIN.tilemap.Tiles[x, y].indexObjectList;
             int actualtexture = MAIN.tilemap.GetMappedFloorTexture(TileMap.fSELF, MAIN.tilemap.Tiles[x, y]);
-            MAIN.LblMappedFloorTexture.Text = actualtexture.ToString()
-                + " " + MAIN.UWGameStrings.GetTextureName(actualtexture, main.curgame);
+            if (main.curgame == main.GAME_UW2)
+            {
+                MAIN.LblMappedFloorTexture.Text = actualtexture.ToString()
+                    + " " + MAIN.UWGameStrings.GetTextureName(510-actualtexture, main.curgame);
+            }
+            else
+            {
+                MAIN.LblMappedFloorTexture.Text = actualtexture.ToString()
+                     + " " + MAIN.UWGameStrings.GetTextureName(actualtexture, main.curgame);
+            }
+
             MAIN.NumTileFlags.Value = MAIN.tilemap.Tiles[x, y].flags;
             MAIN.NumDoorBit.Value = MAIN.tilemap.Tiles[x, y].doorBit;
             MAIN.NumNoMagic.Value = MAIN.tilemap.Tiles[x, y].noMagic;

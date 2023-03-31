@@ -39,7 +39,7 @@ namespace UnderworldEditor
             }
             else
             {
-                NoOfImages = (int)Util.getValAtAddress(ImageFileData, 1, 16);
+                NoOfImages = (int)Util.getAt(ImageFileData, 1, 16);
                 ImageCache = new BitmapUW[NoOfImages];
                 ImageFileDataLoaded = true;
                 return true;
@@ -69,19 +69,19 @@ namespace UnderworldEditor
             }
 
 
-            long imageOffset = Util.getValAtAddress(ImageFileData, (index * 4) + 3, 32);
+            long imageOffset = Util.getAt(ImageFileData, (index * 4) + 3, 32);
             if (imageOffset >= ImageFileData.GetUpperBound(0))
             {//Image out of range
                 return base.LoadImageAt(index);
             }
 
 
-            switch (Util.getValAtAddress(ImageFileData, imageOffset, 8))//File type
+            switch (Util.getAt(ImageFileData, imageOffset, 8))//File type
             {
                 case 0x4://8 bit uncompressed
                     {
-                        int BitMapWidth = (int)Util.getValAtAddress(ImageFileData, imageOffset + 1, 8);
-                        int BitMapHeight = (int)Util.getValAtAddress(ImageFileData, imageOffset + 2, 8);
+                        int BitMapWidth = (int)Util.getAt(ImageFileData, imageOffset + 1, 8);
+                        int BitMapHeight = (int)Util.getAt(ImageFileData, imageOffset + 2, 8);
                         imageOffset = imageOffset + 5;
                         ImageCache[index] = Image(this, ImageFileData, imageOffset, index, BitMapWidth, BitMapHeight, "name_goes_here", PaletteLoader.Palettes[PaletteNo], Alpha, BitmapUW.ImageTypes.EightBitUncompressed);
                         return ImageCache[index];
@@ -91,17 +91,17 @@ namespace UnderworldEditor
                         byte[] imgNibbles;
                         int auxPalIndex;
                        
-                        int BitMapWidth = (int)Util.getValAtAddress(ImageFileData, imageOffset + 1, 8);
-                        int BitMapHeight = (int)Util.getValAtAddress(ImageFileData, imageOffset + 2, 8);
+                        int BitMapWidth = (int)Util.getAt(ImageFileData, imageOffset + 1, 8);
+                        int BitMapHeight = (int)Util.getAt(ImageFileData, imageOffset + 2, 8);
                         if (!useOverrideAuxPalIndex)
                         {
-                            auxPalIndex = (int)Util.getValAtAddress(ImageFileData, imageOffset + 3, 8);
+                            auxPalIndex = (int)Util.getAt(ImageFileData, imageOffset + 3, 8);
                         }
                         else
                         {
                             auxPalIndex = OverrideAuxPalIndex;
                         }
-                        int datalen = (int)Util.getValAtAddress(ImageFileData, imageOffset + 4, 16);
+                        int datalen = (int)Util.getAt(ImageFileData, imageOffset + 4, 16);
                         imgNibbles = new byte[Math.Max(BitMapWidth * BitMapHeight * 2, (datalen + 5) * 2)];
                         imageOffset = imageOffset + 6;  //Start of raw data.
                         copyNibbles(ImageFileData, ref imgNibbles, datalen, imageOffset);
@@ -119,17 +119,17 @@ namespace UnderworldEditor
                         byte[] imgNibbles;
                         int auxPalIndex;
                         int datalen;
-                        int BitMapWidth = (int)Util.getValAtAddress(ImageFileData, imageOffset + 1, 8);
-                        int BitMapHeight = (int)Util.getValAtAddress(ImageFileData, imageOffset + 2, 8);
+                        int BitMapWidth = (int)Util.getAt(ImageFileData, imageOffset + 1, 8);
+                        int BitMapHeight = (int)Util.getAt(ImageFileData, imageOffset + 2, 8);
                         if (!useOverrideAuxPalIndex)
                         {
-                            auxPalIndex = (int)Util.getValAtAddress(ImageFileData, imageOffset + 3, 8);
+                            auxPalIndex = (int)Util.getAt(ImageFileData, imageOffset + 3, 8);
                         }
                         else
                         {
                             auxPalIndex = OverrideAuxPalIndex;
                         }
-                        datalen = (int)Util.getValAtAddress(ImageFileData, imageOffset + 4, 16);
+                        datalen = (int)Util.getAt(ImageFileData, imageOffset + 4, 16);
                         imgNibbles = new byte[Math.Max(BitMapWidth * BitMapHeight * 2, (5 + datalen) * 2)];
                         imageOffset = imageOffset + 6;  //Start of raw data.
                         copyNibbles(ImageFileData, ref imgNibbles, datalen, imageOffset);
@@ -146,8 +146,8 @@ namespace UnderworldEditor
                 //break;
                 default:
                     {
-                        int BitMapWidth = (int)Util.getValAtAddress(ImageFileData, imageOffset + 1, 8);
-                        int BitMapHeight = (int)Util.getValAtAddress(ImageFileData, imageOffset + 2, 8);
+                        int BitMapWidth = (int)Util.getAt(ImageFileData, imageOffset + 1, 8);
+                        int BitMapHeight = (int)Util.getAt(ImageFileData, imageOffset + 2, 8);
                         if (FileName.ToUpper().EndsWith("PANELS.GR"))
                         {//Check to see if the file is panels.gr
                             if (index >= 4) { return base.LoadImageAt(0); } //new Bitmap(2, 2);
@@ -158,7 +158,7 @@ namespace UnderworldEditor
                                 BitMapWidth = 79;
                                 BitMapHeight = 112;
                             }
-                            imageOffset = Util.getValAtAddress(ImageFileData, (index * 4) + 3, 32);
+                            imageOffset = Util.getAt(ImageFileData, (index * 4) + 3, 32);
                             ImageCache[index] = Image(this, ImageFileData, imageOffset, index, BitMapWidth, BitMapHeight, "name_goes_here", PaletteLoader.Palettes[PaletteNo], Alpha, BitmapUW.ImageTypes.EightBitUncompressed);
                             return ImageCache[index];
                         }
@@ -202,8 +202,8 @@ namespace UnderworldEditor
             {
                 if (add_ptr <= InputData.GetUpperBound(0))
                 {
-                    OutputData[i] = (byte)((Util.getValAtAddress(InputData, add_ptr, 8) >> 4) & 0x0F);        //High nibble
-                    OutputData[i + 1] = (byte)((Util.getValAtAddress(InputData, add_ptr, 8)) & 0xf);  //Low nibble							
+                    OutputData[i] = (byte)((Util.getAt(InputData, add_ptr, 8) >> 4) & 0x0F);        //High nibble
+                    OutputData[i + 1] = (byte)((Util.getAt(InputData, add_ptr, 8)) & 0xf);  //Low nibble							
                 }
                 i = i + 2;
                 add_ptr++;
@@ -211,7 +211,7 @@ namespace UnderworldEditor
             }
             if (NoOfNibbles == 1)
             {   //Odd nibble out.
-                OutputData[i] = (byte)((Util.getValAtAddress(InputData, add_ptr, 8) >> 4) & 0x0F);
+                OutputData[i] = (byte)((Util.getAt(InputData, add_ptr, 8) >> 4) & 0x0F);
             }
         }
 

@@ -82,9 +82,9 @@ namespace UnderworldEditor
                                 Palettes[palNo] = new Palette();
                                 for (int pixel = 0; pixel < 256; pixel++)
                                 {
-                                    Palettes[palNo].red[pixel] = (byte)(Util.getValAtAddress(pals_dat, palNo * 256 + (pixel * 3) + 0, 8) << 2);
-                                    Palettes[palNo].green[pixel] = (byte)(Util.getValAtAddress(pals_dat, palNo * 256 + (pixel * 3) + 1, 8) << 2);
-                                    Palettes[palNo].blue[pixel] = (byte)(Util.getValAtAddress(pals_dat, palNo * 256 + (pixel * 3) + 2, 8) << 2);
+                                    Palettes[palNo].red[pixel] = (byte)(Util.getAt(pals_dat, palNo * 256 + (pixel * 3) + 0, 8) << 2);
+                                    Palettes[palNo].green[pixel] = (byte)(Util.getAt(pals_dat, palNo * 256 + (pixel * 3) + 1, 8) << 2);
+                                    Palettes[palNo].blue[pixel] = (byte)(Util.getAt(pals_dat, palNo * 256 + (pixel * 3) + 2, 8) << 2);
                                 }
                             }
 
@@ -103,7 +103,7 @@ namespace UnderworldEditor
             {
                 for (int j = 0; j < 16; j++)
                 {
-                    auxpal[j] = (int)Util.getValAtAddress(palf, auxPalIndex * 16 + j, 8);
+                    auxpal[j] = (int)Util.getAt(palf, auxPalIndex * 16 + j, 8);
                 }
             }
             return auxpal;
@@ -120,7 +120,7 @@ namespace UnderworldEditor
             {
                 for (int j = 0; j < 16; j++)
                 {
-                    int value = (int)Util.getValAtAddress(palf, auxPalIndex * 16 + j, 8);
+                    int value = (int)Util.getAt(palf, auxPalIndex * 16 + j, 8);
                     auxpal.green[j] = gamepal.green[value];
                     auxpal.blue[j] = gamepal.blue[value];
                     auxpal.red[j] = gamepal.red[value];

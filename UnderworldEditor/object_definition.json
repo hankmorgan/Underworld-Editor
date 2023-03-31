@@ -140,11 +140,23 @@
       "ByteOffset": 10,
       "ByteSize": 1,
       "ByteFormat": [
-        {
-          "DataName": "unk0xA",
+	    {
+          "DataName": "unk0xA Bits 0-3",
           "DataOffset": 0,
-          "DataSize": 8,
-          "Description": "bit 7 here is relevant"
+          "DataSize": 4,
+          "Description": "unknown bits 0-3"
+        },
+		{
+          "DataName": "unk0xA Bits 4-6",
+          "DataOffset": 4,
+          "DataSize": 3,
+          "Description": "unk 4-6"
+        },
+        {
+          "DataName": "unk0xA Bit 7",
+          "DataOffset": 7,
+          "DataSize": 1,
+          "Description": "bit is used for what?"
         }
       ]
     }
@@ -437,11 +449,23 @@
       "ByteOffset": 10,
       "ByteSize": 1,
       "ByteFormat": [
-        {
-          "DataName": "unk0xA",
+	    {
+          "DataName": "unk0xA Bits 0-3",
           "DataOffset": 0,
-          "DataSize": 8,
-          "Description": "bit 7 here is relevant"
+          "DataSize": 4,
+          "Description": "unknown bits 0-3"
+        },
+		{
+          "DataName": "unk0xA Bits 4-6",
+          "DataOffset": 4,
+          "DataSize": 3,
+          "Description": "unk 4-6"
+        },
+        {
+          "DataName": "unk0xA Bit 7",
+          "DataOffset": 7,
+          "DataSize": 1,
+          "Description": "bit is used for what?"
         }
       ]
     }

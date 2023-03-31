@@ -37,8 +37,8 @@ namespace UnderworldEditor
             {
                 for (int ass = 0; ass <= 63; ass++)
                 {
-                    int FileID = (int)Util.getValAtAddress(assoc, AssocAddressPtr++, 8);
-                    int auxPal = (int)Util.getValAtAddress(assoc, AssocAddressPtr++, 8);
+                    int FileID = (int)Util.getAt(assoc, AssocAddressPtr++, 8);
+                    int auxPal = (int)Util.getAt(assoc, AssocAddressPtr++, 8);
                     if (FileID != 255)
                     {
                         var critname = objects.ObjectName(ass + 64, 2);
@@ -57,8 +57,8 @@ namespace UnderworldEditor
             {
                 for (int ass = 0; ass <= 63; ass++)//Ignore npc 63 which has no animations
                 {
-                    int FileID = (int)Util.getValAtAddress(assoc, AssocAddressPtr++, 8);
-                    int auxPal = (int)Util.getValAtAddress(assoc, AssocAddressPtr++, 8);
+                    int FileID = (int)Util.getAt(assoc, AssocAddressPtr++, 8);
+                    int auxPal = (int)Util.getAt(assoc, AssocAddressPtr++, 8);
                     var critname = objects.ObjectName(ass+64,1);
                     TreeNode assocNode = critnode.Nodes.Add(critname + "("+ass+") File "+ FileID);
 
@@ -117,7 +117,7 @@ namespace UnderworldEditor
             int spriteIndex = 0;
             for (int i = 0; i < 8; i++)
             {
-                if ((int)Util.getValAtAddress(PGMP, file_id * 8 + i, 8) != 255)//Checks if a critter exists at this index in the page file.
+                if ((int)Util.getAt(PGMP, file_id * 8 + i, 8) != 255)//Checks if a critter exists at this index in the page file.
                 {
                     string ExtractPageNoOctal = Util.DecimalToOct(ExtractPageNo.ToString());
                     string fileCrit = Path.Combine(main.basepath, "CRIT", "CR" + critterIDO + "." + ExtractPageNoOctal);  // BasePath + sep + "CRIT" + sep + "CR" + critterIDO + "." + ExtractPageNoO;
@@ -159,10 +159,10 @@ namespace UnderworldEditor
                         //int animIndex = TranslateAnimToIndex(UW2animIndex);//Maybe remove this?
                         AnimInfo.animName[animIndex] = animIndex.ToString(); //PrintAnimName(UW2animIndex);
                         TreeNode AnimationSet = assocNode.Nodes.Add(animIndex.ToString());
-                        int ValidEntries = (int)Util.getValAtAddress(cran, cranAdd + (Animation * 64) + (Angle * 8) + (7), 8);//Get how many valid frames are in the animation
+                        int ValidEntries = (int)Util.getAt(cran, cranAdd + (Animation * 64) + (Angle * 8) + (7), 8);//Get how many valid frames are in the animation
                         for (int FrameNo = 0; FrameNo < 8; FrameNo++)
                         {
-                            int currFrame = (int)Util.getValAtAddress(cran, cranAdd + (Animation * 64) + (Angle * 8) + (FrameNo), 8);
+                            int currFrame = (int)Util.getAt(cran, cranAdd + (Animation * 64) + (Angle * 8) + (FrameNo), 8);
                             if (FrameNo < ValidEntries)
                             {
                                 AnimInfo.animIndices[animIndex, FrameNo] = currFrame;
@@ -300,8 +300,8 @@ namespace UnderworldEditor
         private int ReadPageFileUW1(int CritterNo, byte[] PageFile, int XX, int YY, int spriteIndex, int AuxPalNo, TreeNode assocNode)
         {
             int addptr = 0;
-            int slotbase = (int)Util.getValAtAddress(PageFile, addptr++, 8);
-            int NoOfSlots = (int)Util.getValAtAddress(PageFile, addptr++, 8);
+            int slotbase = (int)Util.getAt(PageFile, addptr++, 8);
+            int NoOfSlots = (int)Util.getAt(PageFile, addptr++, 8);
             int[] SlotIndices = new int[NoOfSlots];
             int spriteCounter = 0;
             int k = 0;
@@ -309,13 +309,13 @@ namespace UnderworldEditor
             string YYo = Util.DecimalToOct(YY.ToString());
             for (int i = 0; i < NoOfSlots; i++)
             {
-                int val = (int)Util.getValAtAddress(PageFile, addptr++, 8);
+                int val = (int)Util.getAt(PageFile, addptr++, 8);
                 if (val != 255)
                 {
                     SlotIndices[k++] = i;
                 }
             }
-            int NoOfSegs = (int)Util.getValAtAddress(PageFile, addptr++, 8);
+            int NoOfSegs = (int)Util.getAt(PageFile, addptr++, 8);
             for (int i = 0; i < NoOfSegs; i++)
             {
                 //string[] AnimFiles = new string[8];
@@ -329,7 +329,7 @@ namespace UnderworldEditor
                 int ValidCount = 0;
                 for (int j = 0; j < 8; j++)
                 {
-                    int val = (int)Util.getValAtAddress(PageFile, addptr++, 8);
+                    int val = (int)Util.getAt(PageFile, addptr++, 8);
                     if (val != 255)
                     {                   //AnimFiles[j] = "CR" + XX.ToString("d2") + "PAGE_N" + YY.ToString("d2") + "_" + AuxPalNo + "_" + val;
 
@@ -347,17 +347,17 @@ namespace UnderworldEditor
             }
 
             //Read in the palette
-            int NoOfPals = (int)Util.getValAtAddress(PageFile, addptr, 8);//Will skip ahead this far.
+            int NoOfPals = (int)Util.getAt(PageFile, addptr, 8);//Will skip ahead this far.
             addptr++;
             byte[] auxPalVal = new byte[32];
             for (int i = 0; i < 32; i++)
             {
-                auxPalVal[i] = (byte)Util.getValAtAddress(PageFile, (addptr) + (AuxPalNo * 32) + i, 8);
+                auxPalVal[i] = (byte)Util.getAt(PageFile, (addptr) + (AuxPalNo * 32) + i, 8);
             }
 
             //Skip past the palettes
             addptr += NoOfPals * 32;
-            int NoOfFrames = (int)Util.getValAtAddress(PageFile, addptr, 8);
+            int NoOfFrames = (int)Util.getAt(PageFile, addptr, 8);
             //AnimInfo.animSprites=new Sprite[NoOfFrames];
             addptr += 2;
             int addptr_start = addptr;//Bookmark my positiohn
@@ -372,11 +372,11 @@ namespace UnderworldEditor
                 {//get the max width and height
                     for (int i = 0; i < NoOfFrames; i++)
                     {
-                        int frameOffset = (int)Util.getValAtAddress(PageFile, addptr + (i * 2), 16);
-                        int BitMapWidth = (int)Util.getValAtAddress(PageFile, frameOffset + 0, 8);
-                        int BitMapHeight = (int)Util.getValAtAddress(PageFile, frameOffset + 1, 8);
-                        int hotspotx = (int)Util.getValAtAddress(PageFile, frameOffset + 2, 8);
-                        int hotspoty = (int)Util.getValAtAddress(PageFile, frameOffset + 3, 8);
+                        int frameOffset = (int)Util.getAt(PageFile, addptr + (i * 2), 16);
+                        int BitMapWidth = (int)Util.getAt(PageFile, frameOffset + 0, 8);
+                        int BitMapHeight = (int)Util.getAt(PageFile, frameOffset + 1, 8);
+                        int hotspotx = (int)Util.getAt(PageFile, frameOffset + 2, 8);
+                        int hotspoty = (int)Util.getAt(PageFile, frameOffset + 3, 8);
                         if (hotspotx > BitMapWidth)
                         {
                             hotspotx = BitMapWidth;
@@ -415,13 +415,13 @@ namespace UnderworldEditor
                     outputImg = new byte[MaxWidth * MaxHeight * 2];
                     for (int i = 0; i < NoOfFrames; i++)
                     {
-                        int frameOffset = (int)Util.getValAtAddress(PageFile, addptr + (i * 2), 16);
-                        int BitMapWidth = (int)Util.getValAtAddress(PageFile, frameOffset + 0, 8);
-                        int BitMapHeight = (int)Util.getValAtAddress(PageFile, frameOffset + 1, 8);
-                        int hotspotx = (int)Util.getValAtAddress(PageFile, frameOffset + 2, 8);
-                        int hotspoty = (int)Util.getValAtAddress(PageFile, frameOffset + 3, 8);
-                        int compression = (int)Util.getValAtAddress(PageFile, frameOffset + 4, 8);
-                        int datalen = (int)Util.getValAtAddress(PageFile, frameOffset + 5, 16);
+                        int frameOffset = (int)Util.getAt(PageFile, addptr + (i * 2), 16);
+                        int BitMapWidth = (int)Util.getAt(PageFile, frameOffset + 0, 8);
+                        int BitMapHeight = (int)Util.getAt(PageFile, frameOffset + 1, 8);
+                        int hotspotx = (int)Util.getAt(PageFile, frameOffset + 2, 8);
+                        int hotspoty = (int)Util.getAt(PageFile, frameOffset + 3, 8);
+                        int compression = (int)Util.getAt(PageFile, frameOffset + 4, 8);
+                        int datalen = (int)Util.getAt(PageFile, frameOffset + 5, 16);
 
                         //Adjust the hotspots from the biggest point back to the image corners
                         int cornerX; int cornerY;
@@ -525,7 +525,7 @@ namespace UnderworldEditor
             byte[] auxPalVal = new byte[32];
             for (int j = 0; j < 32; j++)
             {
-                auxPalVal[j] = (byte)Util.getValAtAddress(critterFile, (AddressPointer) + (AuxPalNo * 32) + j, 8);
+                auxPalVal[j] = (byte)Util.getAt(critterFile, (AddressPointer) + (AuxPalNo * 32) + j, 8);
             }
 
             //int i = 0;
@@ -540,13 +540,13 @@ namespace UnderworldEditor
                 {//First pass is getting max image sizes
                     for (int index = 128; index < 640; index += 2)
                     {
-                        int frameOffset = (int)Util.getValAtAddress(critterFile, index, 16);
+                        int frameOffset = (int)Util.getAt(critterFile, index, 16);
                         if (frameOffset != 0)
                         {
-                            int BitMapWidth = (int)Util.getValAtAddress(critterFile, frameOffset + 0, 8);
-                            int BitMapHeight = (int)Util.getValAtAddress(critterFile, frameOffset + 1, 8);
-                            int hotspotx = (int)Util.getValAtAddress(critterFile, frameOffset + 2, 8);
-                            int hotspoty = (int)Util.getValAtAddress(critterFile, frameOffset + 3, 8);
+                            int BitMapWidth = (int)Util.getAt(critterFile, frameOffset + 0, 8);
+                            int BitMapHeight = (int)Util.getAt(critterFile, frameOffset + 1, 8);
+                            int hotspotx = (int)Util.getAt(critterFile, frameOffset + 2, 8);
+                            int hotspoty = (int)Util.getAt(critterFile, frameOffset + 3, 8);
                             if (hotspotx > BitMapWidth) { hotspotx = BitMapWidth; }
                             if (hotspoty > BitMapHeight) { hotspoty = BitMapHeight; }
                             if (BitMapWidth > MaxWidth) { MaxWidth = BitMapWidth; }
@@ -573,15 +573,15 @@ namespace UnderworldEditor
                     outputImg = new byte[MaxWidth * MaxHeight * 2];
                     for (int index = 128; index < 640; index += 2)
                     {
-                        int frameOffset = (int)Util.getValAtAddress(critterFile, index, 16);
+                        int frameOffset = (int)Util.getAt(critterFile, index, 16);
                         if (frameOffset != 0)
                         {
-                            int BitMapWidth = (int)Util.getValAtAddress(critterFile, frameOffset + 0, 8);
-                            int BitMapHeight = (int)Util.getValAtAddress(critterFile, frameOffset + 1, 8);
-                            int hotspotx = (int)Util.getValAtAddress(critterFile, frameOffset + 2, 8);
-                            int hotspoty = (int)Util.getValAtAddress(critterFile, frameOffset + 3, 8);
-                            int compression = (int)Util.getValAtAddress(critterFile, frameOffset + 4, 8);
-                            int datalen = (int)Util.getValAtAddress(critterFile, frameOffset + 5, 16);
+                            int BitMapWidth = (int)Util.getAt(critterFile, frameOffset + 0, 8);
+                            int BitMapHeight = (int)Util.getAt(critterFile, frameOffset + 1, 8);
+                            int hotspotx = (int)Util.getAt(critterFile, frameOffset + 2, 8);
+                            int hotspoty = (int)Util.getAt(critterFile, frameOffset + 3, 8);
+                            int compression = (int)Util.getAt(critterFile, frameOffset + 4, 8);
+                            int datalen = (int)Util.getAt(critterFile, frameOffset + 5, 16);
                             //Adjust the hotspots from the biggest point back to the image corners
                             int cornerX; int cornerY;
                             cornerX = MaxHotSpotX - hotspotx;

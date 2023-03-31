@@ -124,13 +124,13 @@ namespace UnderworldEditor
             { return null; }
             // Get the size of the file in bytes
 
-            NoOfTextures = Util.getValAtAddress(textureFile, 0, 8);
+            NoOfTextures = Util.getAt(textureFile, 0, 8);
             if (ImageCache == null)
             { ImageCache = new BitmapUW[NoOfTextures + 1]; }
-            long textureOffset = (int)Util.getValAtAddress(textureFile, (index * 4) + 6, 32);
+            long textureOffset = (int)Util.getAt(textureFile, (index * 4) + 6, 32);
             if (textureOffset != 0)
             {
-                int compressionFlag = (int)Util.getValAtAddress(textureFile, ((index * 4) + 6) + (NoOfTextures * 4), 32);
+                int compressionFlag = (int)Util.getAt(textureFile, ((index * 4) + 6) + (NoOfTextures * 4), 32);
                 int isCompressed = (compressionFlag >> 1) & 0x01;
                 if (isCompressed == 1)
                 {

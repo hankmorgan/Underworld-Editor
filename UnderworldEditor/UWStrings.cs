@@ -548,7 +548,7 @@ namespace UnderworldEditor
 
             if (Util.ReadStreamFile(path, out Buffer))
             {
-                long NoOfNodes = Util.getValAtAddress(Buffer, address_pointer, 16);
+                long NoOfNodes = Util.getAt(Buffer, address_pointer, 16);
                 int i = 0;
                 hman = new huffman_node[NoOfNodes];
                 address_pointer = address_pointer + 2;
@@ -562,17 +562,17 @@ namespace UnderworldEditor
                     address_pointer = address_pointer + 4;
                 }
 
-                long NoOfStringBlocks = Util.getValAtAddress(Buffer, address_pointer, 16);
+                long NoOfStringBlocks = Util.getAt(Buffer, address_pointer, 16);
                 blocks = new block_dir[NoOfStringBlocks];
                 address_pointer = address_pointer + 2;
                 i = 0;
                 while (i < NoOfStringBlocks)
                 {
-                    blocks[i].block_no = Util.getValAtAddress(Buffer, address_pointer, 16);
+                    blocks[i].block_no = Util.getAt(Buffer, address_pointer, 16);
                     address_pointer = address_pointer + 2;
-                    blocks[i].address = Util.getValAtAddress(Buffer, address_pointer, 32);
+                    blocks[i].address = Util.getAt(Buffer, address_pointer, 32);
                     address_pointer = address_pointer + 4;
-                    blocks[i].NoOfEntries = Util.getValAtAddress(Buffer, blocks[i].address, 16);  //look ahead and get no of entries.
+                    blocks[i].NoOfEntries = Util.getAt(Buffer, blocks[i].address, 16);  //look ahead and get no of entries.
                     EntryCounts["_" + blocks[i].block_no] = blocks[i].NoOfEntries.ToString();
                     i++;
                 }

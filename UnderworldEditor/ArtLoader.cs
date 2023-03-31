@@ -102,7 +102,7 @@ namespace UnderworldEditor
             {
                for (int j = (iRow * width); j < (iRow * width) + width; j++)
                {
-                    byte pixel = (byte)Util.getValAtAddress(databuffer, dataOffSet + (long)j, 8);
+                    byte pixel = (byte)Util.getAt(databuffer, dataOffSet + (long)j, 8);
                     Color col = pal.ColorAtPixel(pixel, Alpha);
                     //imageColors[counter++] = pal.ColorAtPixel(pixel, Alpha);
                     imageColors[counter++] = col.B;
@@ -188,7 +188,7 @@ namespace UnderworldEditor
                         nibble = 0;
 
                     //rawbits = ( int)fgetc(fd);
-                    rawbits = (int)Util.getValAtAddress(FileIn, addr_ptr, 8);
+                    rawbits = (int)Util.getAt(FileIn, addr_ptr, 8);
                     addr_ptr++;
                     if ((int)rawbits == -1)  //EOF
                         return;

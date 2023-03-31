@@ -198,7 +198,7 @@ namespace UnderworldEditor
             newObj.StaticValues = new short[ObjectDefinition.NoOfStaticObjectValues];
             foreach (var sdef in main.objdefinition.StaticObjectDefinition)
             {
-                var byt = (int)Util.getValAtAddress(buffer, objectsAddress + sdef.ByteOffset, sdef.ByteSize*8);
+                var byt = (int)Util.getAt(buffer, objectsAddress + sdef.ByteOffset, sdef.ByteSize*8);
                 foreach (var vdef in sdef.ByteFormat)
                 {
                     newObj.StaticValues[vCounter++] = (short)Util.ExtractBits(byt, vdef.DataOffset, vdef.DataSize);
@@ -208,7 +208,7 @@ namespace UnderworldEditor
             //Read in the 4 x int 16s that comprise the static object
             for (int i = 0; i <= Vals.GetUpperBound(0); i++)
             {
-                Vals[i] = (int)Util.getValAtAddress(buffer, objectsAddress + (i * 2), 16);
+                Vals[i] = (int)Util.getAt(buffer, objectsAddress + (i * 2), 16);
             }
             newObj.FileAddress = objectsAddress;
 
@@ -256,7 +256,7 @@ namespace UnderworldEditor
                 {
                     foreach (var sdef in mobileProps)
                     {
-                        var byt = (int)Util.getValAtAddress(buffer, objectsAddress + sdef.ByteOffset, sdef.ByteSize * 8);
+                        var byt = (int)Util.getAt(buffer, objectsAddress + sdef.ByteOffset, sdef.ByteSize * 8);
                         foreach (var vdef in sdef.ByteFormat)
                         {
                             newObj.MobileValues[vCounter++] = (short)Util.ExtractBits(byt, vdef.DataOffset, vdef.DataSize);
@@ -265,23 +265,23 @@ namespace UnderworldEditor
                 }
 
                 //0x8
-                newObj.npc_hp = (short)(Util.getValAtAddress(buffer, objectsAddress + 0x8, 8));
+                newObj.npc_hp = (short)(Util.getAt(buffer, objectsAddress + 0x8, 8));
 
                 //0x9
-                newObj.projectile0x9 = (short)(Util.getValAtAddress(buffer, objectsAddress + 0x9, 8));
+                newObj.projectile0x9 = (short)(Util.getAt(buffer, objectsAddress + 0x9, 8));
 
                 //0xA
-                newObj.Unknown0xA = (short)(Util.getValAtAddress(buffer, objectsAddress + 0xA, 8));
+                newObj.Unknown0xA = (short)(Util.getAt(buffer, objectsAddress + 0xA, 8));
 
                 //0xB
-                int val = (int)Util.getValAtAddress(buffer, objectsAddress + 0xb, 16);
+                int val = (int)Util.getAt(buffer, objectsAddress + 0xb, 16);
                 newObj.npc_goal = (short)(Util.ExtractBits(val, 0, 4));
                 newObj.npc_gtarg = (short)(Util.ExtractBits(val, 4, 8));
                 newObj.Unknown0xB = (short)(Util.ExtractBits(val, 12, 4));
 
 
                 //0xD
-                val = (int)Util.getValAtAddress(buffer, objectsAddress + 0xd, 16);
+                val = (int)Util.getAt(buffer, objectsAddress + 0xd, 16);
                 newObj.npc_level = (short)(Util.ExtractBits(val, 0, 4));
                 newObj.unknown_4_11_0xD = (short)(Util.ExtractBits(val, 4, 8));
                 newObj.loot_spawned = (short)(Util.ExtractBits(val, 12, 1));
@@ -289,46 +289,46 @@ namespace UnderworldEditor
                 newObj.npc_attitude = (short)(Util.ExtractBits(val, 14, 2));
 
                 //0xF
-                val = (int)Util.getValAtAddress(buffer, objectsAddress + 0xf, 16);
+                val = (int)Util.getAt(buffer, objectsAddress + 0xf, 16);
                 newObj.unknown_0_5_0xF = (short)(Util.ExtractBits(val, 0, 6));
                 newObj.npc_height = (short)(Util.ExtractBits(val, 6, 7));
                 newObj.unknown_13_15_0xF = (short)(Util.ExtractBits(val, 13, 3));
 
                 //0x11
-                newObj.unknown_0x11 = (short)(Util.getValAtAddress(buffer, objectsAddress + 0x11, 8));
+                newObj.unknown_0x11 = (short)(Util.getAt(buffer, objectsAddress + 0x11, 8));
 
                 //0x12
-                newObj.unknown_0x12 = (short)(Util.getValAtAddress(buffer, objectsAddress + 0x12, 8));
+                newObj.unknown_0x12 = (short)(Util.getAt(buffer, objectsAddress + 0x12, 8));
 
                 //0x13
-                val = (int)Util.getValAtAddress(buffer, objectsAddress + 0x13, 8);
+                val = (int)Util.getAt(buffer, objectsAddress + 0x13, 8);
                 newObj.unknown_0_6_0x13 = (short)(Util.ExtractBits(val, 0, 7)); 
                 newObj.unknown_7_7_0x13 = (short)(Util.ExtractBits(val, 7, 1)); 
 
                 //0x14
-                newObj.unknown_0x14 = (short)(Util.getValAtAddress(buffer, objectsAddress + 0x14, 8));
+                newObj.unknown_0x14 = (short)(Util.getAt(buffer, objectsAddress + 0x14, 8));
 
                 //0x15
-                newObj.unknown_0x15 = (short)(Util.getValAtAddress(buffer, objectsAddress + 0x15, 8));
+                newObj.unknown_0x15 = (short)(Util.getAt(buffer, objectsAddress + 0x15, 8));
 
                 //0x16
-                val = (int)Util.getValAtAddress(buffer, objectsAddress + 0x16, 16);
+                val = (int)Util.getAt(buffer, objectsAddress + 0x16, 16);
                 newObj.unknown_0_3_0x16 = (short)(Util.ExtractBits(val, 0, 4));
                 newObj.npc_yhome = (short)(Util.ExtractBits(val, 4, 6));
                 newObj.npc_xhome = (short)(Util.ExtractBits(val, 10, 6));
 
                 //0x18
-                val = (int)Util.getValAtAddress(buffer, objectsAddress + 0x18, 8);
+                val = (int)Util.getAt(buffer, objectsAddress + 0x18, 8);
                 newObj.npc_heading = (short)(Util.ExtractBits(val, 0, 5));
                 newObj.unknown_5_7_0x18 = (short)(Util.ExtractBits(val, 5, 3));
 
                 //0x19
-                val = (int)Util.getValAtAddress(buffer, objectsAddress + 0x19, 8);
+                val = (int)Util.getAt(buffer, objectsAddress + 0x19, 8);
                 newObj.npc_hunger = (short)(Util.ExtractBits(val, 0, 7));
                 newObj.unknown_7_7_0x19 = (short)(Util.ExtractBits(val, 7, 1));
 
                 //0x1a
-                newObj.npc_whoami= (short)(Util.getValAtAddress(buffer, objectsAddress + 0x1a, 8));
+                newObj.npc_whoami= (short)(Util.getAt(buffer, objectsAddress + 0x1a, 8));
 
             }
             return newObj;

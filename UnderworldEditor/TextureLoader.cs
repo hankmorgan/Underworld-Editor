@@ -132,7 +132,7 @@ namespace UnderworldEditor
                                 texturesFLoaded = true;
                             }
                         }
-                        long textureOffset = Util.getValAtAddress(texturebufferT, ((index) * 4) + 4, 32);
+                        long textureOffset = Util.getAt(texturebufferT, ((index) * 4) + 4, 32);
                         OffsetT[index] = textureOffset;
                         ImageCache[index] = Image(this, texturebufferT, textureOffset, index, FloorDim, FloorDim, "name_goes_here", palToUse, false, BitmapUW.ImageTypes.Texture);
                         return ImageCache[index];
@@ -158,7 +158,7 @@ namespace UnderworldEditor
                                     texturesWLoaded = true;
                                 }
                             }
-                            long textureOffset = Util.getValAtAddress(texturebufferW, (index * 4) + 4, 32);
+                            long textureOffset = Util.getAt(texturebufferW, (index * 4) + 4, 32);
                             OffsetT[index] = textureOffset;
                             ImageCache[index] = Image(this, texturebufferW, textureOffset, index, 64, 64, "name_goes_here", palToUse, false, BitmapUW.ImageTypes.Texture);
                             return ImageCache[index];
@@ -176,7 +176,7 @@ namespace UnderworldEditor
                                     texturesFLoaded = true;
                                 }
                             }
-                            long textureOffset = Util.getValAtAddress(texturebufferF, ((index - TextureSplit) * 4) + 4, 32);
+                            long textureOffset = Util.getAt(texturebufferF, ((index - TextureSplit) * 4) + 4, 32);
                             OffsetT[index] = textureOffset;
                             ImageCache[index] = Image(this, texturebufferF, textureOffset, index, FloorDim, FloorDim, "name_goes_here", palToUse, false, BitmapUW.ImageTypes.Texture);                            
                             return ImageCache[index];
