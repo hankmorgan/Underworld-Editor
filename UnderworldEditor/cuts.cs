@@ -156,7 +156,7 @@ namespace UnderworldEditor
                 case 2: return 2;//no-op, arguments are ignored
                 case 3: return 1;//pauses for arg[0] / 2 seconds
                 case 4: return 2;//plays up to frame arg[0]
-                case 5: return 1;//unknown, set frame for static cutscene?
+                case 5: return 0;//unknown, set frame for static cutscene? (originally documented as 0 parameters)
                 case 6: return 0;//ends cutscene
                 case 7: return 1;//repeat segment arg[0] times
                 case 8: return 2;//opens a new file csXXX.nYY, with XXX from arg[0] and YY from arg[1]; XXX and YY are formatted octal values
@@ -167,7 +167,7 @@ namespace UnderworldEditor
                 case 13: return 3;//displays text arg[1] with color arg[0] and plays audio arg[2]
                 case 14: return 2;//unknown
                 case 15: return 0;//plays 'klang' sound
-                //case 16: return *;//unknown, not used in uw2
+                //case 16: return *;//unknown, not used in uw2 but looks like some sort of copy function.
                 //case 17: return *;//unknown, not used in uw2
                 case 18: return 4;//does nothing, not used in uw2
                 case 19: return 3;//unknown
@@ -176,7 +176,7 @@ namespace UnderworldEditor
                 case 22: return 3;//unknown
                 case 23: return 3;//unknown
                 case 24: return 1;//unknown, usually at the start of cutscene
-                case 25: return 1;//unknown
+                case 25: return 1;//music
                 case 26: return 1;//does nothing, not used in uw2
                 case 27: return 1;//unknown
             }

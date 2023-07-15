@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
+using System.Security.Policy;
 
 namespace UnderworldEditor
 {
@@ -290,6 +291,7 @@ namespace UnderworldEditor
         ///This decompresses UW2 blocks.
         public static byte[] unpackUW2(byte[] tmp, long address_pointer, ref long datalen)
         {
+            string UnpackLog = "";
             long BlockLen = (int)getAt(tmp, address_pointer, 32);  //lword(base);
             long NoOfSegs = ((BlockLen / 0x1000) + 1) * 0x1000;
             //byte[] buf = new byte[BlockLen+100];
@@ -306,10 +308,12 @@ namespace UnderworldEditor
                 {
                     if (address_pointer > tmp.GetUpperBound(0))
                     {//No more data!
+                        UnpackLog += "NoMoreSpace\n";
                         return buf;
                     }
                     if ((bits & 1) == 1)
                     {//Transfer
+                        UnpackLog += "Transferring " + tmp[address_pointer] + " to " + upPtr + "\n";
                         buf[upPtr++] = tmp[address_pointer++];
                         datalen = datalen + 1;
                     }
@@ -318,17 +322,19 @@ namespace UnderworldEditor
                         int o = tmp[address_pointer++];
                         int c = tmp[address_pointer++];
 
-                        o |= ((c & 0xF0) << 4);
-                        //if((o&0x800) == 0x800)
-                        //	{//Apparently I need to turn this to twos complement when the sign bit is set. 
-                        ///Possibly the code below is what achieves this?
-                        //	o = (o | 0xFFFFF000);
-                        //	//o = 0 & 0x7ff;
-                        //	}
+                        //Convert the two bytes into the copy record header format.
+                        //0000   Int8   0..7: position, bits 0..7
+                        //0001   Int8   0..3: copy count
+                        //4..7: position, bits 8..11
 
-
+                        //The copy count is 4 bits long and an offset of 3 is added to it.The
+                        //position has 12 bits(accessing the last 4k bytes) and an offset of 18 is
+                        //added.
+                     o |= ((c & 0xF0) << 4);
                         c = ((c & 15) + 3);
                         o = (o + 18);
+
+                        UnpackLog += "Copy Count " + c + " at offset " + o + "\n";
 
                         if (o > upPtr)
                         {
@@ -340,6 +346,7 @@ namespace UnderworldEditor
                             o += 0x1000;
                         }
 
+                        
                         while (c-- > 0)
                         {
                             if (o < 0)
@@ -347,20 +354,22 @@ namespace UnderworldEditor
                                 //int currentsegment = ((datalen/0x1000) + 1) * 0x1000;
                                 //buf[upPtr++]= buf[buf.GetUpperBound(0) + o++];//This is probably very very wrong.
                                 //buf[upPtr++]= buf[currentsegment + o++];//This is probably very very wrong.
+                                UnpackLog += "Copying " + 0 + " to " + upPtr + " (o<0)\n";
                                 buf[upPtr++] = (byte)0;
                                 o++;
                             }
                             else
                             {
+                                UnpackLog += "Copying " + buf[o] + " to " + upPtr + " (o = " + o + ")\n";
                                 buf[upPtr++] = buf[o++];
                             }
-
                             datalen++;    // = datalen+1;
                         }
                     }
                     bits >>= 1;
                 }
             }
+            System.IO.File.WriteAllText(main.basepath + "\\unpack.log", UnpackLog);
             return buf;
         }
 

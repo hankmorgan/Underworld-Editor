@@ -77,6 +77,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="PlayerDatUI.cs" />
+    <Compile Include="Repacker.cs" />
     <Compile Include="TextureLoader.cs" />
     <Compile Include="TileMapUI.cs" />
     <Compile Include="UWStrings.cs" />
