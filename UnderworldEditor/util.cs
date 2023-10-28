@@ -291,7 +291,7 @@ namespace UnderworldEditor
         ///This decompresses UW2 blocks.
         public static byte[] unpackUW2(byte[] tmp, long address_pointer, ref long datalen)
         {
-            string UnpackLog = "";
+            //string UnpackLog = "";
             long BlockLen = (int)getAt(tmp, address_pointer, 32);  //lword(base);
             long NoOfSegs = ((BlockLen / 0x1000) + 1) * 0x1000;
             //byte[] buf = new byte[BlockLen+100];
@@ -308,12 +308,12 @@ namespace UnderworldEditor
                 {
                     if (address_pointer > tmp.GetUpperBound(0))
                     {//No more data!
-                        UnpackLog += "NoMoreSpace\n";
+                        //UnpackLog += "NoMoreSpace\n";
                         return buf;
                     }
                     if ((bits & 1) == 1)
                     {//Transfer
-                        UnpackLog += "Transferring " + tmp[address_pointer] + " to " + upPtr + "\n";
+                       // UnpackLog += "Transferring " + tmp[address_pointer] + " to " + upPtr + "\n";
                         buf[upPtr++] = tmp[address_pointer++];
                         datalen = datalen + 1;
                     }
@@ -334,7 +334,7 @@ namespace UnderworldEditor
                         c = ((c & 15) + 3);
                         o = (o + 18);
 
-                        UnpackLog += "Copy Count " + c + " at offset " + o + "\n";
+                      //  UnpackLog += "Copy Count " + c + " at offset " + o + "\n";
 
                         if (o > upPtr)
                         {
@@ -354,13 +354,13 @@ namespace UnderworldEditor
                                 //int currentsegment = ((datalen/0x1000) + 1) * 0x1000;
                                 //buf[upPtr++]= buf[buf.GetUpperBound(0) + o++];//This is probably very very wrong.
                                 //buf[upPtr++]= buf[currentsegment + o++];//This is probably very very wrong.
-                                UnpackLog += "Copying " + 0 + " to " + upPtr + " (o<0)\n";
+                                //UnpackLog += "Copying " + 0 + " to " + upPtr + " (o<0)\n";
                                 buf[upPtr++] = (byte)0;
                                 o++;
                             }
                             else
                             {
-                                UnpackLog += "Copying " + buf[o] + " to " + upPtr + " (o = " + o + ")\n";
+                                //UnpackLog += "Copying " + buf[o] + " to " + upPtr + " (o = " + o + ")\n";
                                 buf[upPtr++] = buf[o++];
                             }
                             datalen++;    // = datalen+1;
@@ -369,7 +369,7 @@ namespace UnderworldEditor
                     bits >>= 1;
                 }
             }
-            System.IO.File.WriteAllText(main.basepath + "\\unpack.log", UnpackLog);
+            //System.IO.File.WriteAllText(main.basepath + "\\unpack.log", UnpackLog);
             return buf;
         }
 

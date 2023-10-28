@@ -140,6 +140,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.PicMap = new PictureBoxWithInterpolationMode();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label49 = new System.Windows.Forms.Label();
@@ -209,6 +210,7 @@
             this.grdTextureMap = new System.Windows.Forms.DataGridView();
             this.colTexture = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.picTextureMap = new PictureBoxWithInterpolationMode();
             this.tabPage8 = new System.Windows.Forms.TabPage();
             this.tabPage9 = new System.Windows.Forms.TabPage();
             this.GrdStrings = new System.Windows.Forms.DataGridView();
@@ -224,11 +226,15 @@
             this.BtnImgSave = new System.Windows.Forms.Button();
             this.BtnImport = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.PicColour = new PictureBoxWithInterpolationMode();
+            this.PicPalette = new PictureBoxWithInterpolationMode();
             this.TreeArt = new System.Windows.Forms.TreeView();
+            this.ImgOut = new PictureBoxWithInterpolationMode();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.panel3 = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
             this.numPalMode = new System.Windows.Forms.NumericUpDown();
+            this.picPSX = new PictureBoxWithInterpolationMode();
             this.btnLoadPSXNodes = new System.Windows.Forms.Button();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.numPal = new System.Windows.Forms.NumericUpDown();
@@ -239,6 +245,9 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.treeCutsN00 = new System.Windows.Forms.TreeView();
             this.grdCutscene = new System.Windows.Forms.DataGridView();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.uW1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LoadPDatUW1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -261,15 +270,6 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.PicMap = new PictureBoxWithInterpolationMode();
-            this.picTextureMap = new PictureBoxWithInterpolationMode();
-            this.PicColour = new PictureBoxWithInterpolationMode();
-            this.PicPalette = new PictureBoxWithInterpolationMode();
-            this.ImgOut = new PictureBoxWithInterpolationMode();
-            this.picPSX = new PictureBoxWithInterpolationMode();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.PlayerDat.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -312,6 +312,7 @@
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.PicMap)).BeginInit();
             this.tableLayoutPanel3.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numMapZoom)).BeginInit();
@@ -344,14 +345,19 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdTextureMap)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picTextureMap)).BeginInit();
             this.tabPage9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GrdStrings)).BeginInit();
             this.tabPage10.SuspendLayout();
             this.PicSelectedColour.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumZoom)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PicColour)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PicPalette)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ImgOut)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPalMode)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picPSX)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOffset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileHeight)).BeginInit();
@@ -363,12 +369,6 @@
             this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdCutscene)).BeginInit();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PicMap)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picTextureMap)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PicColour)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PicPalette)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ImgOut)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picPSX)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -380,11 +380,11 @@
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage11);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 48);
+            this.tabControl1.Location = new System.Drawing.Point(0, 44);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1684, 1350);
+            this.tabControl1.Size = new System.Drawing.Size(1684, 1354);
             this.tabControl1.TabIndex = 2;
             // 
             // PlayerDat
@@ -394,7 +394,7 @@
             this.PlayerDat.Margin = new System.Windows.Forms.Padding(4);
             this.PlayerDat.Name = "PlayerDat";
             this.PlayerDat.Padding = new System.Windows.Forms.Padding(4);
-            this.PlayerDat.Size = new System.Drawing.Size(1668, 1303);
+            this.PlayerDat.Size = new System.Drawing.Size(1668, 1307);
             this.PlayerDat.TabIndex = 0;
             this.PlayerDat.Text = "UW PlayerDat";
             this.PlayerDat.UseVisualStyleBackColor = true;
@@ -411,7 +411,7 @@
             this.tabControl2.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(1660, 1295);
+            this.tabControl2.Size = new System.Drawing.Size(1660, 1299);
             this.tabControl2.TabIndex = 10;
             // 
             // Character
@@ -449,7 +449,7 @@
             this.Character.Location = new System.Drawing.Point(8, 39);
             this.Character.Margin = new System.Windows.Forms.Padding(4);
             this.Character.Name = "Character";
-            this.Character.Size = new System.Drawing.Size(1644, 1248);
+            this.Character.Size = new System.Drawing.Size(1644, 1252);
             this.Character.TabIndex = 2;
             this.Character.Text = "Character";
             this.Character.UseVisualStyleBackColor = true;
@@ -1545,6 +1545,20 @@
             this.panel1.Size = new System.Drawing.Size(1008, 1232);
             this.panel1.TabIndex = 24;
             // 
+            // PicMap
+            // 
+            this.PicMap.BackColor = System.Drawing.Color.Transparent;
+            this.PicMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PicMap.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            this.PicMap.Location = new System.Drawing.Point(4, 4);
+            this.PicMap.Margin = new System.Windows.Forms.Padding(4);
+            this.PicMap.Name = "PicMap";
+            this.PicMap.Size = new System.Drawing.Size(12798, 12306);
+            this.PicMap.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PicMap.TabIndex = 4;
+            this.PicMap.TabStop = false;
+            this.PicMap.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PicMap_MouseClick);
+            // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 1;
@@ -2390,6 +2404,16 @@
             this.Offset.Name = "Offset";
             this.Offset.Width = 200;
             // 
+            // picTextureMap
+            // 
+            this.picTextureMap.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
+            this.picTextureMap.Location = new System.Drawing.Point(3, 0);
+            this.picTextureMap.Name = "picTextureMap";
+            this.picTextureMap.Size = new System.Drawing.Size(640, 640);
+            this.picTextureMap.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.picTextureMap.TabIndex = 0;
+            this.picTextureMap.TabStop = false;
+            // 
             // tabPage8
             // 
             this.tabPage8.Location = new System.Drawing.Point(8, 39);
@@ -2449,7 +2473,7 @@
             this.tabPage10.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage10.Size = new System.Drawing.Size(1668, 1303);
+            this.tabPage10.Size = new System.Drawing.Size(1668, 1307);
             this.tabPage10.TabIndex = 3;
             this.tabPage10.Text = "Images";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -2469,7 +2493,7 @@
             this.PicSelectedColour.Controls.Add(this.PicColour);
             this.PicSelectedColour.Controls.Add(this.PicPalette);
             this.PicSelectedColour.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.PicSelectedColour.Location = new System.Drawing.Point(4, 1185);
+            this.PicSelectedColour.Location = new System.Drawing.Point(4, 1189);
             this.PicSelectedColour.Margin = new System.Windows.Forms.Padding(4);
             this.PicSelectedColour.Name = "PicSelectedColour";
             this.PicSelectedColour.Size = new System.Drawing.Size(1660, 114);
@@ -2581,6 +2605,29 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // PicColour
+            // 
+            this.PicColour.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            this.PicColour.Location = new System.Drawing.Point(784, 6);
+            this.PicColour.Margin = new System.Windows.Forms.Padding(4);
+            this.PicColour.Name = "PicColour";
+            this.PicColour.Size = new System.Drawing.Size(96, 100);
+            this.PicColour.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PicColour.TabIndex = 59;
+            this.PicColour.TabStop = false;
+            // 
+            // PicPalette
+            // 
+            this.PicPalette.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            this.PicPalette.Location = new System.Drawing.Point(4, 4);
+            this.PicPalette.Margin = new System.Windows.Forms.Padding(4);
+            this.PicPalette.Name = "PicPalette";
+            this.PicPalette.Size = new System.Drawing.Size(768, 100);
+            this.PicPalette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.PicPalette.TabIndex = 58;
+            this.PicPalette.TabStop = false;
+            this.PicPalette.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PicPalette_MouseClick);
+            // 
             // TreeArt
             // 
             this.TreeArt.Location = new System.Drawing.Point(4, 4);
@@ -2595,6 +2642,18 @@
             this.TreeArt.Size = new System.Drawing.Size(630, 798);
             this.TreeArt.TabIndex = 51;
             this.TreeArt.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeArt_AfterSelect);
+            // 
+            // ImgOut
+            // 
+            this.ImgOut.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
+            this.ImgOut.Location = new System.Drawing.Point(646, 8);
+            this.ImgOut.Margin = new System.Windows.Forms.Padding(4);
+            this.ImgOut.Name = "ImgOut";
+            this.ImgOut.Size = new System.Drawing.Size(128, 129);
+            this.ImgOut.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.ImgOut.TabIndex = 55;
+            this.ImgOut.TabStop = false;
+            this.ImgOut.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImgOut_MouseClick);
             // 
             // tabPage3
             // 
@@ -2641,6 +2700,17 @@
             this.numPalMode.Size = new System.Drawing.Size(120, 31);
             this.numPalMode.TabIndex = 73;
             this.numPalMode.ValueChanged += new System.EventHandler(this.numPalMode_ValueChanged);
+            // 
+            // picPSX
+            // 
+            this.picPSX.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
+            this.picPSX.Location = new System.Drawing.Point(554, 13);
+            this.picPSX.Margin = new System.Windows.Forms.Padding(4);
+            this.picPSX.Name = "picPSX";
+            this.picPSX.Size = new System.Drawing.Size(1024, 1024);
+            this.picPSX.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.picPSX.TabIndex = 72;
+            this.picPSX.TabStop = false;
             // 
             // btnLoadPSXNodes
             // 
@@ -2793,6 +2863,30 @@
             this.grdCutscene.Size = new System.Drawing.Size(1254, 1297);
             this.grdCutscene.TabIndex = 1;
             // 
+            // Column5
+            // 
+            this.Column5.HeaderText = "FunctionNo";
+            this.Column5.MinimumWidth = 10;
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            this.Column5.Width = 200;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Function";
+            this.Column1.MinimumWidth = 10;
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Width = 200;
+            // 
+            // Column3
+            // 
+            this.Column3.HeaderText = "Comment";
+            this.Column3.MinimumWidth = 10;
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.Width = 200;
+            // 
             // menuStrip1
             // 
             this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
@@ -2804,7 +2898,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(8, 4, 0, 4);
-            this.menuStrip1.Size = new System.Drawing.Size(1684, 48);
+            this.menuStrip1.Size = new System.Drawing.Size(1684, 44);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -2814,7 +2908,7 @@
             this.LoadPDatUW1,
             this.WritePDatUW1});
             this.uW1ToolStripMenuItem.Name = "uW1ToolStripMenuItem";
-            this.uW1ToolStripMenuItem.Size = new System.Drawing.Size(153, 40);
+            this.uW1ToolStripMenuItem.Size = new System.Drawing.Size(153, 36);
             this.uW1ToolStripMenuItem.Text = "Save Game";
             // 
             // LoadPDatUW1
@@ -2870,7 +2964,7 @@
             this.repackUW2DataToolStripMenuItem,
             this.saveLevArkChangesToolStripMenuItem});
             this.levArkToolStripMenuItem.Name = "levArkToolStripMenuItem";
-            this.levArkToolStripMenuItem.Size = new System.Drawing.Size(105, 40);
+            this.levArkToolStripMenuItem.Size = new System.Drawing.Size(105, 36);
             this.levArkToolStripMenuItem.Text = "LevArk";
             // 
             // mainLevArkToolStripMenuItem
@@ -2939,7 +3033,7 @@
             this.otherResourcesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stringsToolStripMenuItem});
             this.otherResourcesToolStripMenuItem.Name = "otherResourcesToolStripMenuItem";
-            this.otherResourcesToolStripMenuItem.Size = new System.Drawing.Size(208, 40);
+            this.otherResourcesToolStripMenuItem.Size = new System.Drawing.Size(208, 36);
             this.otherResourcesToolStripMenuItem.Text = "Other Resources";
             // 
             // stringsToolStripMenuItem
@@ -2963,100 +3057,6 @@
             this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
             this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // PicMap
-            // 
-            this.PicMap.BackColor = System.Drawing.Color.Transparent;
-            this.PicMap.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PicMap.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            this.PicMap.Location = new System.Drawing.Point(4, 4);
-            this.PicMap.Margin = new System.Windows.Forms.Padding(4);
-            this.PicMap.Name = "PicMap";
-            this.PicMap.Size = new System.Drawing.Size(12798, 12306);
-            this.PicMap.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.PicMap.TabIndex = 4;
-            this.PicMap.TabStop = false;
-            this.PicMap.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PicMap_MouseClick);
-            // 
-            // picTextureMap
-            // 
-            this.picTextureMap.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
-            this.picTextureMap.Location = new System.Drawing.Point(3, 0);
-            this.picTextureMap.Name = "picTextureMap";
-            this.picTextureMap.Size = new System.Drawing.Size(640, 640);
-            this.picTextureMap.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.picTextureMap.TabIndex = 0;
-            this.picTextureMap.TabStop = false;
-            // 
-            // PicColour
-            // 
-            this.PicColour.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            this.PicColour.Location = new System.Drawing.Point(784, 6);
-            this.PicColour.Margin = new System.Windows.Forms.Padding(4);
-            this.PicColour.Name = "PicColour";
-            this.PicColour.Size = new System.Drawing.Size(96, 100);
-            this.PicColour.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.PicColour.TabIndex = 59;
-            this.PicColour.TabStop = false;
-            // 
-            // PicPalette
-            // 
-            this.PicPalette.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            this.PicPalette.Location = new System.Drawing.Point(4, 4);
-            this.PicPalette.Margin = new System.Windows.Forms.Padding(4);
-            this.PicPalette.Name = "PicPalette";
-            this.PicPalette.Size = new System.Drawing.Size(768, 100);
-            this.PicPalette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.PicPalette.TabIndex = 58;
-            this.PicPalette.TabStop = false;
-            this.PicPalette.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PicPalette_MouseClick);
-            // 
-            // ImgOut
-            // 
-            this.ImgOut.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
-            this.ImgOut.Location = new System.Drawing.Point(646, 8);
-            this.ImgOut.Margin = new System.Windows.Forms.Padding(4);
-            this.ImgOut.Name = "ImgOut";
-            this.ImgOut.Size = new System.Drawing.Size(128, 129);
-            this.ImgOut.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.ImgOut.TabIndex = 55;
-            this.ImgOut.TabStop = false;
-            this.ImgOut.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ImgOut_MouseClick);
-            // 
-            // picPSX
-            // 
-            this.picPSX.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
-            this.picPSX.Location = new System.Drawing.Point(554, 13);
-            this.picPSX.Margin = new System.Windows.Forms.Padding(4);
-            this.picPSX.Name = "picPSX";
-            this.picPSX.Size = new System.Drawing.Size(1024, 1024);
-            this.picPSX.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.picPSX.TabIndex = 72;
-            this.picPSX.TabStop = false;
-            // 
-            // Column5
-            // 
-            this.Column5.HeaderText = "FunctionNo";
-            this.Column5.MinimumWidth = 10;
-            this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
-            this.Column5.Width = 200;
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Function";
-            this.Column1.MinimumWidth = 10;
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Width = 200;
-            // 
-            // Column3
-            // 
-            this.Column3.HeaderText = "Comment";
-            this.Column3.MinimumWidth = 10;
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            this.Column3.Width = 200;
             // 
             // main
             // 
@@ -3117,6 +3117,7 @@
             this.tabPage1.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.PicMap)).EndInit();
             this.tableLayoutPanel3.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
@@ -3152,16 +3153,21 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdTextureMap)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picTextureMap)).EndInit();
             this.tabPage9.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.GrdStrings)).EndInit();
             this.tabPage10.ResumeLayout(false);
             this.PicSelectedColour.ResumeLayout(false);
             this.PicSelectedColour.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NumZoom)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PicColour)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.PicPalette)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ImgOut)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPalMode)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picPSX)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numPal)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numOffset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fileHeight)).EndInit();
@@ -3174,12 +3180,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.grdCutscene)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.PicMap)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picTextureMap)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PicColour)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.PicPalette)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ImgOut)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.picPSX)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

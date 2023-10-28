@@ -46,6 +46,7 @@ namespace UnderworldEditor
         public objects worldObjects;
         public UWStrings UWGameStrings;
         public GRLoader[] grfile =new GRLoader[35];
+        public cutsArtLoader[] CutSceneArtLoaders = new cutsArtLoader[80];
         public BytLoader[] bytfile;
         public TextureLoader tex = new TextureLoader();
         public static BitmapUW CurrentImage;
@@ -78,7 +79,7 @@ namespace UnderworldEditor
                 PopulateTextureTree();
             }
 
-            PopulateCutsceneTree();
+            PopulateCmdCutsceneTree();
 
             //Load the definition for how an object is structures.
             //File must cover all bytes.
@@ -807,7 +808,8 @@ namespace UnderworldEditor
                             if (node.Tag == null) { return; }
                             if (int.TryParse(node.Tag.ToString(), out index))
                             {
-                                CurrentImage = tex.LoadImageAt(index);
+                                //CurrentImage = tex.LoadImageAt(index,PaletteLoader.GreyScale);
+                                CurrentImage = tex.LoadImageAt(index, PaletteLoader.Palettes[0]);
                             }
                             break;
                         }
@@ -857,7 +859,46 @@ namespace UnderworldEditor
                             }
                             break;
                         }
+                    case "CUTS":
+                        {
+                            // a cuts file has been selected.
+                            //open the cuts file selected 
+                            int index;
+                            if (node.Tag == null) { return; }
+                            if (int.TryParse(node.Tag.ToString(), out index))
+                            {
+                                if (CutSceneArtLoaders[index] == null)
+                                {
+                                    CutSceneArtLoaders[index] = new cutsArtLoader(node.Text);
+                                    //populate the tree
+                                    for (int i = 0; i <= CutSceneArtLoaders[index].ImageCache.GetUpperBound(0); i++)
+                                    {
+                                        TreeNode img = node.Nodes.Add(i.ToString());
+                                        img.Tag = i;
+                                    }
+                                }
+                                //CurrentImage = CutSceneArtLoaders[index].LoadImageAt(index);
+                            }
+                            break;
+                        }
                     default:
+                        if ( partext.ToUpper().Contains("CS") && partext.ToUpper().Contains(".N"))
+                        {   //cutscene file
+                            int parentindex;
+                            if (node.Parent.Tag == null) { return; }
+                            if (int.TryParse(node.Parent.Tag.ToString(), out parentindex))
+                            {
+                                int index;
+                                if (node.Tag == null) { return; }
+                                if (int.TryParse(node.Tag.ToString(), out index))
+                                {
+                                    //load the cut img
+                                    CurrentImage = CutSceneArtLoaders[parentindex].LoadImageAt(index);
+                                }
+                            }
+                            break;
+                        }
+
                         if (partext.ToUpper().Contains(".GR"))
                         {
                             int parentindex;
@@ -925,13 +966,13 @@ namespace UnderworldEditor
         }
 
 
-        private void PopulateCutsceneTree()
+        private void PopulateCmdCutsceneTree()
         {
            treeCutsN00.Nodes.Clear();
            DirectoryInfo dir = new DirectoryInfo(basepath + "\\cuts");
             if (dir != null)
             {
-                FileInfo[] cutsFiles = dir.GetFiles("*.n00");
+                FileInfo[] cutsFiles = dir.GetFiles("CS*.n00");
                 for (int i = 0; i <= cutsFiles.GetUpperBound(0); i++)
                 {
                     TreeNode gr = treeCutsN00.Nodes.Add(cutsFiles[i].Name);
@@ -1019,6 +1060,22 @@ namespace UnderworldEditor
             critters = critters.Nodes.Add("CRITTERS");
             critters.Tag = "CRITTERS";
 
+            TreeNode cuts = TreeArt.Nodes.Add("CUTS");
+            cuts.Tag = "CUTS";
+            dir = new DirectoryInfo(System.IO.Path.Combine( basepath ,"cuts"));
+            if (dir != null)
+            {
+                int i = 0;
+                FileInfo[] cutsfiles = dir.GetFiles("CS*.N*");
+                foreach (var f in cutsfiles)
+                {
+                    if (f.Extension.ToUpper() !=".N00")
+                    {
+                        TreeNode cutfile = cuts.Nodes.Add(f.Name);
+                        cutfile.Tag = i++;
+                    }
+                }
+            }
         }
 
         /// <summary>

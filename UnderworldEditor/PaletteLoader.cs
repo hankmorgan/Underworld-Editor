@@ -69,6 +69,7 @@ namespace UnderworldEditor
                 GreyScale.blue[i] = (byte)i;
                 GreyScale.green[i] = (byte)i;
             }
+
             switch (main.curgame)
             {
                 default:
@@ -92,6 +93,9 @@ namespace UnderworldEditor
                     }
                     break;
             }
+
+            var img = PaletteToImage(0);
+            img.Save("c:\\temp\\greyscale.png");
         }
 
         public static int[] LoadAuxilaryPalIndices(string auxPalPath, int auxPalIndex)
@@ -146,7 +150,6 @@ namespace UnderworldEditor
             }
             BitmapUW output= ArtLoader.Image(null, imgData, 0,0, width, height, "name here", Palettes[PalIndex], true, BitmapUW.ImageTypes.Palette);
             return output.image;
-
         }
     }
 

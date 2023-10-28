@@ -56,6 +56,7 @@
     <Compile Include="BytLoader.cs" />
     <Compile Include="CritterArtLoader.cs" />
     <Compile Include="cuts.cs" />
+    <Compile Include="cutsArtLoader.cs" />
     <Compile Include="frmRES.cs">
       <SubType>Form</SubType>
     </Compile>
