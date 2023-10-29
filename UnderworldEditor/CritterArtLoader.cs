@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Drawing;
 
 namespace UnderworldEditor
 {
@@ -73,29 +75,31 @@ namespace UnderworldEditor
     {
         readonly byte[] FilePage0;
         readonly byte[] FilePage1;
+        public BitmapUW[] animSprites = new BitmapUW[256];
 
-        public CritterAnimInfo AnimInfo;
+        public Dictionary<string, CritterAnimation> AnimInfo = new Dictionary<string, CritterAnimation>();
 
-        public CritterInfo(int CritterNo, int file_id, Palette paletteToUse, int AuxPalNo, TreeNode assocNode)
+        public CritterInfo(int CritterNo, int fileXX, Palette paletteToUse, int AuxPalNo, TreeNode assocNode)
         {
-            string critterIDO = Util.DecimalToOct(file_id.ToString());
+            string critterIDO = Util.DecimalToOct(fileXX.ToString());
             
-            AnimInfo = new CritterAnimInfo();
-            int spriteIndex = 0;
-            for (int pass = 0; pass < 2; pass++)
+
+            //AnimInfo = new CritterAnimations();
+            int StartingSpriteIndex = 0;
+            for (int fileYY = 0; fileYY < 2; fileYY++)
             {
                 //load in both page files.
-                if (pass == 0)
+                if (fileYY == 0)
                 {//CR{CRITTER file ID in octal}PAGE.N{Page}
-                    var toLoad = Path.Combine(main.basepath, "CRIT", "CR" + critterIDO + "PAGE.N0" + pass);
+                    var toLoad = Path.Combine(main.basepath, "CRIT", "CR" + critterIDO + "PAGE.N0" + fileYY);
                     Util.ReadStreamFile(toLoad, out FilePage0);
-                    spriteIndex = ReadPageFileUW1(CritterNo,FilePage0, file_id, pass, spriteIndex, AuxPalNo, assocNode);
+                    StartingSpriteIndex = ReadPageFileUW1(CritterNo,FilePage0, fileXX, fileYY, StartingSpriteIndex, AuxPalNo, assocNode);
                 }
                 else
                 {
-                    var toLoad = Path.Combine(main.basepath, "CRIT", "CR" + critterIDO + "PAGE.N0" + pass);
+                    var toLoad = Path.Combine(main.basepath, "CRIT", "CR" + critterIDO + "PAGE.N0" + fileYY);
                     Util.ReadStreamFile(toLoad, out FilePage1);
-                    ReadPageFileUW1(CritterNo,FilePage1, file_id, pass, spriteIndex, AuxPalNo, assocNode);
+                    ReadPageFileUW1(CritterNo,FilePage1, fileXX, fileYY, StartingSpriteIndex, AuxPalNo, assocNode);
                 }
             }
         }
@@ -113,7 +117,7 @@ namespace UnderworldEditor
         {
             int ExtractPageNo = 0;
             string critterIDO = Util.DecimalToOct(file_id.ToString());
-            AnimInfo = new CritterAnimInfo();
+            //AnimInfo = new CritterAnimations();
             int spriteIndex = 0;
             for (int i = 0; i < 8; i++)
             {
@@ -121,89 +125,121 @@ namespace UnderworldEditor
                 {
                     string ExtractPageNoOctal = Util.DecimalToOct(ExtractPageNo.ToString());
                     string fileCrit = Path.Combine(main.basepath, "CRIT", "CR" + critterIDO + "." + ExtractPageNoOctal);  // BasePath + sep + "CRIT" + sep + "CR" + critterIDO + "." + ExtractPageNoO;
-                    spriteIndex = ReadPageFileUW2(CritterNo, assocData, AuxPalNo, fileCrit, AnimInfo, spriteIndex, paletteToUse);
+                    spriteIndex = ReadPageFileUW2(CritterNo, assocData, AuxPalNo, fileCrit,spriteIndex, paletteToUse);
                     ExtractPageNo++;
                 }
             }
 
-
-
-            /*
-      x*512 : start character x animation definition [C]
-   Each chunk has 8 subchunks of 64 bytes. A subchunk [SC] describes the
-   animation frames to take for a certain action. The actions are
-      [C]+0000 : [SC] standing
-      [C]+0040 : [SC] walking
-      [C]+0080 : [SC] in combat
-      [C]+00c0 : [SC] attack
-      [C]+0100 : [SC] attack
-      [C]+0140 : [SC] attack
-      [C]+0180 : [SC] attack
-      [C]+01c0 : [SC] dying
-            */
             
             int cranAdd = (file_id * 512);
-            int cranBase = cranAdd;
-            int animationCounter = 0;
-            for (int Animation = 0; Animation < 8; Animation++)//The the animation slot
-            {
-                bool NoAngle = false;// isAnimUnAngled(Animation);
-                //int NoOfValid=0;
 
-                for (int Angle = 0; Angle < 8; Angle++)//Each animation has every possible angle.
+            int animationCounter = 0;
+            
+            for (int Animation = 0; Animation < 8; Animation++)//The animation slots
+            {
+                for (int Angle = 0; Angle < 8; Angle++)//Each animation has 8 possible angles.
                 {
-                    if ((NoAngle == false) || (Angle == 4))
-                    {
-                        //int UW2animIndex = GetUW2Anim(Animation, Angle);
-                        int animIndex = animationCounter;//  Animation + Angle;//GetUW2Anim(Animation, Angle);
+                    string newAnimName  = GetUW2AnimName(Animation, Angle);  // = $"{Animation}_{Angle}";
+                    int[] newIndices = new int[8];                  
+                    int animIndex = animationCounter;//  Animation + Angle;//GetUW2Anim(Animation, Angle);
                         //int animIndex = TranslateAnimToIndex(UW2animIndex);//Maybe remove this?
-                        AnimInfo.animName[animIndex] = animIndex.ToString(); //PrintAnimName(UW2animIndex);
-                        TreeNode AnimationSet = assocNode.Nodes.Add(animIndex.ToString());
+                        
+                       // AnimInfo.animName[animIndex] = animIndex.ToString(); //PrintAnimName(UW2animIndex);
+                        TreeNode AnimationSet = assocNode.Nodes.Add(newAnimName);
                         int ValidEntries = (int)Util.getAt(cran, cranAdd + (Animation * 64) + (Angle * 8) + (7), 8);//Get how many valid frames are in the animation
                         for (int FrameNo = 0; FrameNo < 8; FrameNo++)
                         {
                             int currFrame = (int)Util.getAt(cran, cranAdd + (Animation * 64) + (Angle * 8) + (FrameNo), 8);
                             if (FrameNo < ValidEntries)
                             {
-                                AnimInfo.animIndices[animIndex, FrameNo] = currFrame;
-                                var ImageNode = AnimationSet.Nodes.Add("CRITTER:," + CritterNo + "," + (currFrame).ToString());
+                                newIndices[FrameNo] = currFrame;
+                                //AnimInfo.animIndices[animIndex, FrameNo] = currFrame;
+                                var ImageNode = AnimationSet.Nodes.Add($"{currFrame}");
                                 ImageNode.Tag = "CRITTER:," + CritterNo + "," + (currFrame).ToString();
                             }
                             else
                             {
-                                AnimInfo.animIndices[animIndex, FrameNo] = -1;
+                                //AnimInfo.animIndices[animIndex, FrameNo] = -1;
+                                newIndices[FrameNo] = -1;
                             }
                         }
-                        animationCounter++;
-                    }                    
+
+                    var newAnim = new CritterAnimation(newAnimName,newIndices);      
+
+                    AnimInfo.Add(newAnimName, newAnim);
+                    animationCounter++;                  
                 }
             }
         }
 
-
-        /// <summary>
-        /// Is the animation unangled.
-        /// </summary>
-        /// <returns><c>true</c>, if animation unangled was ised, <c>false</c> otherwise.</returns>
-        /// <param name="animationNo">Animation no.</param>
-        bool isAnimUnAngled(int animationNo)
+        private string GetUW2AnimName(int animation, int angle)
         {
-            switch (animationNo)
+            /*
+                  x*512 : start character x animation definition [C]
+                Each chunk has 8 subchunks of 64 bytes. A subchunk [SC] describes the
+                animation frames to take for a certain action. The actions are
+                  [C]+0000 : [SC] standing 0
+                  [C]+0040 : [SC] walking  1
+                  [C]+0080 : [SC] in combat 2
+                  [C]+00c0 : [SC] attack 3
+                  [C]+0100 : [SC] attack 4
+                  [C]+0140 : [SC] attack 5
+                  [C]+0180 : [SC] attack 6
+                  [C]+01c0 : [SC] dying 7
+                */
+            string output=$"UNKNOWNANIM_{animation}";
+            switch(animation)
             {
-                case 0x2:
-                case 0x3:
-                case 0x4:
-                case 0x5:
-                case 0x6:
-                case 0x7:
-                case 0xd:
-                    return true;
-                default:
-                    return false;
+                case 0:
+                    output = "idle_";break;
+                case 1:
+                    output = "walking_"; break;
+                case 2:
+                    output = "idle_combat_"; break;
+                case 3:
+                    output = "attack_bash_"; break;
+                case 4:
+                    output = "attack_slash_"; break;
+                case 5:
+                    output = "attack_stab_"; break;
+                case 6:
+                    output = "attack_secondary_"; break;
+                case 7:
+                    output = "death_"; break;
+
             }
+
+            //[SC] +0000 : [AS] rear  0
+            //[SC] + 0008 : [AS] rear right 1
+            //[SC]+0010 : [AS] right  2
+            //[SC] + 0018 : [AS] front right 3
+            //[SC]+0020 : [AS] front  4
+            //[SC] + 0028 : [AS] front left 5
+            //[SC]+0030 : [AS] left  6
+            //[SC] + 0038 : [AS] rear left 7
+
+            switch (angle)
+            {
+                case 0:
+                     output += "rear"; break;
+                case 1:
+                    output += "rear_right"; break;
+                case 2:
+                    output += "right"; break;
+                case 3:
+                    output += "front_right"; break;
+                   case 4:
+                    output += "front"; break;
+                case 5:
+                    output += "front_left"; break;
+                case 6:
+                    output += "left"; break;
+                case 7:
+                    output += "rear_left"; break;
+            }
+
+            return output;
         }
-
-
 
         public static string PrintAnimName(int animNo)
         {
@@ -216,7 +252,7 @@ namespace UnderworldEditor
                 case 0x2:
                     return "attack_slash";
                 case 0x3:
-                    return "attack_thrust";
+                    return "attack_stab";
                 case 0x4:
                     return "attack_unk4";
                 case 0x5:
@@ -323,27 +359,32 @@ namespace UnderworldEditor
                 // string AnimName = slotbase + "_" + SlotIndices[i]; // PrintAnimName(slotbase + SlotIndices[i]);
 
                 int index = slotbase + SlotIndices[i]; //TranslateAnimToIndex(slotbase + SlotIndices[i]);
-                AnimInfo.animName[index] = AnimName;
+                
+               // AnimInfo.animName[index] = AnimName;
                 TreeNode AnimationSet = assocNode.Nodes.Add(AnimName);
                 //
                 int ValidCount = 0;
+                int[] newIndices = new int[8];
                 for (int j = 0; j < 8; j++)
-                {
+                {                    
                     int val = (int)Util.getAt(PageFile, addptr++, 8);
                     if (val != 255)
                     {                   //AnimFiles[j] = "CR" + XX.ToString("d2") + "PAGE_N" + YY.ToString("d2") + "_" + AuxPalNo + "_" + val;
 
-                        AnimInfo.animSequence[index, j] = "CR" + XXo + "PAGE_N" + YYo + "_" + AuxPalNo + "_" + (val).ToString("d4");
-                        AnimInfo.animIndices[index, j] = (val + spriteIndex);
-                        var ImageNode = AnimationSet.Nodes.Add("CRITTER:," + CritterNo + "," + (val + spriteIndex).ToString());
+                        //AnimInfo.animSequence[index, j] = "CR" + XXo + "PAGE_N" + YYo + "_" + AuxPalNo + "_" + (val).ToString("d4");
+                        //AnimInfo.animIndices[index, j] = (val + spriteIndex);
+                        newIndices[j] = (val + spriteIndex);
+                        var ImageNode = AnimationSet.Nodes.Add($"{(val + spriteIndex)}");
                         ImageNode.Tag = "CRITTER:," + CritterNo + "," + (val + spriteIndex).ToString();
                         ValidCount++;
                     }
                     else
                     {
-                        AnimInfo.animIndices[index, j] = -1;
+                        //AnimInfo.animIndices[index, j] = -1;
+                        newIndices[j] = -1;
                     }
                 }
+                var newanim = new CritterAnimation(AnimName, newIndices);
             }
 
             //Read in the palette
@@ -483,7 +524,8 @@ namespace UnderworldEditor
                         BitmapUW imgData = ArtLoader.Image(this, outputImg, 0, 0, BitMapWidth, BitMapHeight, "name_goes_here", PaletteLoader.Palettes[0], true, BitmapUW.ImageTypes.EightBitUncompressed);
                         //CropImageData(ref imgData, pal);
                         //ImageCache[spriteIndex + 1] = imgData;
-                        AnimInfo.animSprites[spriteIndex + i] = imgData;
+                        //AnimInfo.animSprites[spriteIndex + i] = imgData;
+                        this.animSprites[spriteIndex + i] = imgData;
                         spriteCounter++;
                     }
                 }//endextract
@@ -496,31 +538,19 @@ namespace UnderworldEditor
         /// <param name="assocFile"></param>
         /// <param name="AuxPalNo"></param>
         /// <param name="fileCrit"></param>
-        /// <param name="critanim"></param>
+        /// <param name="critterinfo"></param>
         /// <param name="spriteIndex"></param>
         /// <param name="paletteToUse"></param>
         /// <returns></returns>
-        int ReadPageFileUW2(int CritterNo, byte[] assocFile, int AuxPalNo, string fileCrit, CritterAnimInfo critanim, int spriteIndex, Palette paletteToUse)
+        int ReadPageFileUW2(int CritterNo, byte[] assocFile, int AuxPalNo, string fileCrit, int spriteIndex, Palette paletteToUse)
         {
-            //Debug.Log(fileCrit + " starting at  "  + spriteIndex);
+            //Local auxilary palette
             Palette pal = paletteToUse;
-            //byte[] auxpalval=new byte[32];
-            //Palette[] auxpal = new Palette[32];
-            //int auxPalNo = PaletteNo;
             int AddressPointer;
-
-
-            //pal = new palette[256];
-            //getPalette(PaletteFile, pal, 0);//always palette 0?
 
             Util.ReadStreamFile(fileCrit, out byte[] critterFile);
 
-
-            //UW2 uses a different method
-            //Starting at offset 0x80
-            //fprintf(LOGFILE, "\n\t//%s - palette = %d", fileCrit, auxPalNo);
-            //auxPalNo=2;
-            AddressPointer = 0;//auxPalNo * 32;
+            AddressPointer = 0;
 
             byte[] auxPalVal = new byte[32];
             for (int j = 0; j < 32; j++)
@@ -628,42 +658,35 @@ namespace UnderworldEditor
 
                                 var imgData = ArtLoader.Image(this,outputImg, 0,0, BitMapWidth, BitMapHeight, "namehere", pal, true,  BitmapUW.ImageTypes.EightBitUncompressed);
                                 //CropImageData(ref imgData, pal);
-                                AnimInfo.animSprites[spriteIndex++] = imgData; //Sprite.Create(imgData, new Rect(0f, 0f, imgData.width, imgData.height), new Vector2(0.5f, 0.0f));
+                               this.animSprites[spriteIndex++] = imgData;
                             }
-                        }//end extrac frameoffset
+                        }//end extract frameoffset
                     }//End for loop extract
                 }//End extract images
 
             }
             //Debug.Log(fileCrit + " returning  "  + spriteIndex);
             return spriteIndex;
-
-
         }
 
 
 
 
-        public class CritterAnimInfo
+        /// <summary>
+        /// Class for storing info about the animation sequence.
+        /// </summary>
+        public class CritterAnimation
         {
-            public const int NoOfAnims = 200;
-            public string[,] animSequence;
-            public int[,] animIndices;
-            //public ArtLoader.RawImageData[,] animSprites;
-            public BitmapUW[] animSprites;
-            public string[] animName;
+            public string animName;
+            public int[] animSequence = { -1,-1,-1,-1,-1,-1,-1,-1};
+            public int[] animIndices = { -1, -1, -1, -1, -1, -1, -1, -1 }; //indices for the bitmap images?
 
-            public CritterAnimInfo()
+            public CritterAnimation(string _animName, int[] _indices)
             {
-                animSequence = new string[NoOfAnims, 8];
-                animIndices = new int[NoOfAnims, 8];
-                animSprites = new BitmapUW[256];
-                animName = new string[NoOfAnims];
+                animName = _animName;
+                animIndices = _indices;
             }
-        }
-
-
-
-
+        }    
+       
     }
 }

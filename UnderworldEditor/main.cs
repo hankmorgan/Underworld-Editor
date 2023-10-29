@@ -940,7 +940,7 @@ namespace UnderworldEditor
                                     var animindex = int.Parse(critparams[2]);
                                     try
                                     {
-                                        CurrentImage = critloader.critter[critno].AnimInfo.animSprites[animindex];
+                                        CurrentImage = critloader.critter[critno].animSprites[animindex];
                                     }
                                     catch
                                     {
