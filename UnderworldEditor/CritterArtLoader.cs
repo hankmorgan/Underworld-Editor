@@ -11,15 +11,14 @@ using System.Drawing;
 namespace UnderworldEditor
 {
     class CritterArtLoader
-    {
-        public CritterInfo[] critter =new CritterInfo[64];
-        public CritterArtLoader(int game, TreeNode critnode, Palette pal)
+    {       
+        public static void LoadCritterArt(int game, TreeNode critnode, Palette pal)
         {
             if (game == 1)
             {
-                ReadUw1AssocFile( Path.Combine(main.basepath, "CRIT", "ASSOC.ANM"), pal,critnode);
+                ReadUw1AssocFile(Path.Combine(main.basepath, "CRIT", "ASSOC.ANM"), pal, critnode);
             }
-            if(game==2)
+            if (game == 2)
             {
                 ReadUW2AssocFile(critnode);
             }
@@ -27,7 +26,7 @@ namespace UnderworldEditor
 
 
 
-        void ReadUW2AssocFile(TreeNode critnode)
+        static void ReadUW2AssocFile(TreeNode critnode)
         {
             //Load the assoc file
             long AssocAddressPtr = 0;
@@ -45,14 +44,14 @@ namespace UnderworldEditor
                     {
                         var critname = objects.ObjectName(ass + 64, 2);
                         TreeNode assocNode = critnode.Nodes.Add(critname + "(" + ass + ") File " + FileID);
-                        critter[ass] = new CritterInfo(ass, FileID,PaletteLoader.Palettes[0], auxPal, assoc, pgmp, cran, assocNode);
+                        CritterArt.critterArt[ass] = new CritterArt(ass, FileID,PaletteLoader.Palettes[0], auxPal, assoc, pgmp, cran, assocNode);
                     }
                 }
             }
         }
 
 
-        private void ReadUw1AssocFile(string assocpath, Palette pal, TreeNode critnode)
+        static void ReadUw1AssocFile(string assocpath, Palette pal, TreeNode critnode)
         {
             long AssocAddressPtr = 256;
             if (Util.ReadStreamFile(assocpath, out byte[] assoc))
@@ -64,27 +63,28 @@ namespace UnderworldEditor
                     var critname = objects.ObjectName(ass+64,1);
                     TreeNode assocNode = critnode.Nodes.Add(critname + "("+ass+") File "+ FileID);
 
-                    critter[ass] = new CritterInfo(ass, FileID, pal, auxPal, assocNode);
+                    CritterArt.critterArt[ass] = new CritterArt(ass, FileID, pal, auxPal, assocNode);
                 }
             }
         }
     }
 
 
-    class CritterInfo:ArtLoader
+    class CritterArt:ArtLoader
     {
-        readonly byte[] FilePage0;
-        readonly byte[] FilePage1;
+        public static bool Loaded = false;
+        public static CritterArt[] critterArt = new CritterArt[64];
+
         public BitmapUW[] animSprites = new BitmapUW[256];
 
-        public Dictionary<string, CritterAnimation> AnimInfo = new Dictionary<string, CritterAnimation>();
+        public Dictionary<string, CritterAnimation> Animations = new Dictionary<string, CritterAnimation>();
 
-        public CritterInfo(int CritterNo, int fileXX, Palette paletteToUse, int AuxPalNo, TreeNode assocNode)
+        public CritterArt(int CritterNo, int fileXX, Palette paletteToUse, int AuxPalNo, TreeNode assocNode)
         {
             string critterIDO = Util.DecimalToOct(fileXX.ToString());
-            
+            byte[] FilePage0;
+            byte[] FilePage1;
 
-            //AnimInfo = new CritterAnimations();
             int StartingSpriteIndex = 0;
             for (int fileYY = 0; fileYY < 2; fileYY++)
             {
@@ -102,6 +102,7 @@ namespace UnderworldEditor
                     ReadPageFileUW1(CritterNo,FilePage1, fileXX, fileYY, StartingSpriteIndex, AuxPalNo, assocNode);
                 }
             }
+            Loaded = true;
         }
 
         /// <summary>
@@ -113,11 +114,10 @@ namespace UnderworldEditor
         /// <param name="assocData"></param>
         /// <param name="PGMP"></param>
         /// <param name="cran"></param>
-        public CritterInfo(int CritterNo, int file_id, Palette paletteToUse, int AuxPalNo, byte[] assocData, byte[] PGMP, byte[] cran, TreeNode assocNode)
+        public CritterArt(int CritterNo, int file_id, Palette paletteToUse, int AuxPalNo, byte[] assocData, byte[] PGMP, byte[] cran, TreeNode assocNode)
         {
             int ExtractPageNo = 0;
             string critterIDO = Util.DecimalToOct(file_id.ToString());
-            //AnimInfo = new CritterAnimations();
             int spriteIndex = 0;
             for (int i = 0; i < 8; i++)
             {
@@ -131,45 +131,37 @@ namespace UnderworldEditor
             }
 
             
-            int cranAdd = (file_id * 512);
+            int cranAdd = (file_id * 512); //address lookup into cr.an
 
-            int animationCounter = 0;
-            
             for (int Animation = 0; Animation < 8; Animation++)//The animation slots
             {
                 for (int Angle = 0; Angle < 8; Angle++)//Each animation has 8 possible angles.
                 {
-                    string newAnimName  = GetUW2AnimName(Animation, Angle);  // = $"{Animation}_{Angle}";
+                    string newAnimName  = GetUW2AnimName(Animation, Angle);
                     int[] newIndices = new int[8];                  
-                    int animIndex = animationCounter;//  Animation + Angle;//GetUW2Anim(Animation, Angle);
-                        //int animIndex = TranslateAnimToIndex(UW2animIndex);//Maybe remove this?
-                        
-                       // AnimInfo.animName[animIndex] = animIndex.ToString(); //PrintAnimName(UW2animIndex);
-                        TreeNode AnimationSet = assocNode.Nodes.Add(newAnimName);
-                        int ValidEntries = (int)Util.getAt(cran, cranAdd + (Animation * 64) + (Angle * 8) + (7), 8);//Get how many valid frames are in the animation
-                        for (int FrameNo = 0; FrameNo < 8; FrameNo++)
+                    TreeNode AnimationSet = assocNode.Nodes.Add(newAnimName);
+                    int NoOfValidEntries = (int)Util.getAt(cran, cranAdd + (Animation * 64) + (Angle * 8) + (7), 8);//Get how many valid frames are in the animation
+                    for (int FrameNo = 0; FrameNo < 8; FrameNo++)
+                    {
+                        int currFrame = (int)Util.getAt(cran, cranAdd + (Animation * 64) + (Angle * 8) + (FrameNo), 8);
+                        if (FrameNo < NoOfValidEntries)
                         {
-                            int currFrame = (int)Util.getAt(cran, cranAdd + (Animation * 64) + (Angle * 8) + (FrameNo), 8);
-                            if (FrameNo < ValidEntries)
-                            {
-                                newIndices[FrameNo] = currFrame;
-                                //AnimInfo.animIndices[animIndex, FrameNo] = currFrame;
-                                var ImageNode = AnimationSet.Nodes.Add($"{currFrame}");
-                                ImageNode.Tag = "CRITTER:," + CritterNo + "," + (currFrame).ToString();
-                            }
-                            else
-                            {
-                                //AnimInfo.animIndices[animIndex, FrameNo] = -1;
-                                newIndices[FrameNo] = -1;
-                            }
+                            newIndices[FrameNo] = currFrame;
+                            var ImageNode = AnimationSet.Nodes.Add($"{currFrame}");
+                            ImageNode.Tag = "CRITTER:," + CritterNo + "," + (currFrame).ToString();
                         }
+                        else
+                        {
+                            newIndices[FrameNo] = -1;
+                        }
+                    }
 
                     var newAnim = new CritterAnimation(newAnimName,newIndices);      
 
-                    AnimInfo.Add(newAnimName, newAnim);
-                    animationCounter++;                  
+                    Animations.Add(newAnimName, newAnim);
                 }
             }
+            Loaded = true;
         }
 
         private string GetUW2AnimName(int animation, int angle)
@@ -241,7 +233,7 @@ namespace UnderworldEditor
             return output;
         }
 
-        public static string PrintAnimName(int animNo)
+        public static string GetUW1AnimName(int animNo)
         {
             switch (animNo)
             {
@@ -253,12 +245,12 @@ namespace UnderworldEditor
                     return "attack_slash";
                 case 0x3:
                     return "attack_stab";
-                case 0x4:
-                    return "attack_unk4";
+                //case 0x4:
+                //    return "attack_unk4";
                 case 0x5:
                     return "attack_secondary";
-                case 0x6:
-                    return "attack_unk6";
+                //case 0x6:
+                //    return "attack_unk6"; //does not exist
                 case 0x7:
                     return "walking_towards";
                 case 0xc:
@@ -298,21 +290,21 @@ namespace UnderworldEditor
                 case 0x2f:
                     return "unknown_anim_47";
                 case 0x50:
-                    return "unknown_anim_80";
+                    return "ethereal_anim_80";
                 case 0x51:
-                    return "unknown_anim_81";
+                    return "ethereal_anim_81";
                 case 0x52:
-                    return "unknown_anim_82";
+                    return "ethereal_anim_82";
                 case 0x53:
-                    return "unknown_anim_83";
+                    return "ethereal_anim_83";
                 case 0x54:
-                    return "unknown_anim_84";
+                    return "ethereal_anim_84";
                 case 0x55:
-                    return "unknown_anim_85";
+                    return "ethereal_anim_85";
                 case 0x56:
-                    return "unknown_anim_86";
+                    return "ethereal_anim_86";
                 case 0x57:
-                    return "unknown_anim_87";
+                    return "ethereal_anim_87";
                 case 0x80:
                     return "walking_rear";
                 case 0x81:
@@ -333,6 +325,18 @@ namespace UnderworldEditor
                     return "unknown_anim";
             }
         }
+
+        /// <summary>
+        /// Reads in the page files for UW1. adds them to a tree and store the animation sequences
+        /// </summary>
+        /// <param name="CritterNo"></param>
+        /// <param name="PageFile"></param>
+        /// <param name="XX"></param>
+        /// <param name="YY"></param>
+        /// <param name="spriteIndex"></param>
+        /// <param name="AuxPalNo"></param>
+        /// <param name="assocNode"></param>
+        /// <returns></returns>
         private int ReadPageFileUW1(int CritterNo, byte[] PageFile, int XX, int YY, int spriteIndex, int AuxPalNo, TreeNode assocNode)
         {
             int addptr = 0;
@@ -341,8 +345,8 @@ namespace UnderworldEditor
             int[] SlotIndices = new int[NoOfSlots];
             int spriteCounter = 0;
             int k = 0;
-            string XXo = Util.DecimalToOct(XX.ToString());
-            string YYo = Util.DecimalToOct(YY.ToString());
+            //string XXo = Util.DecimalToOct(XX.ToString());
+            //string YYo = Util.DecimalToOct(YY.ToString());
             for (int i = 0; i < NoOfSlots; i++)
             {
                 int val = (int)Util.getAt(PageFile, addptr++, 8);
@@ -354,14 +358,10 @@ namespace UnderworldEditor
             int NoOfSegs = (int)Util.getAt(PageFile, addptr++, 8);
             for (int i = 0; i < NoOfSegs; i++)
             {
-                //string[] AnimFiles = new string[8];
-                string AnimName = PrintAnimName(slotbase + SlotIndices[i]);
-                // string AnimName = slotbase + "_" + SlotIndices[i]; // PrintAnimName(slotbase + SlotIndices[i]);
+                string AnimName = GetUW1AnimName(slotbase + SlotIndices[i]);
+                //int index = slotbase + SlotIndices[i]; //TranslateAnimToIndex(slotbase + SlotIndices[i]);
 
-                int index = slotbase + SlotIndices[i]; //TranslateAnimToIndex(slotbase + SlotIndices[i]);
-                
-               // AnimInfo.animName[index] = AnimName;
-                TreeNode AnimationSet = assocNode.Nodes.Add(AnimName);
+                TreeNode AnimationSet = assocNode.Nodes.Add($"{AnimName} {slotbase + SlotIndices[i]}");
                 //
                 int ValidCount = 0;
                 int[] newIndices = new int[8];
@@ -369,10 +369,7 @@ namespace UnderworldEditor
                 {                    
                     int val = (int)Util.getAt(PageFile, addptr++, 8);
                     if (val != 255)
-                    {                   //AnimFiles[j] = "CR" + XX.ToString("d2") + "PAGE_N" + YY.ToString("d2") + "_" + AuxPalNo + "_" + val;
-
-                        //AnimInfo.animSequence[index, j] = "CR" + XXo + "PAGE_N" + YYo + "_" + AuxPalNo + "_" + (val).ToString("d4");
-                        //AnimInfo.animIndices[index, j] = (val + spriteIndex);
+                    {                  
                         newIndices[j] = (val + spriteIndex);
                         var ImageNode = AnimationSet.Nodes.Add($"{(val + spriteIndex)}");
                         ImageNode.Tag = "CRITTER:," + CritterNo + "," + (val + spriteIndex).ToString();
@@ -380,11 +377,11 @@ namespace UnderworldEditor
                     }
                     else
                     {
-                        //AnimInfo.animIndices[index, j] = -1;
                         newIndices[j] = -1;
                     }
                 }
                 var newanim = new CritterAnimation(AnimName, newIndices);
+                Animations.Add(AnimName, newanim);
             }
 
             //Read in the palette
@@ -399,9 +396,8 @@ namespace UnderworldEditor
             //Skip past the palettes
             addptr += NoOfPals * 32;
             int NoOfFrames = (int)Util.getAt(PageFile, addptr, 8);
-            //AnimInfo.animSprites=new Sprite[NoOfFrames];
             addptr += 2;
-            int addptr_start = addptr;//Bookmark my positiohn
+            int addptr_start = addptr;//Bookmark my position
             int MaxWidth = 0;
             int MaxHeight = 0;
             int MaxHotSpotX = 0;
@@ -518,13 +514,7 @@ namespace UnderworldEditor
                         BitMapHeight = MaxHeight;
 
                         //****************************
-
-                        // BitmapUW imgData = ArtLoader.Image(outputImg, 0, BitMapWidth, BitMapHeight, "namehere", pal, true, true);
-
-                        BitmapUW imgData = ArtLoader.Image(this, outputImg, 0, 0, BitMapWidth, BitMapHeight, "name_goes_here", PaletteLoader.Palettes[0], true, BitmapUW.ImageTypes.EightBitUncompressed);
-                        //CropImageData(ref imgData, pal);
-                        //ImageCache[spriteIndex + 1] = imgData;
-                        //AnimInfo.animSprites[spriteIndex + i] = imgData;
+                        BitmapUW imgData = ArtLoader.Image(this, outputImg, 0, 0, BitMapWidth, BitMapHeight, "name_goes_here", PaletteLoader.GreyScale, true, BitmapUW.ImageTypes.EightBitUncompressed);
                         this.animSprites[spriteIndex + i] = imgData;
                         spriteCounter++;
                     }

@@ -72,6 +72,8 @@ namespace UnderworldEditor
         {
             FrmSelect frm = new FrmSelect();
             frm.ShowDialog();
+            if (main.basepath == null) { return; }
+          
             PaletteLoader.LoadPalettes(main.basepath + "\\data\\pals.dat");
             if(PaletteLoader.Palettes[0]!=null)
             {
@@ -821,7 +823,7 @@ namespace UnderworldEditor
                             {
                                 if (grfile[index]==null)
                                 {//Load the gr file and populate the tree.
-                                    grfile[index] = new GRLoader(main.basepath + "\\data\\" + node.Text);
+                                    grfile[index] = new GRLoader( System.IO.Path.Combine( main.basepath, "DATA", node.Text) );
                                     for (int i=0; i<=grfile[index].ImageCache.GetUpperBound(0);i++)
                                     {
                                         TreeNode img = node.Nodes.Add(i.ToString());
@@ -910,7 +912,7 @@ namespace UnderworldEditor
                                 if (int.TryParse(node.Tag.ToString(), out index))
                                 {
                                     //load the gr file
-                                    CurrentImage = grfile[parentindex].LoadImageAt(index);
+                                    CurrentImage = grfile[parentindex].LoadImageAt(index,true);
                                     switch (CurrentImage.ImageType)
                                     {
                                         case BitmapUW.ImageTypes.FourBitRunLength:
@@ -925,9 +927,10 @@ namespace UnderworldEditor
                         {
                             if (node.Text=="CRITTERS")
                             {
-                            if (critloader == null)
+                                if (CritterArt.Loaded == false)
                                 {
-                                    critloader = new CritterArtLoader(curgame, node, PaletteLoader.Palettes[0]);
+                                    CritterArtLoader.LoadCritterArt(curgame, node, PaletteLoader.Palettes[0]);
+                                    CritterArt.Loaded = true;
                                 }
                             }
                             if(node.Tag!=null)
@@ -940,7 +943,7 @@ namespace UnderworldEditor
                                     var animindex = int.Parse(critparams[2]);
                                     try
                                     {
-                                        CurrentImage = critloader.critter[critno].animSprites[animindex];
+                                        CurrentImage = CritterArt.critterArt[critno].animSprites[animindex];
                                     }
                                     catch
                                     {

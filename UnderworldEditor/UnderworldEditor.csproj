@@ -54,6 +54,7 @@
     <Compile Include="ArtUI.cs" />
     <Compile Include="BitmapUW.cs" />
     <Compile Include="BytLoader.cs" />
+    <Compile Include="config.cs" />
     <Compile Include="CritterArtLoader.cs" />
     <Compile Include="cuts.cs" />
     <Compile Include="cutsArtLoader.cs" />
@@ -124,6 +125,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="uwsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
