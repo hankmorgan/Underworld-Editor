@@ -252,7 +252,7 @@ namespace UnderworldEditor
         {
             if (index != 0)
             {
-                TreeNode newnode = node.Nodes.Add(objects.ObjectName(objList[index].item_id, main.curgame));
+                TreeNode newnode = node.Nodes.Add($"{objects.ObjectName(objList[index].item_id, main.curgame)} ({index})");
                 newnode.Tag = index;
                 if (objects.isContainer(objList[index].item_id))
                 {
@@ -269,7 +269,7 @@ namespace UnderworldEditor
         {
             while (index != 0)
             {
-                TreeNode newnode = node.Nodes.Add(objects.ObjectName(objList[index].item_id, main.curgame));
+                TreeNode newnode = node.Nodes.Add($"{objects.ObjectName(objList[index].item_id, main.curgame)} ({index})");
                 newnode.Tag = index;
                 if (objects.isContainer(objList[index].item_id))
                 {

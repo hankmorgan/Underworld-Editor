@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,6 +68,12 @@ namespace UnderworldEditor
 
         public TileInfo[,] Tiles;
 
+        public int MobileFreeListCounter = 0;
+        public int StaticFreeListCounter = 0;
+        public int NPCListCounter = 0;
+        public int[] MobileFreeList = new int[254];
+        public int[] StaticFreeList = new int[768];
+        public int[] NPCList = new int[260];
 
         public short[] texture_map;// = new short[272];
 
@@ -94,6 +102,29 @@ namespace UnderworldEditor
             }
             SetTileMapWallFacesUW();
             Cleanup();
+            address_pointer = 0x7300;
+            for (int i = 0;i < 254;i++)
+            {
+                MobileFreeList[i] = (int)Util.getAt(lev_ark, address_pointer + (i*2), 16);
+            }
+            address_pointer = 0x74fc;
+            for (int i = 0; i < 768; i++)
+            {
+               StaticFreeList[i] = (int)Util.getAt(lev_ark, address_pointer + (i * 2), 16);
+            }
+
+            address_pointer = 0x7afc;
+            for (int i = 0; i < 260; i++)
+            {
+                NPCList[i] = (int)Util.getAt(lev_ark, address_pointer + i, 8);
+            }
+
+            NPCListCounter = (int)Util.getAt(lev_ark, 0x7C00, 16);
+            MobileFreeListCounter = (int)Util.getAt(lev_ark, 0x7C02, 16);
+            StaticFreeListCounter = (int)Util.getAt(lev_ark, 0x7C04, 16);
+
+            var uw = (int)Util.getAt(lev_ark, 0x7C06, 16); //7c06
+            Debug.Print(uw.ToString());
         }
 
         /// <summary>
@@ -175,7 +206,7 @@ namespace UnderworldEditor
             short newfloorHeight = (short)getHeight(FirstTileInt) ;
             short newceilingHeight = 0;//UW_CEILING_HEIGHT;	//constant for uw				
 
-            short newFlags = (short)((FirstTileInt >> 7) & 0x3);
+            short newFlags = (short)((FirstTileInt >> 8) & 0x3);
             short newnoMagic = (short)((FirstTileInt >> 14) & 0x1);
             short newdoorBit = (short)((FirstTileInt >> 15) & 0x1);
             short newindexObjectList = getObject(SecondTileInt);

@@ -29,27 +29,27 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode143 = new System.Windows.Forms.TreeNode("Helm");
-            System.Windows.Forms.TreeNode treeNode144 = new System.Windows.Forms.TreeNode("Chest");
-            System.Windows.Forms.TreeNode treeNode145 = new System.Windows.Forms.TreeNode("Gloves");
-            System.Windows.Forms.TreeNode treeNode146 = new System.Windows.Forms.TreeNode("Leggings");
-            System.Windows.Forms.TreeNode treeNode147 = new System.Windows.Forms.TreeNode("Boots");
-            System.Windows.Forms.TreeNode treeNode148 = new System.Windows.Forms.TreeNode("TopRightShoulder");
-            System.Windows.Forms.TreeNode treeNode149 = new System.Windows.Forms.TreeNode("TopLeftShoulder");
-            System.Windows.Forms.TreeNode treeNode150 = new System.Windows.Forms.TreeNode("RightHand");
-            System.Windows.Forms.TreeNode treeNode151 = new System.Windows.Forms.TreeNode("LeftHand");
-            System.Windows.Forms.TreeNode treeNode152 = new System.Windows.Forms.TreeNode("LeftRing");
-            System.Windows.Forms.TreeNode treeNode153 = new System.Windows.Forms.TreeNode("BackPack0");
-            System.Windows.Forms.TreeNode treeNode154 = new System.Windows.Forms.TreeNode("BackPack1");
-            System.Windows.Forms.TreeNode treeNode155 = new System.Windows.Forms.TreeNode("BackPack2");
-            System.Windows.Forms.TreeNode treeNode156 = new System.Windows.Forms.TreeNode("BackPack3");
-            System.Windows.Forms.TreeNode treeNode157 = new System.Windows.Forms.TreeNode("BackPack4");
-            System.Windows.Forms.TreeNode treeNode158 = new System.Windows.Forms.TreeNode("BackPack5");
-            System.Windows.Forms.TreeNode treeNode159 = new System.Windows.Forms.TreeNode("BackPack6");
-            System.Windows.Forms.TreeNode treeNode160 = new System.Windows.Forms.TreeNode("BackPack7");
-            System.Windows.Forms.TreeNode treeNode141 = new System.Windows.Forms.TreeNode("Wall & Floor Textures(2 files)");
-            System.Windows.Forms.TreeNode treeNode142 = new System.Windows.Forms.TreeNode("Textures", new System.Windows.Forms.TreeNode[] {
-            treeNode141});
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Helm");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Chest");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Gloves");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Leggings");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Boots");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("TopRightShoulder");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("TopLeftShoulder");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("RightHand");
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("LeftHand");
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("LeftRing");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("BackPack0");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("BackPack1");
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("BackPack2");
+            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("BackPack3");
+            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("BackPack4");
+            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("BackPack5");
+            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("BackPack6");
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("BackPack7");
+            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("Wall & Floor Textures(2 files)");
+            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("Textures", new System.Windows.Forms.TreeNode[] {
+            treeNode19});
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.PlayerDat = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
@@ -212,6 +212,16 @@
             this.Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.picTextureMap = new PictureBoxWithInterpolationMode();
             this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.grdPossibleNPCList = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.grdStaticFree = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label52 = new System.Windows.Forms.Label();
+            this.txtStaticCounter = new System.Windows.Forms.TextBox();
+            this.grdMobileFree = new System.Windows.Forms.DataGridView();
+            this.Index = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label51 = new System.Windows.Forms.Label();
+            this.txtMobileCounter = new System.Windows.Forms.TextBox();
             this.tabPage9 = new System.Windows.Forms.TabPage();
             this.GrdStrings = new System.Windows.Forms.DataGridView();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -270,6 +280,8 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.label53 = new System.Windows.Forms.Label();
+            this.txtNPCCounter = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.PlayerDat.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -346,6 +358,10 @@
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.grdTextureMap)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picTextureMap)).BeginInit();
+            this.tabPage8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdPossibleNPCList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grdStaticFree)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grdMobileFree)).BeginInit();
             this.tabPage9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GrdStrings)).BeginInit();
             this.tabPage10.SuspendLayout();
@@ -994,7 +1010,7 @@
             this.Inv.Margin = new System.Windows.Forms.Padding(4);
             this.Inv.Name = "Inv";
             this.Inv.Padding = new System.Windows.Forms.Padding(4);
-            this.Inv.Size = new System.Drawing.Size(1644, 1252);
+            this.Inv.Size = new System.Drawing.Size(1644, 1248);
             this.Inv.TabIndex = 0;
             this.Inv.Text = "Inventory";
             // 
@@ -1328,61 +1344,61 @@
             this.TreeInventory.Location = new System.Drawing.Point(10, 4);
             this.TreeInventory.Margin = new System.Windows.Forms.Padding(4);
             this.TreeInventory.Name = "TreeInventory";
-            treeNode143.Name = "Helml";
-            treeNode143.Text = "Helm";
-            treeNode144.Name = "Chest";
-            treeNode144.Text = "Chest";
-            treeNode145.Name = "Gloves";
-            treeNode145.Text = "Gloves";
-            treeNode146.Name = "Leggings";
-            treeNode146.Text = "Leggings";
-            treeNode147.Name = "Boots";
-            treeNode147.Text = "Boots";
-            treeNode148.Name = "TopRightShoulder";
-            treeNode148.Text = "TopRightShoulder";
-            treeNode149.Name = "TopLeftShoulder";
-            treeNode149.Text = "TopLeftShoulder";
-            treeNode150.Name = "RightHand";
-            treeNode150.Text = "RightHand";
-            treeNode151.Name = "LeftHand";
-            treeNode151.Text = "LeftHand";
-            treeNode152.Name = "RightRing";
-            treeNode152.Text = "LeftRing";
-            treeNode153.Name = "BackPack0";
-            treeNode153.Text = "BackPack0";
-            treeNode154.Name = "BackPack1";
-            treeNode154.Text = "BackPack1";
-            treeNode155.Name = "BackPack2";
-            treeNode155.Text = "BackPack2";
-            treeNode156.Name = "BackPack3";
-            treeNode156.Text = "BackPack3";
-            treeNode157.Name = "BackPack4";
-            treeNode157.Text = "BackPack4";
-            treeNode158.Name = "BackPack5";
-            treeNode158.Text = "BackPack5";
-            treeNode159.Name = "BackPack6";
-            treeNode159.Text = "BackPack6";
-            treeNode160.Name = "BackPack7";
-            treeNode160.Text = "BackPack7";
+            treeNode1.Name = "Helml";
+            treeNode1.Text = "Helm";
+            treeNode2.Name = "Chest";
+            treeNode2.Text = "Chest";
+            treeNode3.Name = "Gloves";
+            treeNode3.Text = "Gloves";
+            treeNode4.Name = "Leggings";
+            treeNode4.Text = "Leggings";
+            treeNode5.Name = "Boots";
+            treeNode5.Text = "Boots";
+            treeNode6.Name = "TopRightShoulder";
+            treeNode6.Text = "TopRightShoulder";
+            treeNode7.Name = "TopLeftShoulder";
+            treeNode7.Text = "TopLeftShoulder";
+            treeNode8.Name = "RightHand";
+            treeNode8.Text = "RightHand";
+            treeNode9.Name = "LeftHand";
+            treeNode9.Text = "LeftHand";
+            treeNode10.Name = "RightRing";
+            treeNode10.Text = "LeftRing";
+            treeNode11.Name = "BackPack0";
+            treeNode11.Text = "BackPack0";
+            treeNode12.Name = "BackPack1";
+            treeNode12.Text = "BackPack1";
+            treeNode13.Name = "BackPack2";
+            treeNode13.Text = "BackPack2";
+            treeNode14.Name = "BackPack3";
+            treeNode14.Text = "BackPack3";
+            treeNode15.Name = "BackPack4";
+            treeNode15.Text = "BackPack4";
+            treeNode16.Name = "BackPack5";
+            treeNode16.Text = "BackPack5";
+            treeNode17.Name = "BackPack6";
+            treeNode17.Text = "BackPack6";
+            treeNode18.Name = "BackPack7";
+            treeNode18.Text = "BackPack7";
             this.TreeInventory.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode143,
-            treeNode144,
-            treeNode145,
-            treeNode146,
-            treeNode147,
-            treeNode148,
-            treeNode149,
-            treeNode150,
-            treeNode151,
-            treeNode152,
-            treeNode153,
-            treeNode154,
-            treeNode155,
-            treeNode156,
-            treeNode157,
-            treeNode158,
-            treeNode159,
-            treeNode160});
+            treeNode1,
+            treeNode2,
+            treeNode3,
+            treeNode4,
+            treeNode5,
+            treeNode6,
+            treeNode7,
+            treeNode8,
+            treeNode9,
+            treeNode10,
+            treeNode11,
+            treeNode12,
+            treeNode13,
+            treeNode14,
+            treeNode15,
+            treeNode16,
+            treeNode17,
+            treeNode18});
             this.TreeInventory.Size = new System.Drawing.Size(310, 552);
             this.TreeInventory.TabIndex = 0;
             this.TreeInventory.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeInventory_AfterSelect);
@@ -1392,7 +1408,7 @@
             this.Runes.Location = new System.Drawing.Point(8, 39);
             this.Runes.Margin = new System.Windows.Forms.Padding(4);
             this.Runes.Name = "Runes";
-            this.Runes.Size = new System.Drawing.Size(1644, 1252);
+            this.Runes.Size = new System.Drawing.Size(1644, 1248);
             this.Runes.TabIndex = 3;
             this.Runes.Text = "Runes";
             this.Runes.UseVisualStyleBackColor = true;
@@ -1402,7 +1418,7 @@
             this.GameVars.Location = new System.Drawing.Point(8, 39);
             this.GameVars.Margin = new System.Windows.Forms.Padding(4);
             this.GameVars.Name = "GameVars";
-            this.GameVars.Size = new System.Drawing.Size(1644, 1252);
+            this.GameVars.Size = new System.Drawing.Size(1644, 1248);
             this.GameVars.TabIndex = 4;
             this.GameVars.Text = "Game Variables";
             this.GameVars.UseVisualStyleBackColor = true;
@@ -1414,7 +1430,7 @@
             this.RawData.Margin = new System.Windows.Forms.Padding(4);
             this.RawData.Name = "RawData";
             this.RawData.Padding = new System.Windows.Forms.Padding(4);
-            this.RawData.Size = new System.Drawing.Size(1644, 1252);
+            this.RawData.Size = new System.Drawing.Size(1644, 1248);
             this.RawData.TabIndex = 1;
             this.RawData.Text = "Raw Data";
             this.RawData.UseVisualStyleBackColor = true;
@@ -1434,7 +1450,7 @@
             this.GrdPlayerDat.Name = "GrdPlayerDat";
             this.GrdPlayerDat.RowHeadersWidth = 300;
             this.GrdPlayerDat.RowTemplate.Height = 24;
-            this.GrdPlayerDat.Size = new System.Drawing.Size(1636, 1244);
+            this.GrdPlayerDat.Size = new System.Drawing.Size(1636, 1240);
             this.GrdPlayerDat.TabIndex = 3;
             // 
             // PDatValue
@@ -1570,7 +1586,7 @@
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1232F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1236F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(374, 1236);
             this.tableLayoutPanel3.TabIndex = 11;
             // 
@@ -1866,7 +1882,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage2.Size = new System.Drawing.Size(1406, 1248);
+            this.tabPage2.Size = new System.Drawing.Size(1406, 1252);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Objects";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -2351,7 +2367,7 @@
             this.tabPage7.Location = new System.Drawing.Point(8, 39);
             this.tabPage7.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(1406, 1248);
+            this.tabPage7.Size = new System.Drawing.Size(1406, 1252);
             this.tabPage7.TabIndex = 3;
             this.tabPage7.Text = "TextureMaps";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -2369,7 +2385,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.picTextureMap);
-            this.splitContainer1.Size = new System.Drawing.Size(1406, 1248);
+            this.splitContainer1.Size = new System.Drawing.Size(1406, 1252);
             this.splitContainer1.SplitterDistance = 353;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -2384,7 +2400,7 @@
             this.grdTextureMap.Name = "grdTextureMap";
             this.grdTextureMap.RowHeadersWidth = 82;
             this.grdTextureMap.RowTemplate.Height = 33;
-            this.grdTextureMap.Size = new System.Drawing.Size(353, 1248);
+            this.grdTextureMap.Size = new System.Drawing.Size(353, 1252);
             this.grdTextureMap.TabIndex = 1;
             this.grdTextureMap.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdTextureMap_CellClick);
             this.grdTextureMap.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.grdTextureMap_CellEnter);
@@ -2416,13 +2432,111 @@
             // 
             // tabPage8
             // 
+            this.tabPage8.Controls.Add(this.label53);
+            this.tabPage8.Controls.Add(this.txtNPCCounter);
+            this.tabPage8.Controls.Add(this.grdPossibleNPCList);
+            this.tabPage8.Controls.Add(this.grdStaticFree);
+            this.tabPage8.Controls.Add(this.label52);
+            this.tabPage8.Controls.Add(this.txtStaticCounter);
+            this.tabPage8.Controls.Add(this.grdMobileFree);
+            this.tabPage8.Controls.Add(this.label51);
+            this.tabPage8.Controls.Add(this.txtMobileCounter);
             this.tabPage8.Location = new System.Drawing.Point(8, 39);
             this.tabPage8.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage8.Name = "tabPage8";
-            this.tabPage8.Size = new System.Drawing.Size(1406, 1248);
+            this.tabPage8.Size = new System.Drawing.Size(1406, 1252);
             this.tabPage8.TabIndex = 4;
-            this.tabPage8.Text = "AutoMaps";
+            this.tabPage8.Text = "FreeObjectList";
             this.tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // grdPossibleNPCList
+            // 
+            this.grdPossibleNPCList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdPossibleNPCList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn2});
+            this.grdPossibleNPCList.Location = new System.Drawing.Point(903, 67);
+            this.grdPossibleNPCList.Name = "grdPossibleNPCList";
+            this.grdPossibleNPCList.RowHeadersWidth = 82;
+            this.grdPossibleNPCList.RowTemplate.Height = 33;
+            this.grdPossibleNPCList.Size = new System.Drawing.Size(354, 680);
+            this.grdPossibleNPCList.TabIndex = 6;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "Index";
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 10;
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.Width = 200;
+            // 
+            // grdStaticFree
+            // 
+            this.grdStaticFree.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdStaticFree.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1});
+            this.grdStaticFree.Location = new System.Drawing.Point(434, 67);
+            this.grdStaticFree.Name = "grdStaticFree";
+            this.grdStaticFree.RowHeadersWidth = 82;
+            this.grdStaticFree.RowTemplate.Height = 33;
+            this.grdStaticFree.Size = new System.Drawing.Size(354, 680);
+            this.grdStaticFree.TabIndex = 5;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "Index";
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 10;
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.Width = 200;
+            // 
+            // label52
+            // 
+            this.label52.AutoSize = true;
+            this.label52.Location = new System.Drawing.Point(429, 30);
+            this.label52.Name = "label52";
+            this.label52.Size = new System.Drawing.Size(148, 25);
+            this.label52.TabIndex = 4;
+            this.label52.Text = "Static Counter";
+            // 
+            // txtStaticCounter
+            // 
+            this.txtStaticCounter.Location = new System.Drawing.Point(619, 30);
+            this.txtStaticCounter.Name = "txtStaticCounter";
+            this.txtStaticCounter.Size = new System.Drawing.Size(169, 31);
+            this.txtStaticCounter.TabIndex = 3;
+            // 
+            // grdMobileFree
+            // 
+            this.grdMobileFree.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.grdMobileFree.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Index});
+            this.grdMobileFree.Location = new System.Drawing.Point(30, 67);
+            this.grdMobileFree.Name = "grdMobileFree";
+            this.grdMobileFree.RowHeadersWidth = 82;
+            this.grdMobileFree.RowTemplate.Height = 33;
+            this.grdMobileFree.Size = new System.Drawing.Size(354, 680);
+            this.grdMobileFree.TabIndex = 2;
+            // 
+            // Index
+            // 
+            this.Index.HeaderText = "Index";
+            this.Index.MinimumWidth = 10;
+            this.Index.Name = "Index";
+            this.Index.Width = 200;
+            // 
+            // label51
+            // 
+            this.label51.AutoSize = true;
+            this.label51.Location = new System.Drawing.Point(25, 30);
+            this.label51.Name = "label51";
+            this.label51.Size = new System.Drawing.Size(158, 25);
+            this.label51.TabIndex = 1;
+            this.label51.Text = "Mobile Counter";
+            // 
+            // txtMobileCounter
+            // 
+            this.txtMobileCounter.Location = new System.Drawing.Point(215, 30);
+            this.txtMobileCounter.Name = "txtMobileCounter";
+            this.txtMobileCounter.Size = new System.Drawing.Size(169, 31);
+            this.txtMobileCounter.TabIndex = 0;
             // 
             // tabPage9
             // 
@@ -2633,12 +2747,12 @@
             this.TreeArt.Location = new System.Drawing.Point(4, 4);
             this.TreeArt.Margin = new System.Windows.Forms.Padding(4);
             this.TreeArt.Name = "TreeArt";
-            treeNode141.Name = "Node1";
-            treeNode141.Text = "Wall & Floor Textures(2 files)";
-            treeNode142.Name = "Node0";
-            treeNode142.Text = "Textures";
+            treeNode19.Name = "Node1";
+            treeNode19.Text = "Wall & Floor Textures(2 files)";
+            treeNode20.Name = "Node0";
+            treeNode20.Text = "Textures";
             this.TreeArt.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode142});
+            treeNode20});
             this.TreeArt.Size = new System.Drawing.Size(630, 798);
             this.TreeArt.TabIndex = 51;
             this.TreeArt.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeArt_AfterSelect);
@@ -3058,6 +3172,22 @@
             this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(898, 30);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(138, 25);
+            this.label53.TabIndex = 8;
+            this.label53.Text = "NPC Counter";
+            // 
+            // txtNPCCounter
+            // 
+            this.txtNPCCounter.Location = new System.Drawing.Point(1088, 30);
+            this.txtNPCCounter.Name = "txtNPCCounter";
+            this.txtNPCCounter.Size = new System.Drawing.Size(169, 31);
+            this.txtNPCCounter.TabIndex = 7;
+            // 
             // main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -3154,6 +3284,11 @@
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.grdTextureMap)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picTextureMap)).EndInit();
+            this.tabPage8.ResumeLayout(false);
+            this.tabPage8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.grdPossibleNPCList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grdStaticFree)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.grdMobileFree)).EndInit();
             this.tabPage9.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.GrdStrings)).EndInit();
             this.tabPage10.ResumeLayout(false);
@@ -3407,6 +3542,18 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        public System.Windows.Forms.DataGridView grdStaticFree;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.Label label52;
+        public System.Windows.Forms.TextBox txtStaticCounter;
+        public System.Windows.Forms.DataGridView grdMobileFree;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Index;
+        private System.Windows.Forms.Label label51;
+        public System.Windows.Forms.TextBox txtMobileCounter;
+        public System.Windows.Forms.DataGridView grdPossibleNPCList;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.Label label53;
+        public System.Windows.Forms.TextBox txtNPCCounter;
     }
 }
 

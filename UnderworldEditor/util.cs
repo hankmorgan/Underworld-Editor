@@ -434,7 +434,7 @@ namespace UnderworldEditor
         {
             if (blockno <= 8)
             {
-                return 0x7c06;
+                return 0x7c08;
             }
             if (blockno <= 17)
             {

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace UnderworldEditor
@@ -83,6 +80,35 @@ namespace UnderworldEditor
                 MAIN.grdTextureMap.Rows[newRow].HeaderCell.Value = texIndex.ToString();
                 hexOffset = hexOffset + 2;
                 texIndex++;
+            }
+            MAIN.txtMobileCounter.Text = MAIN.tilemap.MobileFreeListCounter.ToString();
+            MAIN.grdMobileFree.Rows.Clear();
+            for (int i = 0;i<MAIN.tilemap.MobileFreeList.GetUpperBound(0);i++)
+            {
+                var rowId = MAIN.grdMobileFree.Rows.Add();
+                DataGridViewRow row = MAIN.grdMobileFree.Rows[rowId];
+                row.HeaderCell.Value = i.ToString();
+                row.Cells[0].Value = MAIN.tilemap.MobileFreeList[i];
+            }
+
+            MAIN.txtStaticCounter.Text = MAIN.tilemap.StaticFreeListCounter.ToString();
+            MAIN.grdStaticFree.Rows.Clear();
+            for (int i = 0; i < MAIN.tilemap.StaticFreeList.GetUpperBound(0); i++)
+            {
+                var rowId = MAIN.grdStaticFree.Rows.Add();
+                DataGridViewRow row = MAIN.grdStaticFree.Rows[rowId];
+                row.HeaderCell.Value = i.ToString();
+                row.Cells[0].Value = MAIN.tilemap.StaticFreeList[i];
+            }
+
+            MAIN.txtNPCCounter.Text = MAIN.tilemap.NPCListCounter.ToString();
+            MAIN.grdPossibleNPCList.Rows.Clear();
+            for (int i = 0; i < MAIN.tilemap.NPCList.GetUpperBound(0); i++)
+            {
+                var rowId = MAIN.grdPossibleNPCList.Rows.Add();
+                DataGridViewRow row = MAIN.grdPossibleNPCList.Rows[rowId];
+                row.HeaderCell.Value = i.ToString();
+                row.Cells[0].Value = MAIN.tilemap.NPCList[i];
             }
         }
 
@@ -225,9 +251,9 @@ namespace UnderworldEditor
 
             //Shift the bits to construct my data
             int tileType = t.tileType;
-            int floorHeight = (t.floorHeight / 2) << 4;
+            int floorHeight = t.floorHeight;  //(t.floorHeight / 2) << 4;
 
-            int ByteToWrite = tileType | floorHeight;//| floorTexture | noMagic;//This will be set in the original data
+            int ByteToWrite = (tileType & 0xF) | (floorHeight<<4);//| floorTexture | noMagic;//This will be set in the original data
             MAIN.levarkbuffer[t.FileAddress] = (byte)(ByteToWrite);
             int flags = t.flags & 0x3;
             int floorTexture = t.floorTexture << 2;
