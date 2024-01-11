@@ -150,7 +150,7 @@ namespace UnderworldEditor
                         int BitMapHeight = (int)Util.getAt(ImageFileData, imageOffset + 2, 8);
                         if (FileName.ToUpper().EndsWith("PANELS.GR"))
                         {//Check to see if the file is panels.gr
-                            if (index >= 4) { return base.LoadImageAt(0); } //new Bitmap(2, 2);
+                            if (index >= 3) { return base.LoadImageAt(0); } //new Bitmap(2, 2);
                             BitMapWidth = 83;  //getValAtAddress(textureFile, textureOffset + 1, 8);
                             BitMapHeight = 114; // getValAtAddress(textureFile, textureOffset + 2, 8);
                             if (main.curgame == main.GAME_UW2)
