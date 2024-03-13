@@ -102,7 +102,7 @@ namespace UnderworldEditor
             MAIN.NumPDatXPos.Value = Util.getAt(buffer, 0x55, 16);
             MAIN.NumPDatYPos.Value = Util.getAt(buffer, 0x57, 16);
             MAIN.NumPDatZPos.Value = Util.getAt(buffer, 0x59, 16);
-            MAIN.NumPDatHeading.Value = Util.getAt(buffer, 0x5C, 8);
+            MAIN.NumPDatHeading.Value = Util.getAt(buffer, 0x5C, 8); //this may be wrong
             MAIN.NumDungeonLevel.Value = Util.getAt(buffer, 0x5D, 8);
             PopulateCharClass(charclassdetails, MAIN);
         }

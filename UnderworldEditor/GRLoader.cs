@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
 using System.Diagnostics;
 
 namespace UnderworldEditor
 {
+   
     public class GRLoader : ArtLoader
     {
+        public static int ct = 0;
         const int repeat_record_start = 0;
         const int repeat_record = 1;
         const int run_record = 2;
@@ -70,6 +68,7 @@ namespace UnderworldEditor
 
 
             long imageOffset = Util.getAt(ImageFileData, (index * 4) + 3, 32);
+            Debug.Print($"[{ct++}] image {index} at {imageOffset}");
             if (imageOffset >= ImageFileData.GetUpperBound(0))
             {//Image out of range
                 return base.LoadImageAt(index);

@@ -534,6 +534,7 @@ namespace UnderworldEditor
         /// <returns></returns>
         int ReadPageFileUW2(int CritterNo, byte[] assocFile, int AuxPalNo, string fileCrit, int spriteIndex, Palette paletteToUse)
         {
+            //AuxPalNo = 3; auxpal 3 for stone strike
             //Local auxilary palette
             Palette pal = paletteToUse;
             int AddressPointer;

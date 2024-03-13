@@ -33,7 +33,7 @@ namespace UnderworldEditor
             var filepath = System.IO.Path.Combine(main.basepath, "CUTS", File);
             if (Util.ReadStreamFile(filepath, out ImageFileData))
             {
-                ReadCutsFile(ref ImageFileData, UseAlpha(File), UseErrorHandling(File));
+                ReadCutsFile(ref ImageFileData, UseAlpha(File), UseErrorHandling(File), File);
             }
         }
 
@@ -65,6 +65,29 @@ namespace UnderworldEditor
             }
         }
 
+        /// <summary>
+        /// IN UW2 for some reason some frames are bugged and overwrite dstimage in the wrong location. this hack skips loading the image data for these images
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="frame"></param>
+        /// <returns></returns>
+        bool SkipImage(string file,int frame)
+        {
+            if (main.curgame == main.GAME_UW2)
+            {
+                switch(file.ToUpper())
+                {
+                    case "CS012.N01":
+                        return !(frame % 4 == 0);
+                        //return (frame == 1) 
+                        //    || (frame == 2)
+                        //    || (frame == 3)                            
+                        //    ;
+                }
+            }
+                return false;
+        }
+
         public override BitmapUW LoadImageAt(int index)
         {
             return ImageCache[index];
@@ -75,7 +98,7 @@ namespace UnderworldEditor
         /// Reads the cuts file.
         /// </summary>
         /// <param name="cutsFile">Cuts file.</param>
-        public void ReadCutsFile(ref byte[] cutsFile, bool Alpha, bool ErrorHandling)
+        public void ReadCutsFile(ref byte[] cutsFile, bool Alpha, bool ErrorHandling, string File)
         {
             long addptr = 0;
             int imagecount = 0;
@@ -106,7 +129,7 @@ namespace UnderworldEditor
             addptr += 128;//colour cycling info.
 
             //Init the buffer
-            dstImage = new byte[lpH.height * lpH.width + 4000];
+            dstImage = new byte[lpH.height * lpH.width];// + 4000];
 
             //Read in the palette
             for (int i = 0; i < 256; i++)
@@ -174,13 +197,19 @@ namespace UnderworldEditor
                     ppointer += 4;
                 }
                 //	byte[] imgOut ;//= //new byte[lpH.height*lpH.width+ 4000];
-                myPlayRunSkipDump(ppointer, pages);//Stores in the global memory
-                                                   //output.texture= 
+                
+                if (!SkipImage(File, imagecount))
+                {
+                    myPlayRunSkipDump(ppointer, pages);//Stores in the global memory
+                                                       //output.texture= 
+                }
+
 
 
                 ImageCache[imagecount++] = Image(this, dstImage, 0, 0, lpH.width, lpH.height, "x", pal, Alpha, BitmapUW.ImageTypes.Texture);
-                    // Image(dstImage, 0, lpH.width, lpH.height, "name here", pal, Alpha);
+                // Image(dstImage, 0, lpH.width, lpH.height, "name here", pal, Alpha);
 
+                //dstImage = new byte[lpH.height * lpH.width];//reset after each image
             }
         }
 
