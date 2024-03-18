@@ -1,12 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 //Based on file research from https://github.com/jastadj/uwgodot2/tree/main/docs
 
@@ -72,7 +65,7 @@ namespace UnderworldEditor
             "11????",
             "12????",
             "text-play",
-            "14????",
+            "Wait-Seconds",
             "klang",
             "16????",
             "17????",
@@ -101,23 +94,23 @@ namespace UnderworldEditor
             "opens a new file csXXX.nYY, with XXX from arg[0] and YY from arg[1]; XXX and YY are formatted octal values",
             "fades out at rate arg[0] (higher is faster)",
             "fades in at rate arg[0] (higher is faster)",
-            "unknown",
-            "unknown",
-            "displays text arg[1] with color arg[0] and plays audio arg[2]",
-            "unknown",
+            "11 unknown",
+            "12 unknown",
+            "13 displays text arg[1] with color arg[0] and plays audio arg[2]",
+            "14 Wait arg[1] seconds",
             "plays 'klang' sound",
-            "unknown, not used in uw2",
-            "unknown, not used in uw2",
+            "16 unknown, not used in uw2",
+            "17 unknown, not used in uw2",
             "does nothing, not used in uw2",
-            "unknown",
-            "unknown",
-            "unknown",
-            "unknown",
-            "unknown",
-            "unknown, usually at the start of cutscene",
+            "19 unknown",
+            "20 unknown",
+            "21 unknown",
+            "22 unknown",
+            "23 unknown",
+            "24 unknown, usually at the start of cutscene",
             "Plays Music theme given by arg[0]",
             "does nothing, not used in uw2",
-            "unknown"
+            "27 unknown"
         };
         public string FunctionName
         {
@@ -156,7 +149,15 @@ namespace UnderworldEditor
                 case 2: return 2;//no-op, arguments are ignored
                 case 3: return 1;//pauses for arg[0] / 2 seconds
                 case 4: return 2;//plays up to frame arg[0]
-                case 5: return 0;//unknown, set frame for static cutscene? (originally documented as 0 parameters)
+                case 5: //unknown, set frame for static cutscene? (0 params in UW2, 1 in UW1)
+                    if (main.curgame == main.GAME_UW2)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        return 1;
+                    }  
                 case 6: return 0;//ends cutscene
                 case 7: return 1;//repeat segment arg[0] times
                 case 8: return 2;//opens a new file csXXX.nYY, with XXX from arg[0] and YY from arg[1]; XXX and YY are formatted octal values
@@ -165,8 +166,8 @@ namespace UnderworldEditor
                 case 11: return 1;//unknown
                 case 12: return 1;//unknown
                 case 13: return 3;//displays text arg[1] with color arg[0] and plays audio arg[2]
-                case 14: return 2;//unknown
-                case 15: return 0;//plays 'klang' sound
+                case 14: return 2;//wait arg[1] seconds
+                case 15: return 0;//plays 'klang' sound (UW1 only)
                 //case 16: return *;//unknown, not used in uw2 but looks like some sort of copy function.
                 //case 17: return *;//unknown, not used in uw2
                 case 18: return 4;//does nothing, not used in uw2

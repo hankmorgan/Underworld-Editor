@@ -718,20 +718,20 @@ namespace UnderworldEditor
                     try
                     {
                         if (Util.LoadUWBlock(levarkbuffer, i, Util.UWBlockSizes(i), out uwblocks[i]))
-                        {
+                        {                           
                             int worldNo = (i / 8);
                             uwblocks[i].ContentType = Util.GetUWLevArkContentType(i);
                             TreeNode node;
                             switch (uwblocks[i].ContentType)
                             {
                                 case Util.ContentTypes.AnimationOverlay:
-                                    node = OverlayMapNodes.Nodes.Add("World " + worldNo  + " Block #" + i); break;
+                                    node = OverlayMapNodes.Nodes.Add("Block #" + i); break;
                                 case Util.ContentTypes.AutoMap:
-                                    node = AutoMapNodes.Nodes.Add("World " + worldNo + " Block #" + i); break;
+                                    node = AutoMapNodes.Nodes.Add("Block #" + i); break;
                                 case Util.ContentTypes.AutoMapNotes:
-                                    node = AutoMapNotesNodes.Nodes.Add("World " + worldNo  + " Block #" + i); break;
+                                    node = AutoMapNotesNodes.Nodes.Add("Block #" + i); break;
                                 case Util.ContentTypes.TextureMap:
-                                    node = TextureMapNodes.Nodes.Add("World " + worldNo + " Block #" + i); break;
+                                    node = TextureMapNodes.Nodes.Add("Block #" + i); break;
                                 case Util.ContentTypes.TileMap:
                                 default:
                                     node = TileMapNodes.Nodes.Add("World " + worldNo + " Block #" + i); break;
@@ -1895,10 +1895,11 @@ namespace UnderworldEditor
                     foreach (var c in commands)
                     {
                         var r = grdCutscene.Rows.Add();
-                        grdCutscene.Rows[r].HeaderCell.Value = c.offset.ToString();
+                        grdCutscene.Rows[r].HeaderCell.Value = $"F:{c.frame}"; //c.offset.ToString();
                         grdCutscene.Rows[r].Cells[0].Value = c.functionNo;
                         grdCutscene.Rows[r].Cells[1].Value = c.display;
                         grdCutscene.Rows[r].Cells[2].Value = c.FunctionDesc;
+                        grdCutscene.Rows[r].Cells[3].Value = c.offset;
                     }
                 }
             }

@@ -212,6 +212,8 @@
             this.Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.picTextureMap = new PictureBoxWithInterpolationMode();
             this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.label53 = new System.Windows.Forms.Label();
+            this.txtNPCCounter = new System.Windows.Forms.TextBox();
             this.grdPossibleNPCList = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.grdStaticFree = new System.Windows.Forms.DataGridView();
@@ -280,8 +282,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.label53 = new System.Windows.Forms.Label();
-            this.txtNPCCounter = new System.Windows.Forms.TextBox();
+            this.DataOffset = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1.SuspendLayout();
             this.PlayerDat.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -1010,7 +1011,7 @@
             this.Inv.Margin = new System.Windows.Forms.Padding(4);
             this.Inv.Name = "Inv";
             this.Inv.Padding = new System.Windows.Forms.Padding(4);
-            this.Inv.Size = new System.Drawing.Size(1644, 1248);
+            this.Inv.Size = new System.Drawing.Size(1644, 1252);
             this.Inv.TabIndex = 0;
             this.Inv.Text = "Inventory";
             // 
@@ -1408,7 +1409,7 @@
             this.Runes.Location = new System.Drawing.Point(8, 39);
             this.Runes.Margin = new System.Windows.Forms.Padding(4);
             this.Runes.Name = "Runes";
-            this.Runes.Size = new System.Drawing.Size(1644, 1248);
+            this.Runes.Size = new System.Drawing.Size(1644, 1252);
             this.Runes.TabIndex = 3;
             this.Runes.Text = "Runes";
             this.Runes.UseVisualStyleBackColor = true;
@@ -1418,7 +1419,7 @@
             this.GameVars.Location = new System.Drawing.Point(8, 39);
             this.GameVars.Margin = new System.Windows.Forms.Padding(4);
             this.GameVars.Name = "GameVars";
-            this.GameVars.Size = new System.Drawing.Size(1644, 1248);
+            this.GameVars.Size = new System.Drawing.Size(1644, 1252);
             this.GameVars.TabIndex = 4;
             this.GameVars.Text = "Game Variables";
             this.GameVars.UseVisualStyleBackColor = true;
@@ -1430,7 +1431,7 @@
             this.RawData.Margin = new System.Windows.Forms.Padding(4);
             this.RawData.Name = "RawData";
             this.RawData.Padding = new System.Windows.Forms.Padding(4);
-            this.RawData.Size = new System.Drawing.Size(1644, 1248);
+            this.RawData.Size = new System.Drawing.Size(1644, 1252);
             this.RawData.TabIndex = 1;
             this.RawData.Text = "Raw Data";
             this.RawData.UseVisualStyleBackColor = true;
@@ -1450,7 +1451,7 @@
             this.GrdPlayerDat.Name = "GrdPlayerDat";
             this.GrdPlayerDat.RowHeadersWidth = 300;
             this.GrdPlayerDat.RowTemplate.Height = 24;
-            this.GrdPlayerDat.Size = new System.Drawing.Size(1636, 1240);
+            this.GrdPlayerDat.Size = new System.Drawing.Size(1636, 1244);
             this.GrdPlayerDat.TabIndex = 3;
             // 
             // PDatValue
@@ -2449,6 +2450,22 @@
             this.tabPage8.Text = "FreeObjectList";
             this.tabPage8.UseVisualStyleBackColor = true;
             // 
+            // label53
+            // 
+            this.label53.AutoSize = true;
+            this.label53.Location = new System.Drawing.Point(898, 30);
+            this.label53.Name = "label53";
+            this.label53.Size = new System.Drawing.Size(138, 25);
+            this.label53.TabIndex = 8;
+            this.label53.Text = "NPC Counter";
+            // 
+            // txtNPCCounter
+            // 
+            this.txtNPCCounter.Location = new System.Drawing.Point(1088, 30);
+            this.txtNPCCounter.Name = "txtNPCCounter";
+            this.txtNPCCounter.Size = new System.Drawing.Size(169, 31);
+            this.txtNPCCounter.TabIndex = 7;
+            // 
             // grdPossibleNPCList
             // 
             this.grdPossibleNPCList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -2967,7 +2984,8 @@
             this.grdCutscene.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column5,
             this.Column1,
-            this.Column3});
+            this.Column3,
+            this.DataOffset});
             this.grdCutscene.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grdCutscene.Location = new System.Drawing.Point(0, 0);
             this.grdCutscene.Name = "grdCutscene";
@@ -3172,21 +3190,13 @@
             this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // label53
+            // DataOffset
             // 
-            this.label53.AutoSize = true;
-            this.label53.Location = new System.Drawing.Point(898, 30);
-            this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(138, 25);
-            this.label53.TabIndex = 8;
-            this.label53.Text = "NPC Counter";
-            // 
-            // txtNPCCounter
-            // 
-            this.txtNPCCounter.Location = new System.Drawing.Point(1088, 30);
-            this.txtNPCCounter.Name = "txtNPCCounter";
-            this.txtNPCCounter.Size = new System.Drawing.Size(169, 31);
-            this.txtNPCCounter.TabIndex = 7;
+            this.DataOffset.HeaderText = "Offset";
+            this.DataOffset.MinimumWidth = 10;
+            this.DataOffset.Name = "DataOffset";
+            this.DataOffset.ReadOnly = true;
+            this.DataOffset.Width = 200;
             // 
             // main
             // 
@@ -3554,6 +3564,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.Label label53;
         public System.Windows.Forms.TextBox txtNPCCounter;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DataOffset;
     }
 }
 

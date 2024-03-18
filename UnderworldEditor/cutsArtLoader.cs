@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UnderworldEditor
+﻿namespace UnderworldEditor
 {
     public class cutsArtLoader : ArtLoader
     {
@@ -65,28 +59,7 @@ namespace UnderworldEditor
             }
         }
 
-        /// <summary>
-        /// IN UW2 for some reason some frames are bugged and overwrite dstimage in the wrong location. this hack skips loading the image data for these images
-        /// </summary>
-        /// <param name="file"></param>
-        /// <param name="frame"></param>
-        /// <returns></returns>
-        bool SkipImage(string file,int frame)
-        {
-            if (main.curgame == main.GAME_UW2)
-            {
-                switch(file.ToUpper())
-                {
-                    case "CS012.N01":
-                        return !(frame % 4 == 0);
-                        //return (frame == 1) 
-                        //    || (frame == 2)
-                        //    || (frame == 3)                            
-                        //    ;
-                }
-            }
-                return false;
-        }
+
 
         public override BitmapUW LoadImageAt(int index)
         {
@@ -198,10 +171,9 @@ namespace UnderworldEditor
                 }
                 //	byte[] imgOut ;//= //new byte[lpH.height*lpH.width+ 4000];
                 
-                if (!SkipImage(File, imagecount))
+                if (!SkipImageDecoding(File, imagecount))
                 {
                     myPlayRunSkipDump(ppointer, pages);//Stores in the global memory
-                                                       //output.texture= 
                 }
 
 
@@ -209,8 +181,49 @@ namespace UnderworldEditor
                 ImageCache[imagecount++] = Image(this, dstImage, 0, 0, lpH.width, lpH.height, "x", pal, Alpha, BitmapUW.ImageTypes.Texture);
                 // Image(dstImage, 0, lpH.width, lpH.height, "name here", pal, Alpha);
 
-                //dstImage = new byte[lpH.height * lpH.width];//reset after each image
+                if (ResetKeyFrame(File, imagecount))
+                {
+                    dstImage = new byte[lpH.height * lpH.width];//reset after each image
+                }
+
             }
+        }
+
+        static bool ResetKeyFrame(string file, int frame)
+        {
+            return false;
+            if (main.curgame == main.GAME_UW2)
+            {
+                switch (file.ToUpper())
+                {
+                    case "CS000.N06":
+                        return (frame % 8 == 0);
+                }
+            }
+
+            return false;
+        }
+
+
+        /// <summary>
+        /// IN UW2 for some reason some frames are bugged and overwrite dstimage in the wrong location. this hack skips loading the image data for these images
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="frame"></param>
+        /// <returns></returns>
+        static bool SkipImageDecoding(string file, int frame)
+        {
+            if (main.curgame == main.GAME_UW2)
+            {
+                switch (file.ToUpper())
+                {
+                    case "CS000.N06":
+                        return !(frame % 4 == 3);
+                    case "CS012.N01":
+                        return !(frame % 4 == 0);
+                }
+            }
+            return false;
         }
 
 

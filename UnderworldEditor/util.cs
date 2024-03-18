@@ -217,11 +217,12 @@ namespace UnderworldEditor
                         uwb.Address = getAt(arkData, (blockNo * 4) + 2, 32);
                         if (uwb.Address != 0)
                         {
+                            Debug.Print($"{blockNo} at address {uwb.Address}");
                             uwb.Data = new byte[targetDataLen];
                             uwb.DataLen = targetDataLen;
                             uwb.CompressionFlag = 0;
                             int b = 0;
-                            for (long i = uwb.Address; i < uwb.Address + uwb.DataLen; i++)
+                            for (long i = uwb.Address; i < Math.Min(uwb.Address + uwb.DataLen, arkData.GetUpperBound(0)+1); i++)
                             {//Copy the data to the block.
                                 uwb.Data[b++] = arkData[i];
                             }
@@ -386,15 +387,15 @@ namespace UnderworldEditor
                 {
                     return ContentTypes.AnimationOverlay;
                 }
-                if (blockno <= 28)
+                if (blockno <= 26)
                 {
                     return ContentTypes.TextureMap;
                 }
-                if (blockno <= 39)
+                if (blockno <= 35)
                 {
                     return ContentTypes.AutoMap;
                 }
-                if (blockno <= 48)
+                if (blockno <= 44)
                 {
                     return ContentTypes.AutoMapNotes;
                 }
